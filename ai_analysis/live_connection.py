@@ -1,22 +1,22 @@
 import socket
 
 # now is a random value
-THERMAL_FRAME_SIZE = 1024 * 1024 * 32
 class Live_connection:
-    def __init__(self,port):
+    def __init__(self,host:str,port:int):
         self.ss = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-
-        self.host = socket.gethostname()
+        self.host = host
         self.port = port
-        self.msg = ""
-        self.term = True
+        self.__msg = bytes()
+        self.__term = True
         self.csocket = socket.socket()
+        self.new_frame_avaliable = False
 
     def start_connection(self):
         host = self.host
         port = self.port
         ss   = self.ss
 
+        print("binding to",host,port)
         ss.bind((host,port))
 
         ss.listen(1)
@@ -31,19 +31,31 @@ class Live_connection:
             print("accept?(y/n)")
             prompt = input()
             if(prompt != "y"):
-                csocket.send("rejected".encode('anscii'))
+                csocket.send("rejected\n".encode('ascii'))
                 csocket.close()
         self.csocket = csocket
+        csocket.send("accepted\n".encode('ascii'))
+
+# use multiprocess thing to call start_recieve
     def start_recieve(self):
         csocket = self.csocket
         # csocket is now the active recieving
-        while self.term:
-            csocket.send("accepted".encode('anscii'))
-            self.msg = csocket.recv(THERMAL_FRAME_SIZE)
+        while self.__term:
+            bufsize = int(csocket.recv(1024).decode('ascii'))
+            print("1")
+            csocket.send((str(bufsize) + " bytes is going to be recieve\n").encode('ascii'))
+            print("2")
+            self.__msg = csocket.recv(bufsize*8)
+            print("3")
+            csocket.send("recieved\n".encode('ascii'))
+            self.new_frame_avaliable = True
+
     def getcurrentframe(self):
-        return self.msg
+        self.new_frame_avaliable = False
+        return self.__msg
+
     def terminate(self):
-        self.term = False
+        self.__term = False
         self.csocket.close()
         self.ss.close()
         
