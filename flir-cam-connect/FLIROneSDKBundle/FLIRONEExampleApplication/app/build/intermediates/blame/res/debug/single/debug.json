@@ -1,0 +1,46 @@
+[
+    {
+        "merged": "D:\\my programs\\python\\Aiot\\aiot_bedroom\\flir-cam-connect\\FLIROneSDKBundle\\FLIRONEExampleApplication\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "D:\\my programs\\python\\Aiot\\aiot_bedroom\\flir-cam-connect\\FLIROneSDKBundle\\FLIRONEExampleApplication\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "D:\\my programs\\python\\Aiot\\aiot_bedroom\\flir-cam-connect\\FLIROneSDKBundle\\FLIRONEExampleApplication\\app\\build\\intermediates\\res\\merged\\debug\\raw_sampleframes.zip.flat",
+        "source": "D:\\my programs\\python\\Aiot\\aiot_bedroom\\flir-cam-connect\\FLIROneSDKBundle\\FLIRONEExampleApplication\\app\\src\\main\\res\\raw\\sampleframes.zip"
+    },
+    {
+        "merged": "D:\\my programs\\python\\Aiot\\aiot_bedroom\\flir-cam-connect\\FLIROneSDKBundle\\FLIRONEExampleApplication\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_ic_launcher.png.flat",
+        "source": "D:\\my programs\\python\\Aiot\\aiot_bedroom\\flir-cam-connect\\FLIROneSDKBundle\\FLIRONEExampleApplication\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "D:\\my programs\\python\\Aiot\\aiot_bedroom\\flir-cam-connect\\FLIROneSDKBundle\\FLIRONEExampleApplication\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi_ic_launcher.png.flat",
+        "source": "D:\\my programs\\python\\Aiot\\aiot_bedroom\\flir-cam-connect\\FLIROneSDKBundle\\FLIRONEExampleApplication\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "D:\\my programs\\python\\Aiot\\aiot_bedroom\\flir-cam-connect\\FLIROneSDKBundle\\FLIRONEExampleApplication\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "D:\\my programs\\python\\Aiot\\aiot_bedroom\\flir-cam-connect\\FLIROneSDKBundle\\FLIRONEExampleApplication\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "D:\\my programs\\python\\Aiot\\aiot_bedroom\\flir-cam-connect\\FLIROneSDKBundle\\FLIRONEExampleApplication\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "D:\\my programs\\python\\Aiot\\aiot_bedroom\\flir-cam-connect\\FLIROneSDKBundle\\FLIRONEExampleApplication\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "D:\\my programs\\python\\Aiot\\aiot_bedroom\\flir-cam-connect\\FLIROneSDKBundle\\FLIRONEExampleApplication\\app\\build\\intermediates\\res\\merged\\debug\\layout_emptytextview.xml.flat",
+        "source": "D:\\my programs\\python\\Aiot\\aiot_bedroom\\flir-cam-connect\\FLIROneSDKBundle\\FLIRONEExampleApplication\\app\\src\\main\\res\\layout\\emptytextview.xml"
+    },
+    {
+        "merged": "D:\\my programs\\python\\Aiot\\aiot_bedroom\\flir-cam-connect\\FLIROneSDKBundle\\FLIRONEExampleApplication\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_editor.xml.flat",
+        "source": "D:\\my programs\\python\\Aiot\\aiot_bedroom\\flir-cam-connect\\FLIROneSDKBundle\\FLIRONEExampleApplication\\app\\src\\main\\res\\layout\\activity_editor.xml"
+    },
+    {
+        "merged": "D:\\my programs\\python\\Aiot\\aiot_bedroom\\flir-cam-connect\\FLIROneSDKBundle\\FLIRONEExampleApplication\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_preview.xml.flat",
+        "source": "D:\\my programs\\python\\Aiot\\aiot_bedroom\\flir-cam-connect\\FLIROneSDKBundle\\FLIRONEExampleApplication\\app\\src\\main\\res\\layout\\activity_preview.xml"
+    },
+    {
+        "merged": "D:\\my programs\\python\\Aiot\\aiot_bedroom\\flir-cam-connect\\FLIROneSDKBundle\\FLIRONEExampleApplication\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_gl_preview.xml.flat",
+        "source": "D:\\my programs\\python\\Aiot\\aiot_bedroom\\flir-cam-connect\\FLIROneSDKBundle\\FLIRONEExampleApplication\\app\\src\\main\\res\\layout\\activity_gl_preview.xml"
+    },
+    {
+        "merged": "D:\\my programs\\python\\Aiot\\aiot_bedroom\\flir-cam-connect\\FLIROneSDKBundle\\FLIRONEExampleApplication\\app\\build\\intermediates\\res\\merged\\debug\\xml_device_filter.xml.flat",
+        "source": "D:\\my programs\\python\\Aiot\\aiot_bedroom\\flir-cam-connect\\FLIROneSDKBundle\\FLIRONEExampleApplication\\app\\src\\main\\res\\xml\\device_filter.xml"
+    }
+]

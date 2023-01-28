@@ -1,0 +1,237 @@
+-- Merging decision tree log ---
+manifest
+ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:2:1-50:12
+INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:2:1-50:12
+INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:2:1-50:12
+INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:2:1-50:12
+MERGED from [:flironesdk:] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\d55f1548c80180c7b82c46232c5c0ee6\flironesdk\AndroidManifest.xml:2:1-19:12
+MERGED from [com.android.support.constraint:constraint-layout:2.0.4] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\83ae4edcdbcd935b4b42a07154fd5f16\constraint-layout-2.0.4\AndroidManifest.xml:2:1-11:12
+MERGED from [com.android.support:appcompat-v7:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\dfe95567a05aca3330c24fdf6263dbbc\appcompat-v7-28.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-v4:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\91a67bfacd7edcf5be05f2b2c4ca0858\support-v4-28.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-media-compat:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\dad33363a31b4f79d7e022dd50181bc7\support-media-compat-28.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-fragment:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\15f4fc8ad2f47373fff2027bdd849131\support-fragment-28.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:animated-vector-drawable:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\3a3b83624704f181c7e72ea53ef48765\animated-vector-drawable-28.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-ui:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\8ddd03308f8860e7fac1e04bba474513\support-core-ui-28.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-utils:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\ed292d5a922af8e271aeafec396f7480\support-core-utils-28.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:loader:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\5d6001714e1b045ff7d2648f14a8c986\loader-28.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:viewpager:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\e1ab8a9a21030e25fd505ac6ad7a5022\viewpager-28.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:coordinatorlayout:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\32b7a07724b4024786e5e987493ad070\coordinatorlayout-28.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:drawerlayout:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\33f68a696b48948ddeec8393e8f4c9f8\drawerlayout-28.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:slidingpanelayout:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\494a109d5831e872f76bd74aae23d037\slidingpanelayout-28.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:customview:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\4203ecd58c1eaeb9840f72b07e3e30f5\customview-28.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:swiperefreshlayout:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\d84b7a7b30710ab08308a1151cc8dec6\swiperefreshlayout-28.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:asynclayoutinflater:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\dbc1429f57365eb172c595d498a656d7\asynclayoutinflater-28.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-vector-drawable:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\fb6352709885fa5402f1527326d00f06\support-vector-drawable-28.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-compat:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\423f55f9a3c2df55f7251a606d0b4237\support-compat-28.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [com.android.support:versionedparcelable:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\cb09b4eac361a56cc687f479929e3ea8\versionedparcelable-28.0.0\AndroidManifest.xml:17:1-25:12
+MERGED from [android.arch.lifecycle:runtime:1.1.1] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\b1855f97f3c813c43b5ab40806b28a16\runtime-1.1.1\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:documentfile:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\458cf852d7e135fea9eeccc273eac948\documentfile-28.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:localbroadcastmanager:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\5a238a36023ebf58884d4d954c1715bf\localbroadcastmanager-28.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:print:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\28b99b0dfc14cc19cd438682d0970e66\print-28.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:interpolator:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\bfcd67007ec17bc21c202f5a4587a554\interpolator-28.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:cursoradapter:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\bc6cbfc316e65ca55259dc401c29bb0d\cursoradapter-28.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:viewmodel:1.1.1] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\3a21de226a0167558bf87d1716ec3a49\viewmodel-1.1.1\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:livedata:1.1.1] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\920950c877becc28aa1f215f7231768d\livedata-1.1.1\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:livedata-core:1.1.1] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\fe555977487fb73f9b11b93fcf899d47\livedata-core-1.1.1\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.core:runtime:1.1.1] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\2f9274361b1d80e39ac6e45cadc78842\runtime-1.1.1\AndroidManifest.xml:17:1-22:12
+INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:2:1-50:12
+INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:2:1-50:12
+INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:2:1-50:12
+	package
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:4:5-49
+		INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml
+		INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:12:9-34
+		INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml
+	xmlns:tools
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:3:5-51
+	android:versionCode
+		INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:11:9-32
+		INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:2:11-69
+application
+ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:6:5-47:19
+MERGED from [:flironesdk:] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\d55f1548c80180c7b82c46232c5c0ee6\flironesdk\AndroidManifest.xml:14:5-17:19
+MERGED from [:flironesdk:] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\d55f1548c80180c7b82c46232c5c0ee6\flironesdk\AndroidManifest.xml:14:5-17:19
+MERGED from [com.android.support.constraint:constraint-layout:2.0.4] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\83ae4edcdbcd935b4b42a07154fd5f16\constraint-layout-2.0.4\AndroidManifest.xml:9:5-20
+MERGED from [com.android.support.constraint:constraint-layout:2.0.4] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\83ae4edcdbcd935b4b42a07154fd5f16\constraint-layout-2.0.4\AndroidManifest.xml:9:5-20
+MERGED from [com.android.support:support-compat:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\423f55f9a3c2df55f7251a606d0b4237\support-compat-28.0.0\AndroidManifest.xml:22:5-94
+MERGED from [com.android.support:support-compat:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\423f55f9a3c2df55f7251a606d0b4237\support-compat-28.0.0\AndroidManifest.xml:22:5-94
+MERGED from [com.android.support:versionedparcelable:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\cb09b4eac361a56cc687f479929e3ea8\versionedparcelable-28.0.0\AndroidManifest.xml:22:5-23:19
+MERGED from [com.android.support:versionedparcelable:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\cb09b4eac361a56cc687f479929e3ea8\versionedparcelable-28.0.0\AndroidManifest.xml:22:5-23:19
+	android:appComponentFactory
+		ADDED from [com.android.support:support-compat:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\423f55f9a3c2df55f7251a606d0b4237\support-compat-28.0.0\AndroidManifest.xml:22:18-91
+	android:label
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:9:9-41
+	android:versionName
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:12:9-34
+	android:versionCode
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:11:9-32
+	android:icon
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:8:9-43
+	android:allowBackup
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:7:9-35
+	android:theme
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:10:9-40
+activity#com.flir.flironeexampleapplication.EditorActivity
+ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:13:9-23:20
+	android:screenOrientation
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:14:13-49
+	android:name
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:13:19-49
+intent-filter#action:name:android.intent.action.EDIT+action:name:android.intent.action.PICK+action:name:android.intent.action.SEND+action:name:android.intent.action.VIEW+category:name:android.intent.category.DEFAULT+data:mimeType:image/jpeg
+ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:15:13-22:29
+	tools:ignore
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:15:28-58
+action#android.intent.action.VIEW
+ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:16:17-69
+	android:name
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:16:25-66
+action#android.intent.action.EDIT
+ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:17:17-69
+	android:name
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:17:25-66
+action#android.intent.action.PICK
+ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:18:17-69
+	android:name
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:18:25-66
+action#android.intent.action.SEND
+ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:19:17-68
+	android:name
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:19:25-66
+category#android.intent.category.DEFAULT
+ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:20:17-76
+	android:name
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:20:27-73
+data
+ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:21:17-55
+	android:mimeType
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:21:23-52
+activity#com.flir.flironeexampleapplication.GLPreviewActivity
+ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:24:9-45:20
+	android:screenOrientation
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:26:13-49
+	android:label
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:28:13-45
+	android:launchMode
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:29:13-44
+	android:configChanges
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:27:13-74
+	android:theme
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:30:13-51
+	android:name
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:25:13-46
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:31:13-35:29
+action#android.intent.action.MAIN
+ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:32:17-69
+	android:name
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:32:25-66
+category#android.intent.category.LAUNCHER
+ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:34:17-77
+	android:name
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:34:27-74
+intent-filter#action:name:android.hardware.usb.action.USB_DEVICE_ATTACHED+action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:38:13-42:29
+action#android.hardware.usb.action.USB_DEVICE_ATTACHED
+ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:40:17-90
+	android:name
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:40:25-87
+meta-data#android.hardware.usb.action.USB_DEVICE_ATTACHED
+ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:43:13-44:64
+	android:resource
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:44:24-61
+	android:name
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:43:24-86
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:48:5-80
+	android:name
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:48:22-78
+uses-permission#android.permission.INTERNET
+ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:49:5-66
+MERGED from [:flironesdk:] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\d55f1548c80180c7b82c46232c5c0ee6\flironesdk\AndroidManifest.xml:12:5-67
+MERGED from [:flironesdk:] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\d55f1548c80180c7b82c46232c5c0ee6\flironesdk\AndroidManifest.xml:12:5-67
+	android:name
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:49:22-64
+uses-sdk
+INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml
+INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml
+MERGED from [:flironesdk:] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\d55f1548c80180c7b82c46232c5c0ee6\flironesdk\AndroidManifest.xml:7:5-9:41
+MERGED from [:flironesdk:] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\d55f1548c80180c7b82c46232c5c0ee6\flironesdk\AndroidManifest.xml:7:5-9:41
+MERGED from [com.android.support.constraint:constraint-layout:2.0.4] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\83ae4edcdbcd935b4b42a07154fd5f16\constraint-layout-2.0.4\AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support.constraint:constraint-layout:2.0.4] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\83ae4edcdbcd935b4b42a07154fd5f16\constraint-layout-2.0.4\AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support:appcompat-v7:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\dfe95567a05aca3330c24fdf6263dbbc\appcompat-v7-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\dfe95567a05aca3330c24fdf6263dbbc\appcompat-v7-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-v4:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\91a67bfacd7edcf5be05f2b2c4ca0858\support-v4-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-v4:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\91a67bfacd7edcf5be05f2b2c4ca0858\support-v4-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-media-compat:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\dad33363a31b4f79d7e022dd50181bc7\support-media-compat-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-media-compat:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\dad33363a31b4f79d7e022dd50181bc7\support-media-compat-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\15f4fc8ad2f47373fff2027bdd849131\support-fragment-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\15f4fc8ad2f47373fff2027bdd849131\support-fragment-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\3a3b83624704f181c7e72ea53ef48765\animated-vector-drawable-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\3a3b83624704f181c7e72ea53ef48765\animated-vector-drawable-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\8ddd03308f8860e7fac1e04bba474513\support-core-ui-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\8ddd03308f8860e7fac1e04bba474513\support-core-ui-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\ed292d5a922af8e271aeafec396f7480\support-core-utils-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\ed292d5a922af8e271aeafec396f7480\support-core-utils-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:loader:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\5d6001714e1b045ff7d2648f14a8c986\loader-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:loader:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\5d6001714e1b045ff7d2648f14a8c986\loader-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:viewpager:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\e1ab8a9a21030e25fd505ac6ad7a5022\viewpager-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:viewpager:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\e1ab8a9a21030e25fd505ac6ad7a5022\viewpager-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:coordinatorlayout:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\32b7a07724b4024786e5e987493ad070\coordinatorlayout-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:coordinatorlayout:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\32b7a07724b4024786e5e987493ad070\coordinatorlayout-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:drawerlayout:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\33f68a696b48948ddeec8393e8f4c9f8\drawerlayout-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:drawerlayout:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\33f68a696b48948ddeec8393e8f4c9f8\drawerlayout-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:slidingpanelayout:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\494a109d5831e872f76bd74aae23d037\slidingpanelayout-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:slidingpanelayout:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\494a109d5831e872f76bd74aae23d037\slidingpanelayout-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:customview:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\4203ecd58c1eaeb9840f72b07e3e30f5\customview-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:customview:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\4203ecd58c1eaeb9840f72b07e3e30f5\customview-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:swiperefreshlayout:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\d84b7a7b30710ab08308a1151cc8dec6\swiperefreshlayout-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:swiperefreshlayout:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\d84b7a7b30710ab08308a1151cc8dec6\swiperefreshlayout-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:asynclayoutinflater:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\dbc1429f57365eb172c595d498a656d7\asynclayoutinflater-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:asynclayoutinflater:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\dbc1429f57365eb172c595d498a656d7\asynclayoutinflater-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\fb6352709885fa5402f1527326d00f06\support-vector-drawable-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\fb6352709885fa5402f1527326d00f06\support-vector-drawable-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\423f55f9a3c2df55f7251a606d0b4237\support-compat-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\423f55f9a3c2df55f7251a606d0b4237\support-compat-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:versionedparcelable:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\cb09b4eac361a56cc687f479929e3ea8\versionedparcelable-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:versionedparcelable:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\cb09b4eac361a56cc687f479929e3ea8\versionedparcelable-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.1.1] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\b1855f97f3c813c43b5ab40806b28a16\runtime-1.1.1\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.1.1] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\b1855f97f3c813c43b5ab40806b28a16\runtime-1.1.1\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:documentfile:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\458cf852d7e135fea9eeccc273eac948\documentfile-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:documentfile:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\458cf852d7e135fea9eeccc273eac948\documentfile-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:localbroadcastmanager:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\5a238a36023ebf58884d4d954c1715bf\localbroadcastmanager-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:localbroadcastmanager:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\5a238a36023ebf58884d4d954c1715bf\localbroadcastmanager-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:print:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\28b99b0dfc14cc19cd438682d0970e66\print-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:print:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\28b99b0dfc14cc19cd438682d0970e66\print-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:interpolator:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\bfcd67007ec17bc21c202f5a4587a554\interpolator-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:interpolator:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\bfcd67007ec17bc21c202f5a4587a554\interpolator-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:cursoradapter:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\bc6cbfc316e65ca55259dc401c29bb0d\cursoradapter-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:cursoradapter:28.0.0] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\bc6cbfc316e65ca55259dc401c29bb0d\cursoradapter-28.0.0\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:viewmodel:1.1.1] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\3a21de226a0167558bf87d1716ec3a49\viewmodel-1.1.1\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:viewmodel:1.1.1] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\3a21de226a0167558bf87d1716ec3a49\viewmodel-1.1.1\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata:1.1.1] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\920950c877becc28aa1f215f7231768d\livedata-1.1.1\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata:1.1.1] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\920950c877becc28aa1f215f7231768d\livedata-1.1.1\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata-core:1.1.1] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\fe555977487fb73f9b11b93fcf899d47\livedata-core-1.1.1\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata-core:1.1.1] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\fe555977487fb73f9b11b93fcf899d47\livedata-core-1.1.1\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.core:runtime:1.1.1] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\2f9274361b1d80e39ac6e45cadc78842\runtime-1.1.1\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.core:runtime:1.1.1] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\2f9274361b1d80e39ac6e45cadc78842\runtime-1.1.1\AndroidManifest.xml:20:5-44
+INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml
+INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml
+		INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml
+		INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml
+uses-permission#android.permission.CAMERA
+ADDED from [:flironesdk:] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\d55f1548c80180c7b82c46232c5c0ee6\flironesdk\AndroidManifest.xml:11:5-65
+	android:name
+		ADDED from [:flironesdk:] C:\Users\Tommy AU\.gradle\caches\transforms-2\files-2.1\d55f1548c80180c7b82c46232c5c0ee6\flironesdk\AndroidManifest.xml:11:22-62
