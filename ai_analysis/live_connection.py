@@ -1,15 +1,20 @@
 import socket
 
-# now is a random value
+from PIL.Image import merge
+import numpy as np
 class Live_connection:
     def __init__(self,host:str,port:int):
         self.ss = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         self.host = host
         self.port = port
-        self.__msg = bytes()
+        self.__msg = bytearray()
+        self.__height = int()
+        self.__width = int()
+        self.__thermal = np.array(dtype='int32')
         self.__term = True
         self.csocket = socket.socket()
         self.new_frame_avaliable = False
+        self.insync = False
 
     def start_connection(self):
         host = self.host
@@ -41,18 +46,65 @@ class Live_connection:
         csocket = self.csocket
         # csocket is now the active recieving
         while self.__term:
-            bufsize = int(csocket.recv(1024).decode('ascii'))
-            print("1")
-            csocket.send((str(bufsize) + " bytes is going to be recieve\n").encode('ascii'))
-            print("2")
-            self.__msg = csocket.recv(bufsize*8)
-            print("3")
-            csocket.send("recieved\n".encode('ascii'))
-            self.new_frame_avaliable = True
+            message = ""
+            while (message != "new" and message != "new thermal") and self.__term:
+                try:
+                    data = csocket.recv(1024)
+                    if data:
+                        message = str(data.decode('ascii'))
+                    break;
+                except UnicodeDecodeError:
+                    print("invalid input recieved")
+
+                print(message)
+
+            if message == "new":
+                self.__visual_data(csocket)
+            else:
+                self.__thermal_data(csocket)
+
+            csocket.send("ok\n".encode('ascii'))
+
+    def __thermal_data(self,csocket):
+        info = csocket.recv(1024).decode('ascii').split()
+        bufsize = int(info[0])
+        self.width = int(info[1])
+        self.height = int(info[2])
+        print("1")
+        csocket.send((str(bufsize) + " bytes is going to be recieve\n").encode('ascii'))
+        print("2")
+        temp = bytearray()
+        while len(temp)<bufsize:
+            data = csocket.recv(bufsize)
+            temp += bytearray(data)
+        templ = np.frombuffer(temp,dtype=np.int32)
+        self.__thermal = templ
+        print("3")
+        csocket.send("recieved\n".encode('ascii'))
+        print("recieved")
+        self.insync = True
+
+
+    def __visual_data(self,csocket):
+        bufsize = int(csocket.recv(1024).decode('ascii'))
+        print("1")
+        csocket.send((str(bufsize) + " bytes is going to be recieve\n").encode('ascii'))
+        print("2")
+        temp = bytearray()
+        while len(temp)<bufsize:
+            data = csocket.recv(bufsize)
+            temp += bytearray(data)
+        self.__msg = temp
+        print("3")
+        csocket.send("recieved\n".encode('ascii'))
+        print("recieved")
+        self.new_frame_avaliable = True
+        self.insync = False
 
     def getcurrentframe(self):
         self.new_frame_avaliable = False
-        return self.__msg
+        self.thermal_update = False
+        return (self.__msg,self.__thermal)
 
     def terminate(self):
         self.__term = False
