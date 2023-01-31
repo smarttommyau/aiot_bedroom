@@ -50,7 +50,7 @@ import java.util.EnumSet;
  * @see Device.StreamDelegate
  * @see Device.PowerUpdateDelegate
  */
-public class GLPreviewActivity extends Activity implements Device.Delegate, FrameProcessor.Delegate, Device.StreamDelegate, Device.PowerUpdateDelegate{
+public class GLPreviewActivity extends Activity implements Device.Delegate, FrameProcessor.Delegate, Device.StreamDelegate{
     GLSurfaceView thermalSurfaceView;
 //    private volatile boolean imageCaptureRequested = false;
     private boolean chargeCableIsConnected = true;
@@ -89,13 +89,10 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
                       });
         
         flirOneDevice = device;
-        flirOneDevice.setPowerUpdateDelegate(this);
         flirOneDevice.startFrameStream(this);
 
 
         //setup some of the value
-        frameProcessor.setGLOutputMode(RenderedImage.ImageType.ThermalRGBA8888Image);
-        frameProcessor.setImagePalette(RenderedImage.Palette.Rainbow);
 
 //
 //        final ToggleButton chargeCableButton = (ToggleButton)findViewById(R.id.chargeCableToggle);
@@ -184,53 +181,53 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
     public void onAutomaticTuningChanged(boolean deviceWillTuneAutomatically) {
 
     }
-    private ColorFilter originalChargingIndicatorColor = null;
-    @Override
-    public void onBatteryChargingStateReceived(final Device.BatteryChargingState batteryChargingState) {
-        Log.i("ExampleApp", "Battery charging state received!");
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ImageView chargingIndicator = (ImageView)findViewById(R.id.batteryChargeIndicator);
-                if (originalChargingIndicatorColor == null){
-                    originalChargingIndicatorColor = chargingIndicator.getColorFilter();
-                }
-                switch (batteryChargingState) {
-                    case FAULT:
-                    case FAULT_HEAT:
-                        chargingIndicator.setColorFilter(Color.RED);
-                        chargingIndicator.setVisibility(View.VISIBLE);
-                        break;
-                    case FAULT_BAD_CHARGER:
-                        chargingIndicator.setColorFilter(Color.DKGRAY);
-                        chargingIndicator.setVisibility(View.VISIBLE);
-                    case MANAGED_CHARGING:
-                        chargingIndicator.setColorFilter(originalChargingIndicatorColor);
-                        chargingIndicator.setVisibility(View.VISIBLE);
-                        break;
-                    case NO_CHARGING:
-                    default:
-                        chargingIndicator.setVisibility(View.GONE);
-                        break;
-                }
-            }
-        });
-    }
-    @Override
-    public void onBatteryPercentageReceived(final byte percentage){
-        Log.i("ExampleApp", "Battery percentage received!");
-
-        final TextView levelTextView = (TextView)findViewById(R.id.batteryLevelTextView);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                levelTextView.setText(String.valueOf((int) percentage) + "%");
-            }
-        });
-
-
-    }
+//    private ColorFilter originalChargingIndicatorColor = null;
+//    @Override
+//    public void onBatteryChargingStateReceived(final Device.BatteryChargingState batteryChargingState) {
+//        Log.i("ExampleApp", "Battery charging state received!");
+//
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                ImageView chargingIndicator = (ImageView)findViewById(R.id.batteryChargeIndicator);
+//                if (originalChargingIndicatorColor == null){
+//                    originalChargingIndicatorColor = chargingIndicator.getColorFilter();
+//                }
+//                switch (batteryChargingState) {
+//                    case FAULT:
+//                    case FAULT_HEAT:
+//                        chargingIndicator.setColorFilter(Color.RED);
+//                        chargingIndicator.setVisibility(View.VISIBLE);
+//                        break;
+//                    case FAULT_BAD_CHARGER:
+//                        chargingIndicator.setColorFilter(Color.DKGRAY);
+//                        chargingIndicator.setVisibility(View.VISIBLE);
+//                    case MANAGED_CHARGING:
+//                        chargingIndicator.setColorFilter(originalChargingIndicatorColor);
+//                        chargingIndicator.setVisibility(View.VISIBLE);
+//                        break;
+//                    case NO_CHARGING:
+//                    default:
+//                        chargingIndicator.setVisibility(View.GONE);
+//                        break;
+//                }
+//            }
+//        });
+//    }
+//    @Override
+//    public void onBatteryPercentageReceived(final byte percentage){
+//        Log.i("ExampleApp", "Battery percentage received!");
+//
+//        final TextView levelTextView = (TextView)findViewById(R.id.batteryLevelTextView);
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                levelTextView.setText(String.valueOf((int) percentage) + "%");
+//            }
+//        });
+//
+//
+//    }
 
     // StreamDelegate method
     public void onFrameReceived(Frame frame) {
@@ -239,7 +236,13 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
         if (currentTuningState != Device.TuningState.InProgress){
             frameProcessor.processFrame(frame, FrameProcessor.QueuingOption.CLEAR_QUEUED);
             thermalSurfaceView.requestRender();
-
+//            if(this.socketConnection!= null && this.socketConnection.success){
+//                try{
+//                    this.socketConnection.sendFrame(frame,frameProcessor);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
         }
 
     }
@@ -248,10 +251,30 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
 
     // Frame Processor Delegate method, will be called each time a rendered frame is produced
     public void onFrameProcessed(final RenderedImage renderedImage){
+        if(this.socketConnection!= null && this.socketConnection.success) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (renderedImage.imageType() == RenderedImage.ImageType.VisibleAlignedRGBA8888Image) {
+                        try {
+                            socketConnection.sendrenderFrame(renderedImage);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else if (renderedImage.imageType() == RenderedImage.ImageType.ThermalRadiometricKelvinImage) {
 
+                        try {
+                            socketConnection.sendTemperaturedata(renderedImage);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }).start();
+
+        }
         if (renderedImage.imageType() == RenderedImage.ImageType.ThermalRadiometricKelvinImage){
             // Note: this code is not optimized
-
             int[] thermalPixels = renderedImage.thermalPixelValues();
             // average the center 9 pixels for the spot meter
 
@@ -287,13 +310,7 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
                     ((TextView)findViewById(R.id.spotMeterValue)).setText(spotMeterValue);
                 }
             });
-            if(this.socketConnection!= null && this.socketConnection.success){
-                try {
-                    this.socketConnection.sendFrame(renderedImage);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+
         }
 
 //        /*
@@ -457,9 +474,6 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
     @Override
     protected void onStart(){
         super.onStart();
-        if (Device.getSupportedDeviceClasses(this).contains(FlirUsbDevice.class)){
-            findViewById(R.id.pleaseConnect).setVisibility(View.VISIBLE);
-        }
         try {
             Device.startDiscovery(this, this);
         }catch(IllegalStateException e){
@@ -489,10 +503,10 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
         final View controlsViewTop = findViewById(R.id.fullscreen_content_controls_top);
         final View contentView = findViewById(R.id.fullscreen_content);
 
-        RenderedImage.ImageType defaultImageType = RenderedImage.ImageType.ThermalRGBA8888Image;
-        frameProcessor = new FrameProcessor(this, this, EnumSet.of(RenderedImage.ImageType.ThermalRadiometricKelvinImage), true);
-        frameProcessor.setGLOutputMode(defaultImageType);
-
+//        frameProcessor = new FrameProcessor(this, this, EnumSet.of(RenderedImage.ImageType.VisibleAlignedRGBA8888Image,RenderedImage.ImageType.ThermalRadiometricKelvinImage, RenderedImage.ImageType.ThermalRGBA8888Image), true);
+        frameProcessor = new FrameProcessor(this, this, EnumSet.of(RenderedImage.ImageType.VisibleAlignedRGBA8888Image,RenderedImage.ImageType.ThermalRadiometricKelvinImage), true);
+        frameProcessor.setImagePalette(RenderedImage.Palette.Rainbow);
+        frameProcessor.setGLOutputMode(RenderedImage.ImageType.VisibleAlignedRGBA8888Image);
         thermalSurfaceView = (GLSurfaceView) findViewById(R.id.imageView);
         thermalSurfaceView.setPreserveEGLContextOnPause(true);
         thermalSurfaceView.setEGLContextClientVersion(2);
@@ -615,6 +629,8 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
 
                 try {
                     socketConnection = new SocketConnection(ip,port,GLPreviewActivity.this);
+                    if(socketConnection.success == false)
+                        socketConnection = null;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

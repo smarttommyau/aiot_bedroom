@@ -46,7 +46,7 @@
                 android:layout_width="150dp"
                 android:layout_height="50dp"
                 android:layout_marginBottom="40dp"
-                android:inputType="text"
+                android:inputType="number"
                 android:text="192.168.0.1"
                 android:textSize="20sp" />
 
@@ -94,7 +94,8 @@
                     android:layout_margin="8dp"
                     android:layout_weight="0"
                     android:text="@string/battery_label"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:visibility="gone" />
 
                 <ImageView
                     android:id="@+id/batteryChargeIndicator"
@@ -113,7 +114,8 @@
                     android:layout_gravity="left|center_vertical"
                     android:layout_weight="0.48"
                     android:text="--"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:visibility="gone" />
 
                 <ToggleButton
                     android:id="@+id/chargeCableToggle"

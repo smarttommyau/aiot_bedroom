@@ -1,37 +1,52 @@
 package com.flir.flironeexampleapplication;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Picture;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.flir.flironesdk.Frame;
+import com.flir.flironesdk.FrameProcessor;
 import com.flir.flironesdk.RenderedImage;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 public class SocketConnection {
-    private final String ip;
-    private final int port;
     private final Context context;
     public boolean success;
     private Socket socket;
-    private BufferedReader br;
     private volatile boolean socketlock;
-    public SocketConnection(final String ip, final int port, final Context context) throws IOException, InterruptedException {
-        this.ip = ip;
-        this.port = port;
+    private volatile boolean lastlock;//true for visual , false for thermal
+    private volatile boolean lastlocklock;
+    private volatile boolean first;
+    private volatile boolean forcestop;
+    public SocketConnection(final String ip, final int port, final Context context) {
         this.context = context;
         this.success = true;
         this.socket = null;
         this.socketlock = true;
-        new Thread(new Runnable() {
+        this.lastlocklock = false;
+        this.lastlock = false;
+        this.first = true;
+        this.forcestop = false;
+        final Thread t1 = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -49,7 +64,7 @@ public class SocketConnection {
                     return;
                 }
                 socket.isConnected();
-                InputStream is = null;
+                InputStream is;
                 try {
                     is = socket.getInputStream();
                 } catch (IOException e) {
@@ -61,8 +76,8 @@ public class SocketConnection {
                     throw new RuntimeException(e);
                 }
                 InputStreamReader isr = new InputStreamReader(is);
-                br = new BufferedReader(isr);
-                String result = null;
+                BufferedReader br = new BufferedReader(isr);
+                String result;
                 try {
                     result = br.readLine();
                 } catch (IOException e) {
@@ -97,36 +112,219 @@ public class SocketConnection {
                 Toast.makeText(context,"Update success",Toast.LENGTH_SHORT).show();
                 Looper.loop();
             }
-        }).start();
+        });
+        t1.start();
+
         //initial finished
     }
-    public void sendFrame(final RenderedImage frame) throws IOException, InterruptedException {
+    public void sendFrame(final Frame frame, final FrameProcessor frameProcessor){
         if(this.socketlock)
             return;
         this.socketlock = true;
         new Thread(new Runnable() {
             @Override
             public void run() {
-                OutputStream outputStream = null;
+                OutputStream outputStream;
+                BufferedReader br;
                 try {
                     outputStream = socket.getOutputStream();
+                    br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 } catch (IOException e) {
                     Log.e("SocketInfo",e.toString());
                     Toast.makeText(context,e.toString(),Toast.LENGTH_SHORT).show();
                     throw new RuntimeException(e);
                 }
-                byte[] data = frame.pixelData();
+//                byte[] data = frame.pixelData();
+
+                File file;
+                try {
+                    file = File.createTempFile("temp","temp");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                try {
+                    frame.save(file,frameProcessor);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                byte[] data = new byte[(int) file.length()];
+                try {
+                    BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
+                    buf.read(data,0, data.length);
+                    buf.close();
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 //send the size of the frame
                 Log.i( "SocketInfo","size:"+data.length);
-                String result="";
+                String result;
                 try {
-                    outputStream.write((""+data.length).getBytes(StandardCharsets.US_ASCII));
+                    Log.i("SocketInfo","sending new");
+                    outputStream.write(("new".getBytes(StandardCharsets.US_ASCII)));
                     outputStream.flush();
+                    Log.i( "SocketInfo","Connection confirmation: "+br.readLine());
+                    outputStream = socket.getOutputStream();
+                    outputStream.write(((""+data.length).getBytes(StandardCharsets.US_ASCII)));
+                    outputStream.flush();
+                    br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     Log.i( "SocketInfo","size confirmation: "+br.readLine());
                     //send
+                    outputStream = socket.getOutputStream();
                     outputStream.write(data);
                     outputStream.flush();
                     Log.i("SocketInfo","sent");
+                    br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    result = br.readLine();
+                    Log.i("SocketInfo",result);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                if(result.charAt(0) != 'a')
+                    Log.e( "SocketInfo",result);
+                else
+                    Log.i("SocketInfo",result);
+                socketlock = false;
+            }
+
+        }).start();
+    }
+    public void sendrenderFrame(final RenderedImage frame){
+        Log.i("Socket send type", frame.imageType() == RenderedImage.ImageType.VisibleAlignedRGBA8888Image?"visual":"Thermal");
+        final boolean currentlock = frame.imageType()==RenderedImage.ImageType.VisibleAlignedRGBA8888Image;
+        if(this.socketlock&&(this.lastlocklock||currentlock==this.lastlock))
+            return;
+        else {
+            if(this.first){
+                this.first = false;
+            }
+            this.lastlocklock = true;
+            while (this.socketlock)
+                ;
+            lastlock = frame.imageType()== RenderedImage.ImageType.VisibleAlignedRGBA8888Image;
+            this.socketlock = true;
+            this.lastlocklock = false;
+        }
+        this.socketlock = true;
+        lastlock = frame.imageType()== RenderedImage.ImageType.VisibleAlignedRGBA8888Image;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OutputStream outputStream;
+                BufferedReader br;
+                try {
+                    outputStream = socket.getOutputStream();
+                    br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                } catch (IOException e) {
+                    Log.e("SocketInfo",e.toString());
+                    Toast.makeText(context,e.toString(),Toast.LENGTH_SHORT).show();
+                    throw new RuntimeException(e);
+                }
+                Bitmap bitmap = frame.getBitmap();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] data = stream.toByteArray();
+
+                //send the size of the frame
+                Log.i( "SocketInfo","size:"+data.length);
+                String result;
+                try {
+                    Log.i("SocketInfo","sending new");
+                    outputStream.write(("new".getBytes(StandardCharsets.US_ASCII)));
+                    outputStream.flush();
+                    Log.i( "SocketInfo","Connection confirmation: "+br.readLine());
+                    outputStream = socket.getOutputStream();
+                    outputStream.write(((""+data.length).getBytes(StandardCharsets.US_ASCII)));
+                    outputStream.flush();
+                    br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    Log.i( "SocketInfo","size confirmation: "+br.readLine());
+                    //send
+                    outputStream = socket.getOutputStream();
+                    outputStream.write(data);
+                    outputStream.flush();
+                    Log.i("SocketInfo","sent");
+                    br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    result = br.readLine();
+                    Log.i("SocketInfo",result);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                if(result.charAt(0) != 'a')
+                    Log.e( "SocketInfo",result);
+                else
+                    Log.i("SocketInfo",result);
+                socketlock = false;
+            }
+
+        }).start();
+    }
+    public void sendTemperaturedata(final RenderedImage frame){
+        Log.i("Socket send type", "Thermal");
+        final boolean currentlock = frame.imageType()==RenderedImage.ImageType.VisibleAlignedRGBA8888Image;
+        if(this.socketlock&&(currentlock==this.lastlock||this.lastlocklock))
+            return;
+        else {
+            if(this.first) {
+                this.lastlocklock = true;
+                while (this.first)
+                    ;
+                this.lastlocklock = false;
+            }
+            this.lastlocklock = true;
+            while (this.socketlock)
+                ;
+            this.socketlock = true;
+            lastlock = frame.imageType()== RenderedImage.ImageType.VisibleAlignedRGBA8888Image;
+            this.lastlocklock = false;
+        }
+        this.socketlock = true;
+        lastlock = frame.imageType()== RenderedImage.ImageType.VisibleAlignedRGBA8888Image;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OutputStream outputStream;
+                BufferedReader br;
+                try {
+                    outputStream = socket.getOutputStream();
+                    br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                } catch (IOException e) {
+                    Log.e("SocketInfo",e.toString());
+                    Toast.makeText(context,e.toString(),Toast.LENGTH_SHORT).show();
+                    throw new RuntimeException(e);
+                }
+                int[] pixels = frame.thermalPixelValues();
+                byte[] data = new byte[pixels.length*4];
+                for(int i=0;i<pixels.length;i++) {
+                    data[i*4] = (byte) (pixels[i] >> 24);
+                    data[i*4+1] = (byte) (pixels[i] >> 16);
+                    data[i*4+2] = (byte) (pixels[i] >> 8);
+                    data[i*4+3] = (byte) (pixels[i] /*>> 0*/);
+                }
+
+                //send the size of the frame
+                Log.i( "SocketInfo","size:"+data.length );
+                String result;
+                try {
+                    Log.i("SocketInfo","sending new");
+                    outputStream.write(("new thermal".getBytes(StandardCharsets.US_ASCII)));
+                    outputStream.flush();
+                    Log.i( "SocketInfo","Connection confirmation: "+br.readLine());
+                    outputStream = socket.getOutputStream();
+                    outputStream.write(((""+data.length+" "+frame.width()+" "+frame.height()).getBytes(StandardCharsets.US_ASCII)));
+                    outputStream.flush();
+                    br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    Log.i( "SocketInfo","size confirmation: "+br.readLine());
+                    //send
+                    outputStream = socket.getOutputStream();
+                    outputStream.write(data);
+                    outputStream.flush();
+                    Log.i("SocketInfo","sent");
+                    br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     result = br.readLine();
                     Log.i("SocketInfo",result);
                 } catch (IOException e) {
@@ -144,13 +342,16 @@ public class SocketConnection {
     }
     public void terminate() throws InterruptedException {
         socketlock = true;
+        forcestop = true;
             Thread t1 = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    if(socket.isConnected()&&!socket.isClosed()) {
+                    if(socket!=null&&socket.isConnected()&&!socket.isClosed()) {
                         try {
                             socket.close();
                         } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        } catch (java.lang.NullPointerException e){
                             throw new RuntimeException(e);
                         }
                     }
