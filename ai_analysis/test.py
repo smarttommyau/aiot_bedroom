@@ -14,10 +14,12 @@ for i in range(10):
     while not connection.new_frame_avaliable:
         pass
     print("1000")
-    frame = connection.getcurrentframe()
+    (frame,thermal) = connection.getcurrentframe()
     f = open("test" + str(i) + ".png","wb")
     f.write(frame)
     f.close()
+    print(int(thermal[int(connection.width/2)][int(connection.height/2)])/100 - 273,"\n")
+    
 
 connection.terminate()
 t1.join()
