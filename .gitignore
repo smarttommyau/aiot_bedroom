@@ -1,0 +1,4 @@
+*.arr
+./flir-cam-connect/FLIROneSDKBundle/DeveloperGuide.md
+./flir-cam-connect/FLIROneSDKBundle/Documentation/*
+
