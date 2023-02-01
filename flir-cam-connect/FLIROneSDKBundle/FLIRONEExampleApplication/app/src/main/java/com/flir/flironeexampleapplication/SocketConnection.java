@@ -33,18 +33,18 @@ public class SocketConnection {
     public boolean success;
     private Socket socket;
     private volatile boolean socketlock;
-    private volatile boolean lastlock;//true for visual , false for thermal
-    private volatile boolean lastlocklock;
-    private volatile boolean first;
+//    private volatile boolean lastlock;//true for visual , false for thermal
+//    private volatile boolean lastlocklock;
+//    private volatile boolean first;
     private volatile boolean forcestop;
     public SocketConnection(final String ip, final int port, final Context context) {
         this.context = context;
         this.success = true;
         this.socket = null;
         this.socketlock = true;
-        this.lastlocklock = false;
-        this.lastlock = false;
-        this.first = true;
+//        this.lastlocklock = false;
+//        this.lastlock = false;
+//        this.first = true;
         this.forcestop = false;
         final Thread t1 = new Thread(new Runnable() {
             @Override
@@ -193,22 +193,22 @@ public class SocketConnection {
     }
     public void sendrenderFrame(final RenderedImage frame){
         Log.i("Socket send type", frame.imageType() == RenderedImage.ImageType.VisibleAlignedRGBA8888Image?"visual":"Thermal");
-        final boolean currentlock = frame.imageType()==RenderedImage.ImageType.VisibleAlignedRGBA8888Image;
-        if(this.socketlock&&(this.lastlocklock||currentlock==this.lastlock))
+//        final boolean currentlock = frame.imageType()==RenderedImage.ImageType.VisibleAlignedRGBA8888Image;
+        if(this.socketlock/*&&(this.lastlocklock||currentlock==this.lastlock)*/)
             return;
-        else {
-            if(this.first){
-                this.first = false;
-            }
-            this.lastlocklock = true;
-            while (this.socketlock)
-                ;
-            lastlock = frame.imageType()== RenderedImage.ImageType.VisibleAlignedRGBA8888Image;
-            this.socketlock = true;
-            this.lastlocklock = false;
-        }
+//        else {
+//            if(this.first){
+//                this.first = false;
+//            }
+//            this.lastlocklock = true;
+//            while (this.socketlock)
+//                ;
+//            lastlock = frame.imageType()== RenderedImage.ImageType.VisibleAlignedRGBA8888Image;
+//            this.socketlock = true;
+//            this.lastlocklock = false;
+//        }
         this.socketlock = true;
-        lastlock = frame.imageType()== RenderedImage.ImageType.VisibleAlignedRGBA8888Image;
+//        lastlock = frame.imageType()== RenderedImage.ImageType.VisibleAlignedRGBA8888Image;
 
         new Thread(new Runnable() {
             @Override
@@ -233,7 +233,8 @@ public class SocketConnection {
                 String result;
                 try {
                     Log.i("SocketInfo","sending new");
-                    outputStream.write(("new".getBytes(StandardCharsets.US_ASCII)));
+                    outputStream.write((("new "+frame.getFrame().hashCode()).getBytes(StandardCharsets.US_ASCII)));
+
                     outputStream.flush();
                     Log.i( "SocketInfo","Connection confirmation: "+br.readLine());
                     outputStream = socket.getOutputStream();
@@ -264,25 +265,25 @@ public class SocketConnection {
     }
     public void sendTemperaturedata(final RenderedImage frame){
         Log.i("Socket send type", "Thermal");
-        final boolean currentlock = frame.imageType()==RenderedImage.ImageType.VisibleAlignedRGBA8888Image;
-        if(this.socketlock&&(currentlock==this.lastlock||this.lastlocklock))
+//        final boolean currentlock = frame.imageType()==RenderedImage.ImageType.VisibleAlignedRGBA8888Image;
+        if(this.socketlock/*&&(currentlock==this.lastlock||this.lastlocklock)*/)
             return;
-        else {
-            if(this.first) {
-                this.lastlocklock = true;
-                while (this.first)
-                    ;
-                this.lastlocklock = false;
-            }
-            this.lastlocklock = true;
-            while (this.socketlock)
-                ;
-            this.socketlock = true;
-            lastlock = frame.imageType()== RenderedImage.ImageType.VisibleAlignedRGBA8888Image;
-            this.lastlocklock = false;
-        }
+//        else {
+//            if(this.first) {
+//                this.lastlocklock = true;
+//                while (this.first)
+//                    ;
+//                this.lastlocklock = false;
+//            }
+//            this.lastlocklock = true;
+//            while (this.socketlock)
+//                ;
+//            this.socketlock = true;
+//            lastlock = frame.imageType()== RenderedImage.ImageType.VisibleAlignedRGBA8888Image;
+//            this.lastlocklock = false;
+//        }
         this.socketlock = true;
-        lastlock = frame.imageType()== RenderedImage.ImageType.VisibleAlignedRGBA8888Image;
+//        lastlock = frame.imageType()== RenderedImage.ImageType.VisibleAlignedRGBA8888Image;
 
         new Thread(new Runnable() {
             @Override
@@ -310,8 +311,9 @@ public class SocketConnection {
                 Log.i( "SocketInfo","size:"+data.length );
                 String result;
                 try {
+
                     Log.i("SocketInfo","sending new");
-                    outputStream.write(("new thermal".getBytes(StandardCharsets.US_ASCII)));
+                    outputStream.write((("new thermal "+frame.getFrame().hashCode()).getBytes(StandardCharsets.US_ASCII)));
                     outputStream.flush();
                     Log.i( "SocketInfo","Connection confirmation: "+br.readLine());
                     outputStream = socket.getOutputStream();

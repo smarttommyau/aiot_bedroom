@@ -78,6 +78,7 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
     private volatile String ip;
     private volatile int port;
     private volatile SocketConnection socketConnection;
+    private volatile SocketConnection socketConnectionTh;
 
     public void onDeviceConnected(Device device){
         Log.i("ExampleApp", "Device connected!");
@@ -264,7 +265,9 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
                     } else if (renderedImage.imageType() == RenderedImage.ImageType.ThermalRadiometricKelvinImage) {
 
                         try {
-                            socketConnection.sendTemperaturedata(renderedImage);
+                            if(socketConnectionTh!= null && socketConnectionTh.success) {
+                                socketConnectionTh.sendTemperaturedata(renderedImage);
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -629,8 +632,11 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
 
                 try {
                     socketConnection = new SocketConnection(ip,port,GLPreviewActivity.this);
+                    socketConnectionTh = new SocketConnection(ip,port,GLPreviewActivity.this);
                     if(socketConnection.success == false)
                         socketConnection = null;
+                    if(socketConnectionTh.success == false)
+                        socketConnectionTh = null;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
