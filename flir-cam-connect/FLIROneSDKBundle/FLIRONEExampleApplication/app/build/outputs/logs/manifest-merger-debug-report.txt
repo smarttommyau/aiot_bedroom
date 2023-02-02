@@ -38,7 +38,7 @@ INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSD
 INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:2:1-50:12
 INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:2:1-50:12
 	package
-		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:4:5-49
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:4:5-48
 		INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml
 		INJECTED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml
 	android:versionName
@@ -77,12 +77,12 @@ MERGED from [com.android.support:versionedparcelable:28.0.0] C:\Users\Tommy AU\.
 		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:7:9-35
 	android:theme
 		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:10:9-40
-activity#com.flir.flironeexampleapplication.EditorActivity
+activity#com.tommy.AIotFlirCameraConnector.EditorActivity
 ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:13:9-23:20
 	android:screenOrientation
 		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:14:13-49
 	android:name
-		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:13:19-49
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:13:19-82
 intent-filter#action:name:android.intent.action.EDIT+action:name:android.intent.action.PICK+action:name:android.intent.action.SEND+action:name:android.intent.action.VIEW+category:name:android.intent.category.DEFAULT+data:mimeType:image/jpeg
 ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:15:13-22:29
 	tools:ignore
@@ -111,7 +111,7 @@ data
 ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:21:17-55
 	android:mimeType
 		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:21:23-52
-activity#com.flir.flironeexampleapplication.GLPreviewActivity
+activity#com.tommy.AIotFlirCameraConnector.GLPreviewActivity
 ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:24:9-45:20
 	android:screenOrientation
 		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:26:13-49
@@ -124,7 +124,7 @@ ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBu
 	android:theme
 		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:30:13-51
 	android:name
-		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:25:13-46
+		ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:25:13-79
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
 ADDED from D:\my programs\python\Aiot\aiot_bedroom\flir-cam-connect\FLIROneSDKBundle\FLIRONEExampleApplication\app\src\main\AndroidManifest.xml:31:13-35:29
 action#android.intent.action.MAIN

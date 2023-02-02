@@ -1,7 +1,7 @@
 import socket
 import numpy as np
 import threading
-import time.sleep as sleep
+from time import sleep
 class Live_connection:
     def __init__(self,host:str,port:int):
         self.ss = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -15,8 +15,8 @@ class Live_connection:
         self.__newthermal = np.array([],dtype='int32')
         self.__term = True
         self.new_frame_avaliable = False
-        self.__new_hash = ""
-        self.__synced = False
+        self.__new_frameid = ""
+        self.__synced = False # true thermal, flase visual
 
         
 
@@ -51,16 +51,20 @@ class Live_connection:
             csocket.send("accepted\n".encode('ascii'))
             t1 = threading.Thread(target = self.start_recieve,args=(csocket,))
             t1.start()
-            count+=1
+            count+=1 
             prompt = "n"
 
 # use multiprocess thing to call start_recieve
     def start_recieve(self,csocket):
         print("recieving")
         # csocket is now the active recieving
+        state = ""
+        while not(state=="true" or state=="false"):
+            state = str(csocket.recv(2048).decode('ascii'))    
+        csocket.send("setup fin\n".encode('ascii'))
         while self.__term:
             message = ""
-            while not(message[:3] == "new") and self.__term:
+            while not(message == "new") and self.__term:
                 try:
                     message = str(csocket.recv(4096).decode('ascii'))
                     break;
@@ -71,14 +75,14 @@ class Live_connection:
 
             csocket.send("ok\n".encode('ascii'))
             splited = message.split()
-            if splited[1] != "thermal":
+            if state == "true":
                 self.__visual_data(csocket,splited[1])
             else:
-                self.__thermal_data(csocket,splited[2])
+                self.__thermal_data(csocket,splited[1])
 
 
-    def __thermal_data(self,csocket,hash):
-        print("thermal")
+    def __thermal_data(self,csocket,frameid):
+        print("thermal",frameid)
         info = csocket.recv(1024).decode('ascii').split()
         bufsize = int(info[0])
         self.width = int(info[1])
@@ -90,9 +94,9 @@ class Live_connection:
         while len(tempdata)<bufsize:
             data = csocket.recv(bufsize)
             tempdata += bytearray(data)
-        t1 = threading.Thread(target = self.__thermal_data_process,args=(csocket,hash,tempdata))
+        t1 = threading.Thread(target = self.__thermal_data_process,args=(csocket,frameid,tempdata))
         t1.start()
-    def __thermal_data_process(self,csocket,hash,tempdata):
+    def __thermal_data_process(self,csocket,frameid,tempdata):
         temp = np.zeros([self.height,self.width],dtype='int32')
         for j in range(self.height):
             for i in range(self.width):
@@ -104,28 +108,28 @@ class Live_connection:
         self.__newthermal = temp
         print("3")
         csocket.send("recieved\n".encode('ascii'))
-        print("recievedTh")
-        retry = true
+        print("recievedTh",frameid)
+        retry = True
         count = 0
         while retry and count <2:
-        if(hash!=self.__new_hash and self.__synced):
-            self.__new_hash = hash
-            self.__synced = false
-            retry = false
-        else if (hash == self.__new_hash):
-            self.__synced = True
-            self.new_frame_avaliable = True
-            self.__msg = self.__newmsg
-            self.__thermal = self.__newthermal
-            retry = False
-        else:
-            sleep(0.3)
-            retry = true
-            count +=1
+            if(frameid!=self.__new_frameid and not self.__synced):
+                self.__new_frameid = frameid
+                self.__synced = True
+                retry = False
+            elif (frameid == self.__new_frameid):
+                self.__synced = True 
+                self.new_frame_avaliable = True
+                self.__msg = self.__newmsg
+                self.__thermal = self.__newthermal
+                retry = False
+            else:
+                sleep(0.3)
+                retry = True
+                count +=1
 
 
-    def __visual_data(self,csocket,hash):
-        print("visual")
+    def __visual_data(self,csocket,frameid):
+        print("visual",frameid)
         bufsize = int(csocket.recv(1024).decode('ascii'))
         print("1")
         csocket.send((str(bufsize) + " bytes is going to be recieve\n").encode('ascii'))
@@ -137,22 +141,24 @@ class Live_connection:
         self.__newmsg = temp
         print("3")
         csocket.send("recieved\n".encode('ascii'))
-        print("recievedVi")
+        print("recievedVi",frameid)
+        retry = True
+        count  = 0
         while retry and count <2:
-        if(hash!=self.__new_hash and self.__synced):
-            self.__new_hash = hash
-            self.__synced = false
-            retry = false
-        else if (hash == self.__new_hash):
-            self.__synced = True
-            self.new_frame_avaliable = True
-            self.__msg = self.__newmsg
-            self.__thermal = self.__newthermal
-            retry = False
-        else:
-            sleep(0.3)
-            retry = true
-            count +=1l
+            if(frameid!=self.__new_frameid and self.__synced):
+                self.__new_frameid = frameid
+                self.__synced = False
+                retry = False
+            elif (frameid == self.__new_frameid):
+                self.__synced = False
+                self.new_frame_avaliable = True
+                self.__msg = self.__newmsg
+                self.__thermal = self.__newthermal
+                retry = False
+            else:
+                sleep(0.3)
+                retry = True
+                count +=1
         
 
     def getcurrentframe(self):

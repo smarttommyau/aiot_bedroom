@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:background="@android:color/background_dark"
     android:orientation="vertical"
-    tools:context=".PreviewActivity" android:keepScreenOn="true" android:id="@+id/topView"
+    tools:context="com.tommy.AIotFlirCameraConnector.PreviewActivity" android:keepScreenOn="true" android:id="@+id/topView"
     android:touchscreenBlocksFocus="false">
 
 

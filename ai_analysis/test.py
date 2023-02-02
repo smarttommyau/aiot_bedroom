@@ -13,12 +13,10 @@ for i in range(10):
         pass
     print("1000")
     (frame,thermal) = connection.getcurrentframe()
-    f = open("img/test" + str(i) + ".png","wb")
-    f.write(frame)
-    f.close()
-    f = open("img/test" + str(i) + "thermal.txt","w")
-    f.write(str(thermal))
-    f.close()
+    with open('img/test' + str(i) + '.png', 'wb') as f:
+        f.write(frame)
+    with open('img/test' + str(i) + '.txt', 'wb') as f:
+        np.save(f, thermal)
     print(int(thermal[int(connection.width/2)][int(connection.height/2)])/100 - 273,"\n")
     
 

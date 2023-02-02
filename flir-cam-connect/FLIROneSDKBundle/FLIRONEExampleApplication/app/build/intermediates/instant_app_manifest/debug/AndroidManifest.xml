@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.flir.flironeexampleapplication"
+    package="com.tommy.AIotFlirCameraConnector"
     android:targetSandboxVersion="2"
     android:versionCode="21"
     android:versionName="3.1.5" >
@@ -24,7 +24,7 @@
         android:versionCode="3"
         android:versionName="0.3" >
         <activity
-            android:name="com.flir.flironeexampleapplication.EditorActivity"
+            android:name="com.tommy.AIotFlirCameraConnector.EditorActivity"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -38,7 +38,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.flir.flironeexampleapplication.GLPreviewActivity"
+            android:name="com.tommy.AIotFlirCameraConnector.GLPreviewActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:launchMode="singleTask"
