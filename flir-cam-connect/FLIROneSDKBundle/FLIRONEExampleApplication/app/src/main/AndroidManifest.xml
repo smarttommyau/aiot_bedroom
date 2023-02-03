@@ -10,17 +10,6 @@
         android:theme="@style/AppTheme"
         android:versionCode="3"
         android:versionName="0.3">
-        <activity android:name="com.tommy.AIotFlirCameraConnector.EditorActivity"
-            android:screenOrientation="portrait">
-            <intent-filter tools:ignore="AppLinkUrlError">
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.EDIT" />
-                <action android:name="android.intent.action.PICK" />
-                <action android:name="android.intent.action.SEND"/>
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="image/jpeg" />
-            </intent-filter>
-        </activity>
         <activity
             android:name="com.tommy.AIotFlirCameraConnector.GLPreviewActivity"
             android:screenOrientation="portrait"
@@ -45,6 +34,6 @@
         </activity>
 
     </application>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

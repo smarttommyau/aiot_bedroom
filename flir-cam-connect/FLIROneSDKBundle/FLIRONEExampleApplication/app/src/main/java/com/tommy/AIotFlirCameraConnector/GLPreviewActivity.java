@@ -21,8 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.tommy.AIotFlirCameraConnector.R;
-import com.tommy.AIotFlirCameraConnector.util.SystemUiHider;
 import com.flir.flironesdk.Device;
 import com.flir.flironesdk.Frame;
 import com.flir.flironesdk.FrameProcessor;
@@ -31,17 +29,6 @@ import com.flir.flironesdk.RenderedImage;
 import java.text.NumberFormat;
 import java.util.EnumSet;
 
-/**
- * An example activity and delegate for FLIR One image streaming and device interaction.
- * Based on an example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- *
- * @see SystemUiHider
- * @see Device.Delegate
- * @see FrameProcessor.Delegate
- * @see Device.StreamDelegate
- * @see Device.PowerUpdateDelegate
- */
 public class GLPreviewActivity extends Activity implements Device.Delegate, FrameProcessor.Delegate, Device.StreamDelegate{
     GLSurfaceView thermalSurfaceView;
 //    private volatile boolean imageCaptureRequested = false;
@@ -86,32 +73,6 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
         
         flirOneDevice = device;
         flirOneDevice.startFrameStream(this);
-
-
-        //setup some of the value
-
-//
-//        final ToggleButton chargeCableButton = (ToggleButton)findViewById(R.id.chargeCableToggle);
-//        if(flirOneDevice instanceof SimulatedDevice){
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    chargeCableButton.setChecked(chargeCableIsConnected);
-//                    chargeCableButton.setVisibility(View.VISIBLE);
-//                }
-//            });
-//        }else{
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    chargeCableButton.setChecked(chargeCableIsConnected);
-//                    chargeCableButton.setVisibility(View.INVISIBLE);
-//                    findViewById(R.id.connect_sim_button).setEnabled(false);
-//
-//                }
-//            });
-//        }
-
         orientationEventListener.enable();
 
     }
@@ -177,53 +138,6 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
     public void onAutomaticTuningChanged(boolean deviceWillTuneAutomatically) {
 
     }
-//    private ColorFilter originalChargingIndicatorColor = null;
-//    @Override
-//    public void onBatteryChargingStateReceived(final Device.BatteryChargingState batteryChargingState) {
-//        Log.i("ExampleApp", "Battery charging state received!");
-//
-//        runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                ImageView chargingIndicator = (ImageView)findViewById(R.id.batteryChargeIndicator);
-//                if (originalChargingIndicatorColor == null){
-//                    originalChargingIndicatorColor = chargingIndicator.getColorFilter();
-//                }
-//                switch (batteryChargingState) {
-//                    case FAULT:
-//                    case FAULT_HEAT:
-//                        chargingIndicator.setColorFilter(Color.RED);
-//                        chargingIndicator.setVisibility(View.VISIBLE);
-//                        break;
-//                    case FAULT_BAD_CHARGER:
-//                        chargingIndicator.setColorFilter(Color.DKGRAY);
-//                        chargingIndicator.setVisibility(View.VISIBLE);
-//                    case MANAGED_CHARGING:
-//                        chargingIndicator.setColorFilter(originalChargingIndicatorColor);
-//                        chargingIndicator.setVisibility(View.VISIBLE);
-//                        break;
-//                    case NO_CHARGING:
-//                    default:
-//                        chargingIndicator.setVisibility(View.GONE);
-//                        break;
-//                }
-//            }
-//        });
-//    }
-//    @Override
-//    public void onBatteryPercentageReceived(final byte percentage){
-//        Log.i("ExampleApp", "Battery percentage received!");
-//
-//        final TextView levelTextView = (TextView)findViewById(R.id.batteryLevelTextView);
-//        runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                levelTextView.setText(String.valueOf((int) percentage) + "%");
-//            }
-//        });
-//
-//
-//    }
 
     // StreamDelegate method
     public void onFrameReceived(Frame frame) {
@@ -317,164 +231,13 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
             });
 
         }
-
-//        /*
-//        Capture this image if requested.
-//        */
-//
-//        if (this.imageCaptureRequested) {
-//            imageCaptureRequested = false;
-//            final Context context = this;
-//            new Thread(new Runnable() {
-//                public void run() {
-//                    String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-//                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ssZ", Locale.getDefault());
-//                    String formatedDate = sdf.format(new Date());
-//                    String fileName = "FLIROne-" + formatedDate + ".jpg";
-//                    try{
-//                        lastSavedPath = path+ "/" + fileName;
-//                        renderedImage.getFrame().save(new File(lastSavedPath), frameProcessor);
-//
-//                        MediaScannerConnection.scanFile(context,
-//                                new String[]{path + "/" + fileName}, null,
-//                                new MediaScannerConnection.OnScanCompletedListener() {
-//                                    @Override
-//                                    public void onScanCompleted(String path, Uri uri) {
-//                                        Log.i("ExternalStorage", "Scanned " + path + ":");
-//                                        Log.i("ExternalStorage", "-> uri=" + uri);
-//                                    }
-//
-//                                });
-//
-//                    }catch (Exception e){
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }).start();
-//        }
-
-
 }
-
-
-
-
-    /**
-     * Whether or not the system UI should be auto-hidden after
-     * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
-     */
-    private static final boolean AUTO_HIDE = true;
-
-    /**
-     * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
-     * user interaction before hiding the system UI.
-     */
-    private static final int AUTO_HIDE_DELAY_MILLIS = 3000;
-
-    /**
-     * If set, will toggle the system UI visibility upon interaction. Otherwise,
-     * will show the system UI visibility upon interaction.
-     */
-    private static final boolean TOGGLE_ON_CLICK = true;
-
-    /**
-     * The flags to pass to {@link SystemUiHider#getInstance}.
-     */
-    private static final int HIDER_FLAGS = SystemUiHider.FLAG_HIDE_NAVIGATION;
-
-    /**
-     * The instance of the {@link SystemUiHider} for this activity.
-     */
-    private SystemUiHider mSystemUiHider;
     public void onTuneClicked(View v){
         if (flirOneDevice != null){
             flirOneDevice.performTuning();
         }
 
     }
-//    public void onCaptureImageClicked(View v){
-//        if(flirOneDevice != null) {
-//            this.imageCaptureRequested = true;
-//        }
-//    }
-//    public void onConnectSimClicked(View v){
-//        if(flirOneDevice == null){
-//            try {
-//                flirOneDevice = new SimulatedDevice(this, this, getResources().openRawResource(R.raw.sampleframes), 10);
-//                flirOneDevice.setPowerUpdateDelegate(this);
-//                chargeCableIsConnected = true;
-//            } catch(Exception ex) {
-//                flirOneDevice = null;
-//                Log.w("FLIROneExampleApp", "IO EXCEPTION");
-//                ex.printStackTrace();
-//            }
-//        }else if(flirOneDevice instanceof SimulatedDevice) {
-//            flirOneDevice.close();
-//            flirOneDevice = null;
-//        }
-//    }
-
-//    public void onSimulatedChargeCableToggleClicked(View v){
-//        if(flirOneDevice instanceof SimulatedDevice){
-//            chargeCableIsConnected = !chargeCableIsConnected;
-//            ((SimulatedDevice)flirOneDevice).setChargeCableState(chargeCableIsConnected);
-//        }
-//    }
-//    public void onRotateClicked(View v){
-//        ToggleButton theSwitch = (ToggleButton)v;
-//        if (theSwitch.isChecked()){
-//            frameProcessor.setImageRotation(180.0f);
-//        }else{
-//            frameProcessor.setImageRotation(0.0f);
-//        }
-//    }
-//    public void onChangeViewClicked(View v){
-//        if (frameProcessor == null){
-//            ((ToggleButton)v).setChecked(false);
-//            return;
-//        }
-//        ListView paletteListView = (ListView)findViewById(R.id.paletteListView);
-//        ListView imageTypeListView = (ListView)findViewById(R.id.imageTypeListView);
-//        if (((ToggleButton)v).isChecked()){
-//            // only show palette list if selected image type is colorized
-//            paletteListView.setVisibility(View.INVISIBLE);
-//            for (RenderedImage.ImageType imageType : frameProcessor.getImageTypes()){
-//                if (imageType.isColorized()) {
-//                    paletteListView.setVisibility(View.VISIBLE);
-//                    break;
-//                }
-//            }
-//            imageTypeListView.setVisibility(View.VISIBLE);
-//            findViewById(R.id.imageTypeListContainer).setVisibility(View.VISIBLE);
-//        }else{
-//            findViewById(R.id.imageTypeListContainer).setVisibility(View.GONE);
-//        }
-//
-//
-//    }
-
-//    public void onImageTypeListViewClicked(View v){
-//        int index = ((ListView) v).getSelectedItemPosition();
-//        RenderedImage.ImageType imageType = RenderedImage.ImageType.values()[index];
-//        frameProcessor.setGLOutputMode(imageType);
-//        int paletteVisibility = (imageType.isColorized()) ? View.VISIBLE : View.GONE;
-//        int paletteVisibility = View.GONE;
-//        findViewById(R.id.paletteListView).setVisibility(paletteVisibility);
-//    }
-
-//    public void onPaletteListViewClicked(View v){
-//        RenderedImage.Palette pal = (RenderedImage.Palette )(((ListView)v).getSelectedItem());
-//        frameProcessor.setImagePalette(pal);
-//    }
-
-//    /**
-//     * Example method of starting/stopping a frame stream to a host
-//     * @param v The toggle button pushed
-//     */
-//    public void onVividClicked(View v){
-//        final ToggleButton button = (ToggleButton)v;
-//        frameProcessor.setVividIrEnabled(button.isChecked());
-//    }
 
     @Override
     protected void onStart(){
@@ -527,95 +290,7 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
 //                RenderedImage.ImageType.BlendedMSXRGBA8888Image,
 //        };
 
-//        ListView imageTypeListView = ((ListView)findViewById(R.id.imageTypeListView));
-//        imageTypeListView.setAdapter(new ArrayAdapter<>(this,R.layout.emptytextview,imageTypeNames));
-//        imageTypeListView.setSelection(defaultImageType.ordinal());
-//        imageTypeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                if (frameProcessor != null) {
-//                    RenderedImage.ImageType imageType = imageTypeValues[position];
-//                    frameProcessor.setGLOutputMode(imageType);
-//                    if (imageType.isColorized()){
-//                        findViewById(R.id.paletteListView).setVisibility(View.VISIBLE);
-//                    }else{
-//                        findViewById(R.id.paletteListView).setVisibility(View.INVISIBLE);
-//                    }
-//                }
-//            }
-//        });
-//        imageTypeListView.setDivider(null);
 
-        // Palette List View Setup
-//        ListView paletteListView = ((ListView)findViewById(R.id.paletteListView));
-//        paletteListView.setDivider(null);
-//        paletteListView.setAdapter(new ArrayAdapter<>(this, R.layout.emptytextview, RenderedImage.Palette.values()));
-//        paletteListView.setSelection(frameProcessor.getImagePalette().ordinal());
-//        paletteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                if (frameProcessor != null){
-//                    frameProcessor.setImagePalette(RenderedImage.Palette.values()[position]);
-//                }
-//            }
-//        });
-        // Set up an instance of SystemUiHider to control the system UI for
-        // this activity.
-
-//        mSystemUiHider = SystemUiHider.getInstance(this, contentView, HIDER_FLAGS);
-//        mSystemUiHider.setup();
-
-//        mSystemUiHider
-//                .setOnVisibilityChangeListener(new SystemUiHider.OnVisibilityChangeListener() {
-//                    // Cached values.
-//                    int mControlsHeight;
-//                    int mShortAnimTime;
-//
-//                    @Override
-//                    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-//                    public void onVisibilityChange(boolean visible) {
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-//                            // If the ViewPropertyAnimator API is available
-//                            // (Honeycomb MR2 and later), use it to animate the
-//                            // in-layout UI controls at the bottom of the
-//                            // screen.
-//                            if (mControlsHeight == 0) {
-//                                mControlsHeight = controlsView.getHeight();
-//                            }
-//                            if (mShortAnimTime == 0) {
-//                                mShortAnimTime = getResources().getInteger(
-//                                        android.R.integer.config_shortAnimTime);
-//                            }
-//                            controlsView.animate()
-//                                    .translationY(visible ? 0 : mControlsHeight)
-//                                    .setDuration(mShortAnimTime);
-//                            controlsViewTop.animate().translationY(visible ? 0 : -1 * mControlsHeight).setDuration(mShortAnimTime);
-//                        } else {
-//                            // If the ViewPropertyAnimator APIs aren't
-//                            // available, simply show or hide the in-layout UI
-//                            // controls.
-//                            controlsView.setVisibility(visible ? View.VISIBLE : View.GONE);
-//                            controlsViewTop.setVisibility(visible ? View.VISIBLE : View.GONE);
-//                        }
-//
-//                        if (visible && !((ToggleButton)findViewById(R.id.change_view_button)).isChecked() && AUTO_HIDE) {
-//                            // Schedule a hide().
-//                            delayedHide(AUTO_HIDE_DELAY_MILLIS);
-//                        }
-//                    }
-//                });
-
-        // Set up the user interaction to manually show or hide the system UI.
-//        contentView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (TOGGLE_ON_CLICK) {
-//                    mSystemUiHider.toggle();
-//                } else {
-//                    mSystemUiHider.show();
-//                }
-//            }
-//        });
         //Setup socket update button
         ((Button)findViewById(R.id.AdressUpdate)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -684,22 +359,21 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
 //            }
 //        });
 
-        // ask for permission?
-        String writePermission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+        String cameraPermission = Manifest.permission.CAMERA;
         boolean permissionGranted = false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            permissionGranted = (ContextCompat.checkSelfPermission(this, writePermission) == PackageManager.PERMISSION_GRANTED);
+            permissionGranted = (ContextCompat.checkSelfPermission(this, cameraPermission) == PackageManager.PERMISSION_GRANTED);
         }
         else {
-            permissionGranted = (PermissionChecker.checkSelfPermission(this, writePermission) == PermissionChecker.PERMISSION_GRANTED);
+            permissionGranted = (PermissionChecker.checkSelfPermission(this, cameraPermission) == PermissionChecker.PERMISSION_GRANTED);
         }
 
         if(!permissionGranted) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, writePermission)) {
-                Toast.makeText(this, "App requires write permission to save photos", Toast.LENGTH_LONG).show();
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, cameraPermission)) {
+                Toast.makeText(this, "App requires camera permission", Toast.LENGTH_LONG).show();
             }
             else {
-                ActivityCompat.requestPermissions(this, new String[]{writePermission}, 0);
+                ActivityCompat.requestPermissions(this, new String[]{cameraPermission}, 0);
             }
         }
     }
@@ -732,46 +406,4 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
         super.onStop();
     }
 
-//    @Override
-//    protected void onPostCreate(Bundle savedInstanceState) {
-//        super.onPostCreate(savedInstanceState);
-//
-//        // Trigger the initial hide() shortly after the activity has been
-//        // created, to briefly hint to the user that UI controls
-//        // are available.
-//        delayedHide(100);
-//    }
-
-
-    /**
-     * Touch listener to use for in-layout UI controls to delay hiding the
-     * system UI. This is to prevent the jarring behavior of controls going away
-     * while interacting with activity UI.
-     */
-//    View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
-//        @Override
-//        public boolean onTouch(View view, MotionEvent motionEvent) {
-//            if (AUTO_HIDE) {
-//                delayedHide(AUTO_HIDE_DELAY_MILLIS);
-//            }
-//            return false;
-//        }
-//    };
-
-//    Handler mHideHandler = new Handler();
-//    Runnable mHideRunnable = new Runnable() {
-//        @Override
-//        public void run() {
-//            mSystemUiHider.hide();
-//        }
-//    };
-
-    /**
-     * Schedules a call to hide() in [delay] milliseconds, canceling any
-     * previously scheduled calls.
-     */
-//    private void delayedHide(int delayMillis) {
-//        mHideHandler.removeCallbacks(mHideRunnable);
-//        mHideHandler.postDelayed(mHideRunnable, delayMillis);
-//    }
 }

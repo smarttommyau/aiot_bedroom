@@ -112,15 +112,15 @@ class Live_connection:
         retry = True
         count = 0
         while retry and count <2:
-            if(frameid!=self.__new_frameid and not self.__synced):
-                self.__new_frameid = frameid
-                self.__synced = True
-                retry = False
-            elif (frameid == self.__new_frameid):
+            if (frameid == self.__new_frameid):
                 self.__synced = True 
                 self.new_frame_avaliable = True
                 self.__msg = self.__newmsg
                 self.__thermal = self.__newthermal
+                retry = False
+            elif(frameid!=self.__new_frameid and not self.__synced):
+                self.__new_frameid = frameid
+                self.__synced = True
                 retry = False
             else:
                 sleep(0.3)
@@ -145,15 +145,15 @@ class Live_connection:
         retry = True
         count  = 0
         while retry and count <2:
-            if(frameid!=self.__new_frameid and self.__synced):
-                self.__new_frameid = frameid
-                self.__synced = False
-                retry = False
-            elif (frameid == self.__new_frameid):
+            if (frameid == self.__new_frameid):
                 self.__synced = False
                 self.new_frame_avaliable = True
                 self.__msg = self.__newmsg
                 self.__thermal = self.__newthermal
+                retry = False
+            elif(frameid!=self.__new_frameid and self.__synced):
+                self.__new_frameid = frameid
+                self.__synced = False
                 retry = False
             else:
                 sleep(0.3)

@@ -873,7 +873,6 @@ id easeIn
 id easeInOut
 id easeOut
 id edit_query
-id editorImageView
 id end
 id end_padder
 id expand_activities_button
@@ -989,7 +988,6 @@ id staticLayout
 id staticPostLayout
 id status_bar_latest_event_content
 id stop
-id streamButton
 id submenuarrow
 id submit_area
 id switch_rotate
@@ -1056,9 +1054,7 @@ layout abc_search_dropdown_item_icons_2line
 layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
-layout activity_editor
 layout activity_gl_preview
-layout activity_preview
 layout emptytextview
 layout notification_action
 layout notification_action_tombstone
