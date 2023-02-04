@@ -20,7 +20,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.ConnectException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
@@ -50,7 +52,8 @@ public class SocketConnection {
             @Override
             public void run() {
                 try {
-                    socket = new Socket(InetAddress.getByName(ip), port);
+                    socket = new Socket();
+                    socket.connect(new InetSocketAddress(ip,port),500);
                     Log.i("SocketInfo",ip+":"+port+" connecting+");
                 }catch(Exception e){
                     Log.e("SocketInfo",e.toString());
@@ -77,7 +80,7 @@ public class SocketConnection {
                 }
                 InputStreamReader isr = new InputStreamReader(is);
                 BufferedReader br = new BufferedReader(isr);
-                String result;
+                String result = "r";
                 try {
                     result = br.readLine();
                 } catch (IOException e) {
@@ -269,7 +272,9 @@ public class SocketConnection {
                     br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 } catch (IOException e) {
                     Log.e("SocketInfo",e.toString());
+                    Looper.prepare();
                     Toast.makeText(context,e.toString(),Toast.LENGTH_SHORT).show();
+                    Looper.loop();
                     throw new RuntimeException(e);
                 }
                 Bitmap bitmap = frame.getBitmap();
@@ -349,18 +354,25 @@ public class SocketConnection {
                     br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 } catch (IOException e) {
                     Log.e("SocketInfo",e.toString());
+                    Looper.prepare();
                     Toast.makeText(context,e.toString(),Toast.LENGTH_SHORT).show();
+                    Looper.loop();
                     throw new RuntimeException(e);
                 }
-                int[] pixels = frame.thermalPixelValues();
-                byte[] data = new byte[pixels.length*4];
-                for(int i=0;i<pixels.length;i++) {
-                    data[i*4] = (byte) (pixels[i] >> 24);
-                    data[i*4+1] = (byte) (pixels[i] >> 16);
-                    data[i*4+2] = (byte) (pixels[i] >> 8);
-                    data[i*4+3] = (byte) (pixels[i] /*>> 0*/);
+                short[] pixels = frame.thermalPixelData();
+//                int[] pixels = frame.thermalPixelValues();
+//                byte[] data = new byte[pixels.length*4];
+//                for(int i=0;i<pixels.length;i++) {
+//                    data[i*4] = (byte) (pixels[i] >> 24);
+//                    data[i*4+1] = (byte) (pixels[i] >> 16);
+//                    data[i*4+2] = (byte) (pixels[i] >> 8);
+//                    data[i*4+3] = (byte) (pixels[i] /*>> 0*/);
+//                }
+                byte[] data = new byte[pixels.length*2];
+                for(int i=0;i< pixels.length;i++){
+                    data[i*2] = (byte)(pixels[i]>>8);
+                    data[i*2+1] = (byte)(pixels[i]);
                 }
-
                 //send the size of the frame
                 Log.i( "SocketInfo","size:"+data.length );
                 String result;
