@@ -34,10 +34,10 @@ class Live_connection:
 
         ss.listen(2)
 
-        prompt = "n"
         csocket = socket.socket()
         addrlist = []
         count =0
+        prompt = "n"
         while self.__term and count <2:
             while prompt != "y":
                 csocket,addr = ss.accept()
@@ -49,12 +49,11 @@ class Live_connection:
                     prompt= "y"
                 if(prompt != "y" and prompt != ""):
                     csocket.send("rejected\n".encode('ascii'))
-                    csocket.close()
                 else:
                     addrlist.append(addr[0])
-            csocket.send("accepted\n".encode('ascii'))
-            t1 = threading.Thread(target = self.start_recieve,args=(csocket,nolog))
-            t1.start()
+                    csocket.send("accepted\n".encode('ascii'))
+                    t1 = threading.Thread(target = self.start_recieve,args=(csocket,nolog))
+                    t1.start()
             count+=1 
             prompt = "n"
 
@@ -180,10 +179,6 @@ class Live_connection:
 
     def terminate(self):
         self.__term = False
-        try:
-            self.ss.close()
-        except AttributeError:
-            pass
         self.died = True
 
 
