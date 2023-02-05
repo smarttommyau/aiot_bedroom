@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/FLIRONEExampleApplication.iml" filepath="$PROJECT_DIR$/FLIRONEExampleApplication.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FLIRONEExampleApplication.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FLIRONEExampleApplication.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FLIRONEExampleApplication.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FLIRONEExampleApplication.app.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FLIRONEExampleApplication.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FLIRONEExampleApplication.app.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FLIRONEExampleApplication.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FLIRONEExampleApplication.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/FlirCameraConnectorApp.iml" filepath="$PROJECT_DIR$/.idea/modules/FlirCameraConnectorApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FlirCameraConnectorApp.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FlirCameraConnectorApp.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FlirCameraConnectorApp.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FlirCameraConnectorApp.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FlirCameraConnectorApp.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FlirCameraConnectorApp.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FlirCameraConnectorApp.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FlirCameraConnectorApp.app.unitTest.iml" />
     </modules>
   </component>
 </project>

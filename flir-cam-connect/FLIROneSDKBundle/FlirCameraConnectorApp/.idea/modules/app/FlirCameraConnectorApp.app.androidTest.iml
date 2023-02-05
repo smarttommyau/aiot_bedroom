@@ -70,5 +70,5 @@
     <orderEntry type="library" scope="TEST" name="Gradle: android.arch.core:runtime:1.1.1@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: :flironesdk:@aar" level="project" />
   </component>
-  <component name="TestModuleProperties" production-module="FLIRONEExampleApplication.app.main" />
+  <component name="TestModuleProperties" production-module="FlirCameraConnectorApp.app.main" />
 </module>
