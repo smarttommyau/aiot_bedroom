@@ -1,6 +1,8 @@
 # aiot_bedroom
 Project that aims to provide the best bedroom environment with AI and IoT
-
+![](img/not_moving.png)
+![](img/not_moving_end.png)
+![](img/sleeping_and_lyingbed_end.png)
 ## 2 part 
 - AI analysis
 - Camera Connector
