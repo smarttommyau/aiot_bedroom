@@ -1,7 +1,0 @@
-#Sat Feb 04 23:52:15 CST 2023
-base.1=D\:\\my programs\\python\\Aiot\\aiot_bedroom\\flir-cam-connect\\FLIROneSDKBundle\\FLIRONEExampleApplication\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\out\\classes.dex
-path.1=classes.dex
-base.0=D\:\\my programs\\python\\Aiot\\aiot_bedroom\\flir-cam-connect\\FLIROneSDKBundle\\FLIRONEExampleApplication\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\out\\classes.dex
-renamed.1=classes2.dex
-renamed.0=classes.dex
-path.0=classes.dex
