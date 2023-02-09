@@ -15,7 +15,7 @@ Project that aims to provide the best bedroom environment with AI and IoT
 ## More Details
 Look at the project documents
 - Poster(Finished)
-    - ![youtube link](https://youtu.be/l8e21IzSXhs)
+    - [youtube link](https://youtu.be/l8e21IzSXhs)
 - Pitch deck(Old,outdated)
 
 ## Hardware
