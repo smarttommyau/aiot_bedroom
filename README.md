@@ -16,7 +16,7 @@ Project that aims to provide the best bedroom environment with AI and IoT
 Look at the project documents
 - Poster(Finished)
     - [youtube link](https://youtu.be/l8e21IzSXhs)
-- Pitch deck(Old,outdated)
+- Pitch deck(Finished)
 
 ## Hardware
 Current using Cat S60(inbuilt flir camera), can accept more hardware in the future
