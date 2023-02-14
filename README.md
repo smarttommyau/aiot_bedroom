@@ -17,6 +17,7 @@ Look at the project documents
 - Poster(Finished)
     - [youtube link](https://youtu.be/l8e21IzSXhs)
 - Pitch deck(Finished)
+- Learning Summary(Finished)
 
 ## Hardware
 Current using Cat S60(inbuilt flir camera), can accept more hardware in the future
