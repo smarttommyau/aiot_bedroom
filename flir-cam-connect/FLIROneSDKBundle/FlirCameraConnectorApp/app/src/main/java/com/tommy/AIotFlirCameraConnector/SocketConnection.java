@@ -25,6 +25,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.zip.Deflater;
 
 public class SocketConnection {
     private final Context context;
@@ -368,11 +369,20 @@ public class SocketConnection {
 //                    data[i*4+2] = (byte) (pixels[i] >> 8);
 //                    data[i*4+3] = (byte) (pixels[i] /*>> 0*/);
 //                }
-                byte[] data = new byte[pixels.length*2];
+                byte[] uncompressed_data = new byte[pixels.length*2];
+                Log.i("Socket","uncompress size"+ uncompressed_data.length);
                 for(int i=0;i< pixels.length;i++){
-                    data[i*2] = (byte)(pixels[i]>>8);
-                    data[i*2+1] = (byte)(pixels[i]);
+                    uncompressed_data[i*2] = (byte)(pixels[i]>>8);
+                    uncompressed_data[i*2+1] = (byte)(pixels[i]);
                 }
+                Log.i("Socket","startcom");
+                byte[] data;
+                try {
+                    data = compress(uncompressed_data,Deflater.BEST_COMPRESSION);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                Log.i("Socket","endcom");
                 //send the size of the frame
                 Log.i( "SocketInfo","size:"+data.length );
                 String result;
@@ -408,6 +418,22 @@ public class SocketConnection {
 
         }).start();
         return true;
+    }
+    private static byte[] compress(byte[] input, int compressionLevel) throws IOException {
+        Deflater compressor = new Deflater(compressionLevel);
+        compressor.setInput(input);
+        compressor.finish();
+        ByteArrayOutputStream bao = new ByteArrayOutputStream();
+        byte[] readBuffer = new byte[1024];
+        int readCount = 0;
+        while (!compressor.finished()) {
+            readCount = compressor.deflate(readBuffer);
+            if (readCount > 0) {
+                bao.write(readBuffer, 0, readCount);
+            }
+        }
+        compressor.end();
+        return bao.toByteArray();
     }
     public void terminate() throws InterruptedException {
         socketlock = true;

@@ -1,7 +1,8 @@
-import socket
-import numpy as np
-import threading
-from time import sleep
+import socket # networking
+import numpy as np # better array
+import threading # multithreading
+from time import sleep # delay
+import zlib # for decompressing the data
 class Live_connection:
     def __init__(self,host:str,port:int):
         self.ss = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -110,6 +111,9 @@ class Live_connection:
         printer(("recievedTh",frameid),nolog=nolog)
     def __thermal_data_process(self,csocket,frameid,tempdata,nolog):
         printer = self.printer
+        # print("bef:",len(tempdata))
+        tempdata = zlib.decompress(tempdata)
+        # print("aft:",len(tempdata))
         temp = np.zeros([self.height,self.width],dtype='int32')
         for j in range(self.height):
             for i in range(self.width):
