@@ -4,3 +4,4 @@
 /flir-cam-connect/FLIROneSDKBundle/FlirCameraConnectorApp/app/build/*
 *.pt
 *.log
+*.pyc
