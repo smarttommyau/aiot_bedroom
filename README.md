@@ -25,4 +25,5 @@ Look at the project documents
 - Learning Summary(Finished)
 
 ## Hardware
-Current using Cat S60(inbuilt flir camera), can accept more hardware in the future
+Current using Cat S60(inbuilt flir camera), can accept more hardware in the future\
+ESP8826 as the IoT chipset to control some small IoT devices(lights, fans, buzzer)
