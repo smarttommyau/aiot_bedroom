@@ -1,6 +1,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 
+
 ESP8266WebServer _esp8266WebServer(7777);
 bool fan_state,light_state,buzzer_state;
 
@@ -81,6 +82,8 @@ void setup() {
   digitalWrite(D3, LOW);
   fan_state = false;
   light_state = false;
+
+
   //propmt serial to connect wifi
   Serial.println("Enter WIFIName:");
   while (Serial.available() == 0) {}
@@ -89,6 +92,8 @@ void setup() {
   Serial.println("Enter WIFIPass:");
   while (Serial.available() == 0) {}
   String wifipass = Serial.readString();
+  wifipass.trim();
+
   WiFi.begin(wifiname, wifipass);
   while(WiFi.isConnected() == false) {
     delay(1);

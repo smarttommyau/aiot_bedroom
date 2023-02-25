@@ -128,8 +128,8 @@ while True:
                 # twinkle twinkle little star
                 song = ["C5","C5","G5","G5","A5","A5","G5","P","F5","F5","E5","E5","D5","D5","C5","P","G5","G5","F5","F5","E5","E5","D5","P","C5","C5","G5","G5","A5","A5","G5","P","F5","F5","E5","E5","D5","D5","C5","P"]
                 for x in song:
-                    buzzer.send_buzzer_command(tones[x],1000)
-                    sleep(1)
+                    buzzer.send_buzzer_command(tones[x],500)
+                    sleep(0.5)
                 continue 
             x = x.split()
             buzzer.send_buzzer_command(int(x[0]),int(x[1]))
