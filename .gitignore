@@ -6,4 +6,5 @@
 *.log
 *.pyc
 *.lock
+*.json
 /ai_analysis/IoT/esp8826/build/*
