@@ -27,3 +27,8 @@ Look at the project documents
 ## Hardware
 Current using Cat S60(inbuilt flir camera), can accept more hardware in the future\
 ESP8826 as the IoT chipset to control some small IoT devices(lights, fans, buzzer)
+
+# License
+We offer 2 LICENSES:
+- GPL-3.0 License: See [LICENSE](./LICENSE) file for details.
+- Enterprise License: You can get more freedom for commercial development, you may contact me to negotiate for the License.
