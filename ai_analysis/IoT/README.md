@@ -1,7 +1,7 @@
 # IoT
 > Using D1 mini (ESP8266)
 ## Setup Arduino ide
-Follow instruction from ![official repository](https://github.com/esp8266/Arduino)
+Follow instruction from [official repository](https://github.com/esp8266/Arduino)
 ## Main program
 - **esp8826/esp8826.ino** is the code for the D1 mini board
   - compile and flash it to it will done the job
