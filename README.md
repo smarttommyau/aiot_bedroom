@@ -11,8 +11,8 @@ Project that aims to provide the best bedroom environment with AI and IoT
 ### IoT
 Adurino project devices(ESP8266)\
 Currenly control fan and lights\
-use **IoT/test.py** to test and play with\
-**IoT/esp8826.ino** is the program for the board\
+use **IoT/test.py** to test with\
+**IoT/esp8826.ino** is the program for the board
 ## Camera Connector
 - **live_connection.py** as the server(For pc)
 - flir-cam-connect as the client source code(For Cat S60)
