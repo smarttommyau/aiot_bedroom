@@ -10,7 +10,7 @@ Project that aims to provide the best bedroom environment with AI and IoT
 - use the **live_analysis.ipynb** as the main program(For pc)
 ### IoT
 Adurino project devices(ESP8266)\
-- **IoT/esp8826.ino** is the program for the board
+- **IoT/esp8826.ino** is the code for the board
 ## Camera Connector
 - **live_connection.py** as the server(For pc)
 - flir-cam-connect as the client source code(For Cat S60)
