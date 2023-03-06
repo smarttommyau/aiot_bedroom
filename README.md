@@ -30,8 +30,8 @@ Current using Cat S60(inbuilt flir camera), can accept more hardware in the futu
 ESP8826 as the IoT chipset to control some small IoT devices(lights, fans, buzzer)
 
 # Awards
-- Champion of GEF AIoT coding, Engineering, Entrepreneurial skills
-- First in vote of GEF AIoT coding, Engineering, Entrepreneurial skills
+- **Champion** of GEF AIoT coding, Engineering, Entrepreneurial skills
+- **First in vote** of GEF AIoT coding, Engineering, Entrepreneurial skills
 # License
 We offer 2 LICENSES:
 - GPL-3.0 License: See [LICENSE](./LICENSE) file for details.
