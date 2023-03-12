@@ -12,6 +12,8 @@ jobs:
       name: clean output and generate databricks
       runs-on: ubuntu-latest
       steps:
+      - name: Ensure Clean Jupyter Notebooks
+        uses: ResearchSoftwareActions/EnsureCleanNotebooksAction@1.1
       - name: Convert Jupyter Notebooks to Databricks Notebooks
         uses: rafaelvp-db/jupyter-to-databricks@v1.3
         with:
@@ -19,5 +21,3 @@ jobs:
           inputPath: ./ai_analysis
       # Relative path to the folder to which DB notebooks will be output
           outputPath: ./ai_analysis/datablock
-      - name: Ensure Clean Jupyter Notebooks
-        uses: ResearchSoftwareActions/EnsureCleanNotebooksAction@1.1
