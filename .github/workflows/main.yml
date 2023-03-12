@@ -12,7 +12,7 @@ jobs:
     permissions:
       contents: write
     name: clean output and generate databricks
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
     - name: Convert Jupyter Notebooks to Databricks Notebooks
       uses: rafaelvp-db/jupyter-to-databricks@v1.3
