@@ -8,12 +8,10 @@ on:
     paths:
       - '**.ipynb'
 jobs:
-    clean_and_databricks:
+    databricks:
       name: clean output and generate databricks
       runs-on: ubuntu-latest
       steps:
-      - name: Ensure Clean Jupyter Notebooks
-        uses: ResearchSoftwareActions/EnsureCleanNotebooksAction@1.1
       - name: Convert Jupyter Notebooks to Databricks Notebooks
         uses: rafaelvp-db/jupyter-to-databricks@v1.3
         with:
