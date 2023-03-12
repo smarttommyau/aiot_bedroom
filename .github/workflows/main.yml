@@ -18,7 +18,7 @@ jobs:
       uses: rafaelvp-db/jupyter-to-databricks@v1.3
       with:
       # Relative path to the folder containing Jupyter notebooks
-        inputPath: ai_analysis
+        inputPath: ./ai_analysis
     # Relative path to the folder to which DB notebooks will be output
-        outputPath: ai_analysis/datablock
+        outputPath: ./ai_analysis/datablock
     
