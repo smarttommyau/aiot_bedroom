@@ -8,14 +8,17 @@ on:
     paths:
       - '**.ipynb'
 jobs:
-    databricks:
-      name: clean output and generate databricks
-      runs-on: ubuntu-latest
-      steps:
-      - name: Convert Jupyter Notebooks to Databricks Notebooks
-        uses: rafaelvp-db/jupyter-to-databricks@v1.3
-        with:
-        # Relative path to the folder containing Jupyter notebooks
-          inputPath: ./ai_analysis
-      # Relative path to the folder to which DB notebooks will be output
-          outputPath: ./ai_analysis/datablock
+  databricks:
+    permissions:
+      contents: write
+    name: clean output and generate databricks
+    runs-on: ubuntu-latest
+    steps:
+    - name: Convert Jupyter Notebooks to Databricks Notebooks
+      uses: rafaelvp-db/jupyter-to-databricks@v1.3
+      with:
+      # Relative path to the folder containing Jupyter notebooks
+        inputPath: ai_analysis
+    # Relative path to the folder to which DB notebooks will be output
+        outputPath: ai_analysis/datablock
+    
