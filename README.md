@@ -16,7 +16,7 @@ Adurino project devices(ESP8266)
 - **IoT/esp8826.ino** is the code for the board
 ## Camera Connector
 - **live_connection.py** as the server(For pc)
-- flir-cam-connect as the client source code(For Cat S60)
+- **flir-cam-connect** as the client source code(For Cat S60)
 
 ## More Details
 Look at the project documents
