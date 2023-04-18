@@ -44,3 +44,7 @@ Current using **Cat S60**(built-in flir camera), can accept more hardware in the
 We offer 2 LICENSES:
 - GPL-3.0 License: See [LICENSE](./LICENSE) file for details.
 - Enterprise License: You can get more freedom for commercial development, you may contact me to negotiate for the License.
+
+# TODO
+- [ ] Optimize performance
+- [ ] Update for Elderly edition
