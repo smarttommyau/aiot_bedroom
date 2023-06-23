@@ -7,27 +7,29 @@ Project that aims to provide the best bedroom environment with AI and IoT
 </p>
 
 ## 2 part 
-- AI analysis
-- Camera Connector
+- [AI analysis](./ai_analysis)
+- [Camera Connector](./flir-cam-connect/FLIROneSDKBundle)
 ## AI analysis
-- use the **live_analysis.ipynb** as the main program(For pc)
+- use the [**live_analysis.ipynb**](./ai_analysis/live_analysis.ipynb) as the main program(For pc)
 ### IoT
 Adurino project devices(ESP8266)
-- **IoT/esp8826.ino** is the code for the board
+- [**IoT/esp8826**](./ai_analysis/IoT/esp8826/esp8826.ino) is the code for the board
 ## Camera Connector
-- **live_connection.py** as the server(For pc)
-- flir-cam-connect as the client source code(For Cat S60)
+- [**live_connection.py**](./ai_analysis/live_connection.py) as the server(For pc)
+- [**flir-cam-connect**](./flir-cam-connect/FLIROneSDKBundle) as the client source code(For Cat S60)
 
 ## More Details
-Look at the project documents
-- Poster(Finished)
-    - [youtube link](https://youtu.be/l8e21IzSXhs)
-- Pitch deck(Finished)
-- Learning Summary(Finished)
+Look at the [project documents](./project_documents)
+- [Poster](./project_documents/P21_Poster.pptx)(Finished)
+    - [Demo Video(Long)](https://youtu.be/l8e21IzSXhs)
+    - [Product Video(Short)](https://youtu.be/VZf5DOBUzaY)
+- [Poster(For Elderly Update)](./project_documents/Elderly_Poster.pdf)
+- [Pitch deck](./project_documents/P21_pitching_deck_AIoT%20Bedroom.pptx)(Finished)
+- [Learning Summary](./project_documents/P21_Learning_Summary.docx)(Finished)
 
 ## Hardware
-Current using Cat S60(inbuilt flir camera), can accept more hardware in the future\
-ESP8826 as the IoT chipset to control some small IoT devices(lights, fans, buzzer)
+Current using **Cat S60**(built-in flir camera), can accept more hardware in the future\
+**ESP8826** as the IoT chipset to control some small IoT devices(lights, fans, buzzer)
 
 # Awards
 <p float="left" align="middle">
@@ -42,3 +44,7 @@ ESP8826 as the IoT chipset to control some small IoT devices(lights, fans, buzze
 We offer 2 LICENSES:
 - GPL-3.0 License: See [LICENSE](./LICENSE) file for details.
 - Enterprise License: You can get more freedom for commercial development, you may contact me to negotiate for the License.
+
+# TODO
+- [ ] Optimize performance
+- [ ] Update for Elderly edition
