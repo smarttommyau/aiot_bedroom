@@ -2,9 +2,11 @@
 /flir-cam-connect/FLIROneSDKBundle/DeveloperGuide.md
 /flir-cam-connect/FLIROneSDKBundle/Documentation/*
 /flir-cam-connect/FLIROneSDKBundle/FlirCameraConnectorApp/app/build/*
+/flir-cam-connect/FLIROneSDKBundle/FlirCameraConnectorApp/.gradle/*
 *.pt
 *.log
 *.pyc
 *.lock
 *.json
+/ai_analysis/__pycache__/*
 /ai_analysis/IoT/esp8826/build/*
