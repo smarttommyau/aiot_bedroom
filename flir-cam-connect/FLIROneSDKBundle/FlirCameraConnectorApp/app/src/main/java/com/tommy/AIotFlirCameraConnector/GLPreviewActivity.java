@@ -26,8 +26,19 @@ import com.flir.flironesdk.Frame;
 import com.flir.flironesdk.FrameProcessor;
 import com.flir.flironesdk.RenderedImage;
 
+//import java.io.BufferedInputStream;
+//import java.io.ByteArrayOutputStream;
+//import java.io.File;
+//import java.io.FileInputStream;
+//import java.io.FileNotFoundException;
+//import java.io.IOException;
+//import java.io.OutputStream;
+//import java.nio.ByteBuffer;
+import java.net.InetSocketAddress;
 import java.text.NumberFormat;
 import java.util.EnumSet;
+
+import java.net.Socket;
 
 public class GLPreviewActivity extends Activity implements Device.Delegate, FrameProcessor.Delegate, Device.StreamDelegate{
     GLSurfaceView thermalSurfaceView;
@@ -56,11 +67,14 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
     //Socket variables
     private volatile String ip;
     private volatile int port;
-    private volatile SocketConnection socketConnection;
-    private volatile SocketConnection socketConnectionTh;
-    private volatile int frameid;
-    private volatile int curV;
-    private volatile int curT;
+    private volatile Socket StreamSocket = null;
+    private volatile boolean socketsetup = false;
+    private volatile FullFrameManager fullframemanager = null;
+    //    private volatile SocketConnection socketConnection;
+//    private volatile SocketConnection socketConnectionTh;
+//    private volatile int frameid;
+//    private volatile int curV;
+//    private volatile int curT;
 
     public void onDeviceConnected(Device device){
         Log.i("ExampleApp", "Device connected!");
@@ -141,7 +155,7 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
 
     // StreamDelegate method
     public void onFrameReceived(Frame frame) {
-        frameid++;
+//        frameid++;
 //        Log.v("ExampleApp", "Frame received!");
 
         if (currentTuningState != Device.TuningState.InProgress){
@@ -162,36 +176,44 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
 
     // Frame Processor Delegate method, will be called each time a rendered frame is produced
     public void onFrameProcessed(final RenderedImage renderedImage){
-        if(this.socketConnection!= null && this.socketConnection.success) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    if (renderedImage.imageType() == RenderedImage.ImageType.VisibleAlignedRGBA8888Image) {
-                        try {
-                            int cur = socketConnection.frameidd;
-                            if(socketConnection.sendrenderFrame(renderedImage,curT)){
-                                curV = cur;
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } else if (renderedImage.imageType() == RenderedImage.ImageType.ThermalRadiometricKelvinImage) {
-
-                        try {
-                            if(socketConnectionTh!= null && socketConnectionTh.success) {
-                                int cur = socketConnectionTh.frameidd;
-                                if(socketConnectionTh.sendTemperaturedata(renderedImage,curV)){
-                                    curT = cur;
-                                }
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }).start();
-
+        if (StreamSocket != null && StreamSocket.isConnected() && socketsetup) {
+            if (fullframemanager == null) {
+                fullframemanager = new FullFrameManager(StreamSocket);
+            }
+            if (renderedImage.imageType() == RenderedImage.ImageType.VisibleAlignedRGBA8888Image || renderedImage.imageType() == RenderedImage.ImageType.ThermalRadiometricKelvinImage) {
+                fullframemanager.add(renderedImage);
+            }
         }
+//        if(this.socketConnection!= null && this.socketConnection.success) {
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if (renderedImage.imageType() == RenderedImage.ImageType.VisibleAlignedRGBA8888Image) {
+//                        try {
+//                            int cur = socketConnection.frameidd;
+//                            if(socketConnection.sendrenderFrame(renderedImage,curT)){
+//                                curV = cur;
+//                            }
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                    } else if (renderedImage.imageType() == RenderedImage.ImageType.ThermalRadiometricKelvinImage) {
+//
+//                        try {
+//                            if(socketConnectionTh!= null && socketConnectionTh.success) {
+//                                int cur = socketConnectionTh.frameidd;
+//                                if(socketConnectionTh.sendTemperaturedata(renderedImage,curV)){
+//                                    curT = cur;
+//                                }
+//                            }
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }
+//            }).start();
+//
+//        }
         if (renderedImage.imageType() == RenderedImage.ImageType.ThermalRadiometricKelvinImage){
             // Note: this code is not optimized
             int[] thermalPixels = renderedImage.thermalPixelValues();
@@ -267,9 +289,9 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
 
         setContentView(R.layout.activity_gl_preview);
 
-        final View controlsView = findViewById(R.id.fullscreen_content_controls);
-        final View controlsViewTop = findViewById(R.id.fullscreen_content_controls_top);
-        final View contentView = findViewById(R.id.fullscreen_content);
+//        final View controlsView = findViewById(R.id.fullscreen_content_controls);
+//        final View controlsViewTop = findViewById(R.id.fullscreen_content_controls_top);
+//        final View contentView = findViewById(R.id.fullscreen_content);
 
 //        frameProcessor = new FrameProcessor(this, this, EnumSet.of(RenderedImage.ImageType.VisibleAlignedRGBA8888Image,RenderedImage.ImageType.ThermalRadiometricKelvinImage, RenderedImage.ImageType.ThermalRGBA8888Image), true);
         frameProcessor = new FrameProcessor(this, this, EnumSet.of(RenderedImage.ImageType.VisibleAlignedRGBA8888Image,RenderedImage.ImageType.ThermalRadiometricKelvinImage), true);
@@ -299,27 +321,63 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
                 ip = ((EditText) findViewById(R.id.Adress)).getText().toString();
                 port = Integer.parseInt(((EditText)findViewById(R.id.port)).getText().toString());
                 Log.i("convert",ip+":"+port);
-                if(socketConnection != null) {
-                    try {
-                        socketConnection.terminate();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+                if (StreamSocket == null || StreamSocket.isClosed()) {
+                    Toast.makeText(getApplicationContext(),"Opening socket",Toast.LENGTH_SHORT);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                StreamSocket = new Socket();
+                                StreamSocket.connect(new InetSocketAddress(ip, port), 500);
+                                byte[] accept = new byte[20];
+                                StreamSocket.getInputStream().read(accept);
+                                Log.i("Socket",new String(accept));
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ((Button) findViewById(R.id.AdressUpdate)).setText("STOP");
+                                    }
+                                });
+                                socketsetup = true;
+                            } catch (Exception e) {
+                                Log.e("Socket", e.toString());
+                            }
+                        }
+                    }).start();
+                }else{
+                    Toast.makeText(getApplicationContext(),"Closing socket",Toast.LENGTH_SHORT);
 
-                try {
-                    socketConnection = new SocketConnection(ip,port,GLPreviewActivity.this);
-                    socketConnectionTh = new SocketConnection(ip,port,GLPreviewActivity.this);
-                    socketConnection.setup(true);
-                    socketConnectionTh.setup(false);
-                    if(socketConnection.success == false)
-                        socketConnection = null;
-                    if(socketConnectionTh.success == false)
-                        socketConnectionTh = null;
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    try {
+                        StreamSocket.close();
+                        socketsetup = false;
+                        fullframemanager = null;
+                        ((Button)findViewById(R.id.AdressUpdate)).setText("START");
+                    }catch (Exception ex) {
+                        Log.e("Socket","Close failed");
+                    }
+
                 }
-                frameid = 0;
+//                if(socketConnection != null) {
+//                    try {
+//                        socketConnection.terminate();
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
+//
+//                try {
+//                    socketConnection = new SocketConnection(ip,port,GLPreviewActivity.this);
+//                    socketConnectionTh = new SocketConnection(ip,port,GLPreviewActivity.this);
+//                    socketConnection.setup(true);
+//                    socketConnectionTh.setup(false);
+//                    if(socketConnection.success == false)
+//                        socketConnection = null;
+//                    if(socketConnectionTh.success == false)
+//                        socketConnectionTh = null;
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                frameid = 0;
             }
         });
 

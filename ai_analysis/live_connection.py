@@ -10,15 +10,12 @@ class Live_connection:
         self.port = port
         self.died = False
         self.__msg = bytearray()
-        self.__newmsg = bytearray()
-        self.height = int()
-        self.width = int()
+        self.height = 640
+        self.width = 480 #change if camera resolution changes
         self.__thermal = np.array([],dtype='int32')
-        self.__newthermal = np.array([],dtype='int32')
         self.__term = True
         self.new_frame_avaliable = False
-        self.__new_frameid = ""
-        self.__synced = False # true thermal, flase visual
+        self.__decompress = True
 
         
     def printer(self,*values: object,nolog:bool):
@@ -33,11 +30,11 @@ class Live_connection:
         print("binding to",host,port)
         ss.bind((host,port))
 
-        ss.listen(2)
+        ss.listen(10)
 
         csocket = socket.socket()
         addrlist = []
-        count =0
+        count = 0
         prompt = "n"
         while self.__term and count <2:
             while prompt != "y":
@@ -63,56 +60,70 @@ class Live_connection:
         printer = self.printer
         printer("recieving",nolog=nolog)
         # csocket is now the active recieving
-        state = ""
-        while not(state=="true" or state=="false"):
-            state = str(csocket.recv(2048).decode('ascii'))    
-        csocket.send("setup fin\n".encode('ascii'))
+        headerPending = True
+        expectedData = 8
+        size_thermal = 0
+        size_visual = 0
+        bufferedData = bytearray()
+        thermalPending = True
+        csocket.settimeout(10)
+
         while self.__term:
-            message = ""
-            while not("new" in message) and self.__term:
-                try:
-                    message = str(csocket.recv(4096).decode('ascii'))
-                    break;
-                except UnicodeDecodeError:
-                    print("invalid input recieved")
-                printer(message,nolog=nolog)
-
-            splited = message.split()
-            frameid = 0
-            if len(splited) == 1:
-                frameid = str(csocket.recv(4096).decode('ascii'))
+            if headerPending:
+                bufferedData = bytearray()
+                expectedData = 8
+            #Receiving from client
+            try:
+                data = csocket.recv(expectedData)
+            except:
+                print('Error receiving data and exit')
+                break
+            if not data: 
+                csocket.close()
+                printer("Error to exit",nolog=nolog)
+                break
+            if headerPending:
+                printer("new",nolog=nolog)
+                size_thermal = (data[0] << 24) + (data[1] << 16) + (data[2] << 8) + data[3]
+                size_visual = (data[4] << 24) + (data[5] << 16) + (data[6] << 8) + data[7]
+                #print('size of frame: '+str(size))
+                printer(str(size_thermal)+ "," + str(size_visual),nolog=nolog)
+                expectedData = size_thermal
+                headerPending = False
             else:
-                frameid = splited[1]
-            csocket.send("ok\n".encode('ascii'))
-            if state == "true":
-                self.__visual_data(csocket,frameid,nolog)
-            else:
-                self.__thermal_data(csocket,frameid,nolog)
+                expectedData = expectedData - len(data)
+                bufferedData += data
+                if thermalPending and expectedData <= 0:
+                    expectedData = size_visual
+                    thermalPending = False
+                    t1 = threading.Thread(target=self.__thermal_data_process,args=(bufferedData.copy(),nolog))
+                    t1.start()
+                    bufferedData = bytearray()
 
+                if expectedData <= 0:
+                    self.__msg = bufferedData.copy()
+                    thermalPending = True
+                    bufferedData = bytearray()
+                    headerPending = True
+                    expectedData = 8
+                    t1.join()
+                    if self.__decompress:
+                        self.new_frame_avaliable = True
+                        printer("true",nolog=nolog)
+                    else:
+                        printer("continue",nolog=nolog)
 
-    def __thermal_data(self,csocket,frameid,nolog:bool):
-        printer = self.printer
-        printer(("thermal",frameid),nolog=nolog)
-        info = csocket.recv(1024).decode('ascii').split()
-        bufsize = int(info[0])
-        self.width = int(info[1])
-        self.height = int(info[2])
-        printer("1",nolog=nolog)
-        csocket.send((str(bufsize) + " bytes is going to be recieve\n").encode('ascii'))
-        printer("2",nolog=nolog)
-        tempdata = bytearray()
-        while len(tempdata)<bufsize:
-            data = csocket.recv(bufsize)
-            tempdata += bytearray(data)
-        t1 = threading.Thread(target = self.__thermal_data_process,args=(csocket,frameid,tempdata,nolog))
-        t1.start()
-        printer("3",nolog=nolog)
-        csocket.send("recieved\n".encode('ascii'))
-        printer(("recievedTh",frameid),nolog=nolog)
-    def __thermal_data_process(self,csocket,frameid,tempdata,nolog):
+    def __thermal_data_process(self,tempdata,nolog):
+        self.__decompress = True
         printer = self.printer
         # print("bef:",len(tempdata))
-        tempdata = zlib.decompress(tempdata)
+        try:
+            tempdata = zlib.decompress(tempdata)
+        except:
+            self.__decompress = False
+            printer("fail to decompress",nolog=nolog)
+        if not self.__decompress:
+            return None
         # print("aft:",len(tempdata))
         temp = np.zeros([self.height,self.width],dtype='int32')
         for j in range(self.height):
@@ -121,60 +132,10 @@ class Live_connection:
                 # temp[j][i]+=tempdata[(j*self.width+i)*4+1]<<16
                 temp[j][i]+=tempdata[(j*self.width+i)*2]<<8
                 temp[j][i]+=tempdata[(j*self.width+i)*2+1]
-        printer(4,nolog=nolog)
-        self.__newthermal = temp
-        retry = True
-        count = 0
-        while retry and count <2:
-            if (frameid == self.__new_frameid):
-                self.__synced = True 
-                self.new_frame_avaliable = True
-                self.__msg = self.__newmsg
-                self.__thermal = self.__newthermal
-                retry = False
-            elif(frameid!=self.__new_frameid and not self.__synced):
-                self.__new_frameid = frameid
-                self.__synced = True
-                retry = False
-            else:
-                sleep(0.3)
-                retry = True
-                count +=1
+        printer("decompressed",nolog=nolog)
+        self.__thermal = temp
+        return None
 
-
-    def __visual_data(self,csocket,frameid,nolog:bool):
-        printer = self.printer
-        printer(("visual",frameid),nolog=nolog)
-        bufsize = int(csocket.recv(1024).decode('ascii'))
-        printer("1",nolog=nolog)
-        csocket.send((str(bufsize) + " bytes is going to be recieve\n").encode('ascii'))
-        printer("2",nolog=nolog)
-        temp = bytearray()
-        while len(temp)<bufsize:
-            data = csocket.recv(bufsize)
-            temp += bytearray(data)
-        self.__newmsg = temp
-        printer("3",nolog=nolog)
-        csocket.send("recieved\n".encode('ascii'))
-        printer(("recievedVi",frameid),nolog=nolog)
-        retry = True
-        count  = 0
-        while retry and count <4:
-            if (frameid == self.__new_frameid):
-                self.__synced = False
-                self.new_frame_avaliable = True
-                self.__msg = self.__newmsg
-                self.__thermal = self.__newthermal
-                retry = False
-            elif(frameid!=self.__new_frameid and self.__synced):
-                self.__new_frameid = frameid
-                self.__synced = False
-                retry = False
-            else:
-                sleep(0.3)
-                retry = True
-                count +=1
-    
 
 
     def getcurrentframe(self):
