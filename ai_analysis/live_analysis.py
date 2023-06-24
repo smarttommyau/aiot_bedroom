@@ -1,5 +1,6 @@
 # Version tends to fix performance issue by using native python instead of ipy
 from live_connection import Live_connection 
+from live_tkwindow import tkwindow
 from IoT.IoT import Fan_Control,Light_Control,Buzzer_Control
 from audioplayer import AudioPlayer
 import threading
@@ -30,7 +31,8 @@ torch.set_num_threads(8)
 #model.cpu() , if you want to use cpu;model.cuda() if you want to use gpu
 
 logger.info("Start main")
-
+# Start up window
+tkwindow = tkwindow()
 
 
 
