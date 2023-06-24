@@ -24,6 +24,7 @@ posLogStream = 0
 
 # Load and Setup model
 ## you can change to other yolo model(they are not tested,but less cpu usage)
+## TODO: Update to v8
 model = torch.hub.load('ultralytics/yolov5', 'yolov5x6', pretrained=True) # default yolov5x6
 model.classes = [0,59,63,67]# person, bed, laptop(as some phone can be detact by laptop), cell phone 
 torch.set_num_interop_threads(8)# improve performance, you may change according to your cpu
