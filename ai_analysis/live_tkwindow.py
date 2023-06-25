@@ -1,35 +1,38 @@
-import threading
 from PIL import Image, ImageTk
 import tkinter
 from io import BytesIO
-
+from os import _exit 
 
 class tkwindow:
     def __init__(self) -> None:
-        self.__window = tkinter.Tk()
-        self.__window.geometry('{}x{}'.format(480,640))
-        self.__window.title('Frame Viewer')
-        self.__window.protocol("WM_DELETE_WINDOW", self.__onQuit)
-        self.__imageLabel = tkinter.Label(self.__window,text="Waiting...");
+        self.window = tkinter.Tk()
+        self.window.geometry('{}x{}'.format(480,700))
+        self.window.title('Frame Viewer')
+        self.window.protocol("WM_DELETE_WINDOW", self.__onQuit)
+        self.__imageLabel = tkinter.Label(self.window,text="Waiting...");
         self.__imageLabel.pack()
         self.__imageLabel.place(x=0,y=0,width=480,height=640)
-        t1 = threading.Thread(target=self.__tkwindow)
-        t1.start()
+        button = tkinter.Button(self.window,text="!!Force Kill!!",command=self.__onQuit)
+        button.place(x=0,y=640,width=480,height=60)
+        button.pack()
+        self.window.after(100,self.__updateImageLabel)
         return None
+
 
 
     def __updateImageLabel(self,direct=False):
         self.__imageLabel.config()
         if direct != True:
-            self.__window.after(100,self.__updateImageLabel)
+            self.window.after(100,self.__updateImageLabel)
 
     def __onQuit(self):
         self.__imageLabel.destroy()
-        self.__window.destroy()
+        self.window.destroy()
+        ## Be carefuk of this _exit as it kill everthing in a bad way
+        _exit(0)
 
-    def __tkwindow(self):
-        self.__window.after(100,self.__updateImageLabel)
-        self.__window.mainloop()
+    def start(self):
+        self.window.mainloop()
 
     def updateImage(self,frame):
         memoryFile = BytesIO(frame)
@@ -39,4 +42,30 @@ class tkwindow:
             self.__imageLabel.config(image=tkpi);
         except:
             pass
-        self.__window.after_idle(self.__updateImageLabel, True);
+        self.window.after_idle(self.__updateImageLabel, True);
+
+class tkdialog:
+    def __init__(self,title:str,label:tuple,default:tuple):
+        self.input = list()
+        self.__window = tkinter.Tk()
+        self.__window.geometry('{}x{}'.format(300,150))
+        self.__window.title(title)
+        self.__entry = list()
+        # create an entry widget for user input
+        for txt,detxt in zip(label,default):
+            tkinter.Label(self.__window,text=txt).pack()
+            self.__entry.append(tkinter.Entry(self.__window))
+            self.__entry[-1].insert(0,detxt)
+            self.__entry[-1].pack()
+        # create a button to submit the input
+        self.__button = tkinter.Button(self.__window, text="Submit", command=self.__submit)
+        self.__window.bind_all('<Return>',self.__submit)
+        self.__button.pack()
+        self.__window.mainloop()
+
+    def __submit(self,event=None):
+        # event use to catch <return> event
+        # get the input from the entry widget 
+        for x in self.__entry:
+            self.input.append(x.get())
+        self.__window.destroy()
