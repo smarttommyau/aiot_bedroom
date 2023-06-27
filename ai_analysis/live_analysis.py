@@ -1,10 +1,11 @@
 # Version tends to fix performance issue by using native python instead of ipy
 from live_connection import Live_connection 
 from live_tkwindow import tkwindow, tkdialog
+from live_detections import detection
 from IoT.IoT import Fan_Control,Light_Control,Buzzer_Control
 from audioplayer import AudioPlayer
 import threading
-import torch
+from ultralytics import YOLO
 from PIL import Image
 from io import BytesIO, StringIO
 import math
@@ -36,11 +37,9 @@ tkwindow = tkwindow()
 # Load and Setup model
 ## you can change to other yolo model(they are not tested,but less cpu usage)
 ## TODO: Update to v8
-model = torch.hub.load('ultralytics/yolov5', 'yolov5x6', pretrained=True) # default yolov5x6
-model.classes = [0,59,63,67]# person, bed, laptop(as some phone can be detact by laptop), cell phone 
-torch.set_num_interop_threads(8)# improve performance, you may change according to your cpu
-torch.set_num_threads(8)
-#model.cpu() , if you want to use cpu;model.cuda() if you want to use gpu
+model = YOLO("yolov8n.pt") # default yolov5x6
+model.classes = [0,59,63,67]
+# person, bed, laptop(as some phone can be detact by laptop), cell phone 
 
 # Start up Network
 ## Setup Hardware
@@ -54,17 +53,31 @@ buzzer = Buzzer_Control(IoT_addr)
 
 dialog = tkdialog("Prompt for setting up server for thermal camera",("IP(local)","Port"),("192.168.210","7777"))
 (addr,port) = dialog.input
+## Setup detection
+detection = detection()
 
 ## Setup live connection to thermal camera
-live_connection = Live_connection(addr,port)
+def new_frame_handler():
+    (frame,thermal) = live_connection.getcurrentframe()
+    image = Image.open(BytesIO(frame))
+    results = model(image)
+    tkwindow.updateImage(results[0].ims[0])
+    detection.update(results[0],thermal,time.time()) 
+    
+
+live_connection = Live_connection(addr,port,new_frame_handler)
 connection_thread = threading.Thread(target=live_connection.start_connection,args=(nolog,))
 
-## Detection thread
+def main_threadf():
+    pass
 
 
-## Action thread
+
+
 
 ## start internet incomming
+tkwindow.start()
 connection_thread.start()
-
+main_thread = threading.Thread(target=main_threadf)
+main_thread.start()
 

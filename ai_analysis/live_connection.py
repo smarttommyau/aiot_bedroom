@@ -4,7 +4,8 @@ import threading # multithreading
 from time import sleep # delay
 import zlib # for decompressing the data
 class Live_connection:
-    def __init__(self,host:str,port:int):
+    # format of new_frame_handler
+    def __init__(self,host:str,port:int,new_frame_handler=None):
         self.ss = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         self.host = host
         self.port = port
@@ -16,6 +17,7 @@ class Live_connection:
         self.__term = True
         self.new_frame_avaliable = False
         self.__decompress = True
+        self.__frame_handler = new_frame_handler
 
         
     def printer(self,*values: object,nolog:bool):
@@ -110,6 +112,8 @@ class Live_connection:
                     if self.__decompress:
                         self.new_frame_avaliable = True
                         printer("true",nolog=nolog)
+                        if self.__frame_handler is not None:
+                            threading.Thread(target=self.__frame_handler()).start()
                     else:
                         printer("continue",nolog=nolog)
 

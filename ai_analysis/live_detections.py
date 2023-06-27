@@ -1,6 +1,37 @@
+import numpy as np
+class Person:
+    def __init__(self,box):
+        self.box = box
+        self.lying_bed = False
+    def update_lying_bed(self,bed):
+        if(bed is None):
+            ## fallback to only checking posture is lying or not
+            length = max(box.x)
 
+
+
+class Bed:
+    def __init__(self,box):
+        self.box = box
 # Class for detection algorithms
 class detection:
+    def __init__(self):
+        pass
+    def update(self,result,thermal,timenow):
+        Persons = list()
+        bed = None
+        for box in result.boxes:
+            if box.cls == 0:
+                Persons.append(Person(box))
+            elif box.cls == 59:
+                bed = Bed(box)
+        for person in Persons:
+
+
+
+
+
+
         
 # State variables
 ##global tolerance

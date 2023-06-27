@@ -5,6 +5,8 @@ from os import _exit
 
 class tkwindow:
     def __init__(self) -> None:
+        # TODO: design for status indicator
+        # TODO: design IoT indicator  
         self.window = tkinter.Tk()
         self.window.geometry('{}x{}'.format(480,700))
         self.window.title('Frame Viewer')
