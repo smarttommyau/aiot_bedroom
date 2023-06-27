@@ -38,7 +38,6 @@ tkwindow = tkwindow()
 ## you can change to other yolo model(they are not tested,but less cpu usage)
 ## TODO: Update to v8
 model = YOLO("yolov8n.pt") # default yolov5x6
-model.classes = [0,59,63,67]
 # person, bed, laptop(as some phone can be detact by laptop), cell phone 
 
 # Start up Network
@@ -60,8 +59,8 @@ detection = detection()
 def new_frame_handler():
     (frame,thermal) = live_connection.getcurrentframe()
     image = Image.open(BytesIO(frame))
-    results = model(image)
-    tkwindow.updateImage(results[0].ims[0])
+    results = model.prediction(image,classes=[0,59,63,67])
+    tkwindow.updateImage(image=Image.fromarray(results[0].plot(pil=True))
     detection.update(results[0],thermal,time.time()) 
     
 

@@ -1,12 +1,28 @@
 import numpy as np
+import torch
 class Person:
     def __init__(self,box):
         self.box = box
         self.lying_bed = False
     def update_lying_bed(self,bed):
+        box = self.box
         if(bed is None):
             ## fallback to only checking posture is lying or not
-            length = max(box.x)
+            length = max(box.xywh[2],box.xywh[3])
+            width = min(box.xywh[2],box.xywh[3])
+            if(length/width>3 and length/width<5):
+                self.lying_bed = True
+        else:
+            ## check if the person is on the bed
+            if torch.all(box.xyxy[0:2] >= bed.box.xyxy[0:2]) and torch.all(box.xyxy[2:4] <= bed.box.xyxy[2:4]):
+                ## check if person is lying
+                if bed.box.xywh[2] > bed.box.xywh[3]:
+                    if box.xywh[2]/box.xywh[3] > 0.6:
+                        self.lying_bed = True
+                else:
+                    if box.xywh[3]/box.xywh[2] > 0.6:
+                        self.lying_bed = True
+
 
 
 
@@ -23,9 +39,11 @@ class detection:
         for box in result.boxes:
             if box.cls == 0:
                 Persons.append(Person(box))
+                ## cannot actually does multi user
             elif box.cls == 59:
                 bed = Bed(box)
         for person in Persons:
+            person.update_lying_bed(bed)
 
 
 

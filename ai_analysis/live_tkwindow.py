@@ -36,9 +36,14 @@ class tkwindow:
     def start(self):
         self.window.mainloop()
 
-    def updateImage(self,frame):
-        memoryFile = BytesIO(frame)
-        img = Image.open(memoryFile)
+    def updateImage(self,frame=None,image=None):
+        if frame is None and image is None:
+            return
+        elif frame is None:
+            img = image
+        else:
+            memoryFile = BytesIO(frame)
+            img = Image.open(memoryFile)
         try:
             tkpi = ImageTk.PhotoImage(img)
             self.__imageLabel.config(image=tkpi);
