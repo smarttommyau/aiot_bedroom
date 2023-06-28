@@ -38,7 +38,6 @@ tkwindow = tkwindow()
 ## you can change to other yolo model(they are not tested,but less cpu usage)
 ## TODO: Update to v8
 model = YOLO("yolov8n.pt") # default yolov5x6
-# person, bed, laptop(as some phone can be detact by laptop), cell phone 
 
 # Start up Network
 ## Setup Hardware
@@ -54,14 +53,17 @@ dialog = tkdialog("Prompt for setting up server for thermal camera",("IP(local)"
 (addr,port) = dialog.input
 ## Setup detection
 detection = detection()
+action = action()
 
 ## Setup live connection to thermal camera
 def new_frame_handler():
     (frame,thermal) = live_connection.getcurrentframe()
     image = Image.open(BytesIO(frame))
     results = model.prediction(image,classes=[0,59,63,67])
+    # person, bed, laptop(as some phone can be detact by laptop), cell phone 
     tkwindow.updateImage(image=Image.fromarray(results[0].plot(pil=True))
-    detection.update(results[0],thermal,time.time()) 
+    threads = detection.update(results[0],thermal,time.time())
+    action.update(detection,threads,time.time())
     
 
 live_connection = Live_connection(addr,port,new_frame_handler)

@@ -1,11 +1,22 @@
 import numpy as np
 import torch
+import threading
 class Person:
-    def __init__(self,box):
-        self.box = box
+    def __init__(self):
+        self.box = None
         self.lying_bed = False
+        self.touching_phone = False
+        self.temperature = 0
+        self.xyxy = torch.tensor([0,0,0,0])
+        self.moving = False
+        self.notmoving = 0
+    ## This function must be called before other operations
+    def update_box(self,box):
+        self.box = box
+
     def update_lying_bed(self,bed):
         box = self.box
+        self.lying_bed = False
         if(bed is None):
             ## fallback to only checking posture is lying or not
             length = max(box.xywh[2],box.xywh[3])
@@ -22,6 +33,27 @@ class Person:
                 else:
                     if box.xywh[3]/box.xywh[2] > 0.6:
                         self.lying_bed = True
+    def update_touching_phone(self,phones):
+        box = self.box
+        self.touching_phone = False
+        for phone in phones:
+            if torch.all(phone.box.xyxy[0:2] >= box.xyxy[0:2]) and torch.all(phone.box.xyxy[2:4] <= box.xyxy[2:4]):
+                self.touching_phone = True
+                return
+    def update_moving(self):
+        # tolerance of movement is 10 pixels
+        xyxy = self.box.xyxy
+        if torch.all(torch.abs(self.xyxy-xyxy)<10):
+            self.moving = False
+            self.notmoving += 1
+        else:
+            self.moving = True
+        self.xyxy = xyxy
+
+    def update_temperature(self,thermal,other_object):
+        (x1,y1,x2,y2) = self.box.xyxy
+        thermal = thermal * other_object
+        self.temperature = np.sum(thermal[x1:x2+1][y1:y2+1]/100 - 273)/(x2-x1+1)/(y2-y1+1)
 
 
 
@@ -29,119 +61,59 @@ class Person:
 class Bed:
     def __init__(self,box):
         self.box = box
+    def update_temperature(self,thermal,other_object,personxyxy):
+        (x1,y1,x2,y2) = self.box.xyxy
+        thermal = thermal * other_object
+        ## set overlap with person to 0
+        (x1p,y1p,x2p,y2p) = personxyxy
+        thermal[x1p:x2p+1][y1p:y2p+1] = 0
+        self.temperature = np.sum(thermal[x1:x2+1][y1:y2+1]/100 - 273)/(x2-x1+1)/(y2-y1+1)
+    
+
+class Phone:
+    def __init__(self,box):
+        self.box = box
 # Class for detection algorithms
 class detection:
     def __init__(self):
-        pass
-    def update(self,result,thermal,timenow):
-        Persons = list()
+        self.person = Person()
+        self.lock = False
+    def update(self,result,thermal) -> list[threading.Thread]:
+        ## timenow is now perserve, may still use later is fps is fluctuating too much
+        # Persons = list()
+        while self.lock:
+            pass
+        self.lock = True
+        phones =  list()
         bed = None
+        updated = False
+        other_object = np.ones((640,480))
         for box in result.boxes:
             if box.cls == 0:
-                Persons.append(Person(box))
                 ## cannot actually does multi user
+                # Persons.append(Person(box))
+                if updated:
+                    pass
+                self.person.update_box(box)
+                updated = True
+                
             elif box.cls == 59:
                 bed = Bed(box)
-        for person in Persons:
-            person.update_lying_bed(bed)
-
-
-
-
-
-
-        
-# State variables
-##global tolerance
-    tolerance = 10
-## Person exist
-    personexist = False
-## lying bed
-    lyingonbed = False
-    startlyingtime = 0
-    notlyingtimestart = 0
-    chancelying = 3
-## touching phone
-    Touchingphone = False
-    starttouchingtime = 0
-    nottouchingtimestart = 0
-    chanceTouching = 3
-## sleeping
-    sleeping = False
-    startsleepingtime = 0
-    notsleepingtimestart = 0
-## not moving
-    notmoving = False
-    lastposition = [0,0,0,0]
-    toleranceOfNotMoving = 10
-    startnotmovingtime = 0
-    movingtimestart = 0
-    chancenotmoving = 2
-## temperatures
-    tempPerson = []
-### core temp requires face recongnition
-    tempBed = -1
-# Detection algorithms
-# TODO: Update for multi-user
-
-## Person
-    def isPersonAvailable(self)-> bool:
-        return 0 in pandas['class'].array
-
-## Bed lying
-    def isLyinOnBed(self,k:int)->bool:
-        #pandasDataFrame is the output of model(pandas.DataFrame)
-        #return true if the person is lying on the bed
-        #return false if the person is not lying on the bed
-
-        # Check if the person is on bed     
-        if not(0 in pandas['class'].array):
-            return False
-        # Calculate the length ratio of person on the bed
-        personxlen = pandas[pandas['class'] == 0]['xmax'].array[k] - pandas[pandas['class'] == 0]['xmin'].array[k]
-        personylen = pandas[pandas['class'] == 0]['ymax'].array[k] - pandas[pandas['class'] == 0]['ymin'].array[k]
-        if not(59 in pandas['class'].array):
-            if personylen>personxlen:
-                if(personylen/personxlen>3 and personylen/personxlen<5):# acoording to web data, the ratio of length to  shoulder is 4:1
-                    return True
-                else:
-                    return False
-        bedxlen = pandas[pandas['class'] == 59]['xmax'].array[0] - pandas[pandas['class'] == 59]['xmin'].array[0]
-        bedylen = pandas[pandas['class'] == 59]['ymax'].array[0] - pandas[pandas['class'] == 59]['ymin'].array[0]
-
-        if bedxlen > bedylen :
-                return personxlen/bedxlen > 0.6
-        else:
-                return personylen/bedylen > 0.6
-
-## Phone touching
-    def isTouchingPhone(pandas,person)->bool:
-        #pandasDataFrame is the output of model(pandas.DataFrame)
-        #return true if the person is touching the phone
-        #return false if the person is not touching the phone
-        #return None if the person is not in the frame
-        # Check if the person is on bed
-        phone = []
-        if 63 in pandas['class'].array:
-            phone.append(pandas[pandas['class'] == 63])
-        if 67 in pandas['class'].array:
-            phone.append(pandas[pandas['class'] == 67])
-        if len(phone) == 0:
-            return False
-        # see if the person touches the phone
-        overlapArea = 0
-        people = pandas[pandas['class'] == 0]
-        for x in person:
-            for y in phone:
-                for z in range(len(y)):
-                    x_overlap = max(0, min(y['xmax'].array[z], people['xmax'].array[x]) - max(y['xmin'].array[z], people['xmin'].array[x]));
-                    y_overlap = max(0, min(y['ymax'].array[z], people['ymax'].array[x]) - max(y['ymin'].array[z], people['ymin'].array[x]));
-                    overlapArea = max(overlapArea,x_overlap * y_overlap);
-                    areaphone = (y['xmax'].array[z] - y['xmin'].array[z])*(y['ymax'].array[z] - y['ymin'].array[z])
-                    time.sleep(1)
-                    if overlapArea/areaphone > 0.3:
-                        return True
-        return False
-
-
-
+            elif box.cls == 63 or box.cls == 67:
+                phones.append(Phone(box))
+                ## set other object to 1 with box.xyxy
+                (x1,y1,x2,y2) = box.xyxy
+                other_object[x1:x2+1][y1:y2+1] = 0
+        # for person in Persons:
+        threads = tuple(
+            threading.Thread(target=self.person.update_lying_bed,args=(bed,)),
+            threading.Thread(target=self.person.update_touching_phone,args=(phones,)),
+            threading.Thread(target=self.person.update_moving,args=()),
+            threading.Thread(target=self.person.update_temperature,args=(thermal,other_object))
+            threading.Thread(target=box.update_temperature,args=(thermal,other_object,person.box.xyxy))
+        )
+        for thread in threads:
+            thread.start()
+        return threads
+    def free(self):
+        self.lock = False
