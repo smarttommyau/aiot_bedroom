@@ -110,7 +110,7 @@ class detection:
             threading.Thread(target=self.person.update_touching_phone,args=(phones,)),
             threading.Thread(target=self.person.update_moving,args=()),
             threading.Thread(target=self.person.update_temperature,args=(thermal,other_object))
-            threading.Thread(target=box.update_temperature,args=(thermal,other_object,person.box.xyxy))
+            threading.Thread(target=bed.update_temperature,args=(thermal,other_object,person.box.xyxy)) if bed is not None else None
         )
         for thread in threads:
             thread.start()
