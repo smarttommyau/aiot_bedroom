@@ -48,12 +48,17 @@ dialog = tkdialog("Prompt for IoT server",("Address",),("http://192.168.43.151:7
 fan = Fan_Control(IoT_addr)
 light = Light_Control(IoT_addr)
 buzzer = Buzzer_Control(IoT_addr)
+class aircon:
+    def __init__(self) -> None:
+        self.status = False
+        self.temperature = 0
+aircon = aircon()
 
 dialog = tkdialog("Prompt for setting up server for thermal camera",("IP(local)","Port"),("192.168.210","7777"))
 (addr,port) = dialog.input
 ## Setup detection
 detection = detection()
-action = action()
+action = action(fan,aircon,light,detection)
 
 ## Setup live connection to thermal camera
 def new_frame_handler():
@@ -62,8 +67,7 @@ def new_frame_handler():
     results = model.prediction(image,classes=[0,59,63,67])
     # person, bed, laptop(as some phone can be detact by laptop), cell phone 
     tkwindow.updateImage(image=Image.fromarray(results[0].plot(pil=True))
-    threads = detection.update(results[0],thermal,time.time())
-    action.update(detection,threads,time.time())
+    detection.update(results[0],thermal,time.time())
     
 
 live_connection = Live_connection(addr,port,new_frame_handler)

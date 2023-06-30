@@ -84,12 +84,15 @@ class detection:
     def __init__(self):
         self.person = Person()
         self.person_prensence = StatusManager(2,2)
-        self.lock = threading.Lock()
+        self.lock = threading.RLock()
         self.timenow = 0
         self.events = tuple(threading.Event() * 6)
+        self.condition_self = threading.Condition()
         ## 0: lying_bed, 1: touching_phone, 2: moving, 3: temperature, 4: bed_temperature, 5: sleep
     def update(self,result,thermal,timenow):
-        self.lock.aquire()
+        self.lock.aquire(block=True)
+        self.events.clear()
+        self.condition_self.notify_all()
         ## timenow is now perserve, may still use later is fps is fluctuating too much
         # Persons = list()
         self.timenow = timenow
