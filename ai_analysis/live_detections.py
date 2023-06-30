@@ -66,6 +66,7 @@ class Person:
 class Bed:
     def __init__(self,box):
         self.box = box
+        self.temperature = 0
     def update_temperature(self,thermal,other_object,personxyxy,event):
         (x1,y1,x2,y2) = self.box.xyxy
         thermal = thermal * other_object

@@ -49,16 +49,30 @@ fan = Fan_Control(IoT_addr)
 light = Light_Control(IoT_addr)
 buzzer = Buzzer_Control(IoT_addr)
 class aircon:
-    def __init__(self) -> None:
+    def __init__(self,fan) -> None:
         self.status = False
-        self.temperature = 0
+        self.temperature = 25
+        self.lastchange = 0
+        self.fan = fan
+
+    def temp_change(self,increment):
+        timenow = time.time()
+        if timenow - self.lastchange >300: #i.e. 5min
+            aircon += increment
+            self.lastchange = timenow
+    def power(self,onOff):
+        if self.status != onOff:
+            self.status = onOff
+            fan.set_fan_state(onOff)
+            logger.info("Aircon "+("On" if onOff else "Off"))
+
 aircon = aircon()
 
 dialog = tkdialog("Prompt for setting up server for thermal camera",("IP(local)","Port"),("192.168.210","7777"))
 (addr,port) = dialog.input
 ## Setup detection
 detection = detection()
-action = action(fan,aircon,light,detection)
+action = action(aircon,light,detection)
 
 ## Setup live connection to thermal camera
 def new_frame_handler():
