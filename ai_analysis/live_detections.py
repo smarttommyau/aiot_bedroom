@@ -115,7 +115,7 @@ class detection:
                 other_object[x1:x2+1][y1:y2+1] = 0
         if not updated:
             if self.person_prensence.update_status(False,timenow):
-                for event in events:
+                for event in self.events:
                     event.set()
             else:
                 self.lock.release()
