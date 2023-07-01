@@ -10,3 +10,4 @@
 *.json
 /ai_analysis/__pycache__/*
 /ai_analysis/IoT/esp8826/build/*
+ai_analysis/img/*

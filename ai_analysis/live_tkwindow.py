@@ -5,15 +5,17 @@ from os import _exit
 
 
 class tkvariables:
-    def __init__(self,name,tkvar,update) -> None:
+    def __init__(self,name,tkvar,window,update) -> None:
         self.name = name
         self.tkvar = tkvar
         self.getter = update
+        self.window = window
     def update(self):
         self.tkvar.set(self.getter())
+        self.window.after(1000,self.update)
         ## update should call after method to update the value
 class tkwindow:
-    def __init__(self) -> None:
+    def __init__(self,logger) -> None:
         # TODO: design for status indicator
         # TODO: design IoT indicator  
         self.window = tkinter.Tk()
@@ -27,7 +29,7 @@ class tkwindow:
         button.place(x=0,y=641,width=480,height=60)
         button.pack()
         self.window.after(100,self.__updateImageLabel)
-        self.window.withdraw()
+        self.logger = logger
             
 
 
@@ -44,10 +46,11 @@ class tkwindow:
         _exit(0)
 
     def start(self):
-        self.window.deiconify()
+        self.logger.info("Start GUI")
         self.window.mainloop()
 
     def updateImage(self,frame=None,image=None):
+
         if frame is None and image is None:
             return
         elif frame is None:
@@ -57,7 +60,8 @@ class tkwindow:
             img = Image.open(memoryFile)
         try:
             tkpi = ImageTk.PhotoImage(img)
-            self.__imageLabel.config(image=tkpi);
+            self.__imageLabel.config(image=tkpi)
+            self.logger.info("Update Image")
         except:
             pass
         self.window.after_idle(self.__updateImageLabel, True);

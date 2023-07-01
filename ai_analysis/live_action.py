@@ -15,7 +15,7 @@ from audioplayer import AudioPlayer
     ##4. music(lying)
 
 class action:
-    def __init__(self,aircon,light,ambulance,detection) -> None:
+    def __init__(self,aircon,light,ambulance,detection,logger) -> None:
         self.aircon    = aircon
         self.light     = light
         self.ambulance = ambulance
@@ -24,18 +24,21 @@ class action:
         self.rlock    = detection.lock
         self.person    = detection.person
         self.condition = detection.condition_self
+        self.logger    = logger
         # self.buzzer = buzzer
         ## Start all actions
-        threading.Thread(target=self.Aircon,args=(self.events[0],self.events[3],self.events[4]))
-        threading.Thread(target=self.Light,args=(self.events[5],self.events[1]))
-        threading.Thread(target=self.Ambulance,args=(self.events[2],self.events[3]))
-        threading.Thread(target=self.Music,args=(self.events[0],self.events[5]))
+        threading.Thread(target=self.Aircon,args=(self.events[0],self.events[3],self.events[4])).start()
+        threading.Thread(target=self.Light,args=(self.events[5],self.events[1])).start()
+        threading.Thread(target=self.Ambulance,args=(self.events[2],self.events[3])).start()
+        threading.Thread(target=self.Music,args=(self.events[0],)).start()
 
     def Aircon(self,lying,temperature,bed_temperature):
         while True:
-            self.rlock.aquire(blocking=False)
-            self.condition.wait()
+            with self.condition:
+                self.condition.wait()
+            self.rlock.acquire(blocking=False)
             lying.wait(),bed_temperature.wait()#,temperature.wait()
+            self.logger.info("Aircon updating...")
             if not self.detection.person_presence.status or not self.person.lying_bed.status:
                 self.aricon.Power(False)
                 self.rlock.release()
@@ -55,9 +58,11 @@ class action:
             self.rlock.release()
     def Light(self,sleep,touching_phone):
         while True:
-            self.rlock.aquire(blocking=False)
-            self.condition.wait()
+            with self.condition:
+                self.condition.wait()
+            self.rlock.acquire(blocking=False)
             sleep.wait(),touching_phone.wait()
+            self.logger.info("Light updating...")
             if not self.detection.person_presence.status:
                 self.light.power(False)
                 self.rlock.release()
@@ -69,9 +74,11 @@ class action:
             self.rlock.release()
     def Ambulance(self,moving,temperature):
         while True:
-            self.rlock.aquire(blocking=False)
-            self.condition.wait()
+            with self.condition:
+                self.condition.wait()
+            self.rlock.acquire(blocking=False)
             moving.wait(),temperature.wait()
+            self.logger.info("Ambulance updating...")
             if not self.detection.person_presence.status:
                 self.ambulance.power(False)
                 self.rlock.release()
@@ -91,9 +98,11 @@ class action:
         music_player = AudioPlayer('music/Chopin_Nocturne_E_Flat_Major_Op9_No2.mp3')
         # lying time >5
         while True:
-            self.rlock.aquire(blocking=False)
-            self.condition.wait()
+            with self.condition:
+                self.condition.wait()
+            self.rlock.acquire(blocking=False)
             lying.wait()
+            self.logger.info("Music updating...")
             if not self.detection.person_presence.status:           
                 if music_player.state == 'playing':
                     music_player.stop()   

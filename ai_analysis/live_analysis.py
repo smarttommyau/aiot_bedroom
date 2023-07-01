@@ -126,8 +126,8 @@ dialog.start()
 (addr,port) = dialog.input
 logger.info("Thermal camera address: "+addr+":"+port)
 ## Setup detection
-detection = detection()
-action = action(aircon_,light,ambulance_,detection)
+detection = detection(logger)
+action = action(aircon_,light,ambulance_,detection,logger)
 
 ## Setup live connection to thermal camera
 def new_frame_handler():
@@ -143,18 +143,18 @@ live_connection = Live_connection(addr,int(port),new_frame_handler)
 connection_thread = threading.Thread(target=live_connection.start_connection,args=(nolog,))
 
 ## setup varible list
-tkwindow = tkwindow()
+tkwindow = tkwindow(logger)
 variables = (
-    tkvariables("lyingbed",tkinter.BooleanVar(),lambda: detection.person.lying_bed.status),
-    tkvariables("TouchingPhone", tkinter.BooleanVar(), lambda: detection.person.touching_phone.status),
-    tkvariables("Moving", tkinter.BooleanVar(), lambda: detection.person.moving.status),
-    tkvariables("Sleeping", tkinter.BooleanVar(), lambda: detection.person.sleeping.status),
-    tkvariables("Temperature", tkinter.IntVar(), lambda: detection.person.temperature),
-    tkvariables("BedTemperature", tkinter.IntVar(), lambda: detection.bed.temperature),
-    tkvariables("Ambulance", tkinter.BooleanVar(), lambda: action.ambulance.status),
-    tkvariables("Aircon", tkinter.BooleanVar(), lambda: action.aircon.status),
-    tkvariables("AirconTemp", tkinter.IntVar(), lambda: action.aircon.temperature),
-    tkvariables("Light", tkinter.BooleanVar(), lambda: action.light.get_light_state()),
+    tkvariables("lyingbed",tkinter.BooleanVar(),tkwindow.window,lambda: detection.person.lying_bed.status),
+    tkvariables("TouchingPhone", tkinter.BooleanVar(), tkwindow.window, lambda: detection.person.touching_phone.status),
+    tkvariables("Moving", tkinter.BooleanVar(), tkwindow.window, lambda: detection.person.moving.status),
+    tkvariables("Sleeping", tkinter.BooleanVar(), tkwindow.window, lambda: detection.person.sleeping.status),
+    tkvariables("Temperature", tkinter.IntVar(), tkwindow.window, lambda: detection.person.temperature),
+    tkvariables("BedTemperature", tkinter.IntVar(), tkwindow.window, lambda: detection.bed.temperature),
+    tkvariables("Ambulance", tkinter.BooleanVar(), tkwindow.window, lambda: action.ambulance.status),
+    tkvariables("Aircon", tkinter.BooleanVar(), tkwindow.window, lambda: action.aircon.status),
+    tkvariables("AirconTemp", tkinter.IntVar(), tkwindow.window, lambda: action.aircon.temperature),
+    tkvariables("Light", tkinter.BooleanVar(), tkwindow.window, lambda: action.light.get_light_state()),
 )
 
 def updateVariables(variables) -> None:
