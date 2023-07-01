@@ -16,7 +16,7 @@ from audioplayer import AudioPlayer
 
 class action:
     def __init__(self,aircon,light,ambulance,detection) -> None:
-        self.aricon    = aircon
+        self.aircon    = aircon
         self.light     = light
         self.ambulance = ambulance
         self.events    = detection.events

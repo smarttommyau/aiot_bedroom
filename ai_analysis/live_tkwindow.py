@@ -17,16 +17,17 @@ class tkwindow:
         # TODO: design for status indicator
         # TODO: design IoT indicator  
         self.window = tkinter.Tk()
-        self.window.geometry('{}x{}'.format(480,1000))
+        self.window.geometry('{}x{}'.format(1000,800))
         self.window.title('Frame Viewer')
         self.window.protocol("WM_DELETE_WINDOW", self.__onQuit)
         self.__imageLabel = tkinter.Label(self.window,text="Waiting...");
         self.__imageLabel.pack()
         self.__imageLabel.place(x=0,y=0,width=480,height=640)
         button = tkinter.Button(self.window,text="!!Force Kill!!",command=self.__onQuit)
-        button.place(x=0,y=640,width=480,height=60)
+        button.place(x=0,y=641,width=480,height=60)
         button.pack()
         self.window.after(100,self.__updateImageLabel)
+        self.window.withdraw()
             
 
 
@@ -43,6 +44,7 @@ class tkwindow:
         _exit(0)
 
     def start(self):
+        self.window.deiconify()
         self.window.mainloop()
 
     def updateImage(self,frame=None,image=None):
@@ -77,6 +79,7 @@ class tkdialog:
         self.__button = tkinter.Button(self.__window, text="Submit", command=self.__submit)
         self.__window.bind_all('<Return>',self.__submit)
         self.__button.pack()
+    def start(self):
         self.__window.mainloop()
 
     def __submit(self,event=None):

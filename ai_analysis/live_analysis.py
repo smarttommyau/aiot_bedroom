@@ -2,6 +2,7 @@
 from live_connection import Live_connection 
 from live_tkwindow import tkwindow, tkdialog,tkvariables
 from live_detections import detection
+from live_action import action
 from IoT.IoT import Fan_Control,Light_Control,Buzzer_Control
 from audioplayer import AudioPlayer
 import threading
@@ -32,22 +33,37 @@ posLogStream = 0
 
 # Start up window
 logger.info("Start main")
-tkwindow = tkwindow()
 
 # Load and Setup model
 ## you can change to other yolo model(they are not tested,but less cpu usage)
 ## TODO: Update to v8
+logger.info("Loading model")
 model = YOLO("yolov8n.pt") # default yolov5x6
-
+logger.info("Model loaded")
 # Start up Network
 ## Setup Hardware
-dialog = tkdialog("Prompt for IoT server",("Address",),("http://192.168.43.151:7777/controller",))
+dialog = tkdialog("Prompt for IoT server",("Address",),("http://192.168.0.240:7777/controller",))
+logger.info("Prompt for IoT server")
+dialog.start()
 (IoT_addr,) = dialog.input
-
+logger.info("IoT server address: "+IoT_addr)
 ## Controllers
+logger.info("Test Fan Controller")
 fan = Fan_Control(IoT_addr)
+fan.set_fan_state(True)
+time.sleep(2)
+fan.set_fan_state(False)
+time.sleep(1)
+logger.info("Test Light Controller")
 light = Light_Control(IoT_addr)
+light.set_light_state(True)
+time.sleep(2)
+light.set_light_state(False)
+time.sleep(1)
+logger.info("Test Buzzer Controller")
 buzzer = Buzzer_Control(IoT_addr)
+buzzer.send_buzzer_command(1000,2)
+time.sleep(2)
 class aircon:
     def __init__(self,fan) -> None:
         self.status = False
@@ -101,48 +117,52 @@ class ambulance:
             time.sleep(1)
 
 
-aircon = aircon(fan)
-ambulance = ambulance(buzzer)
+aircon_ = aircon(fan)
+ambulance_ = ambulance(buzzer)
 
-dialog = tkdialog("Prompt for setting up server for thermal camera",("IP(local)","Port"),("192.168.210","7777"))
+dialog = tkdialog("Prompt for setting up server for thermal camera",("IP(local)","Port"),("192.168.0.210","7777"))
+logger.info("Prompt for setting up server for thermal camera")
+dialog.start()
 (addr,port) = dialog.input
+logger.info("Thermal camera address: "+addr+":"+port)
 ## Setup detection
 detection = detection()
-action = action(aircon,light,ambulance,detection)
+action = action(aircon_,light,ambulance_,detection)
 
 ## Setup live connection to thermal camera
 def new_frame_handler():
     (frame,thermal) = live_connection.getcurrentframe()
     image = Image.open(BytesIO(frame))
-    results = model.prediction(image,classes=[0,59,63,67])
+    results = model.predict(image,classes=[0,59,63,67])
     # person, bed, laptop(as some phone can be detact by laptop), cell phone 
-    tkwindow.updateImage(image=Image.fromarray(results[0].plot(pil=True))
+    tkwindow.updateImage(image=Image.fromarray(results[0].plot(pil=True)))
     detection.update(results[0],thermal,time.time())
     
 
-live_connection = Live_connection(addr,port,new_frame_handler)
+live_connection = Live_connection(addr,int(port),new_frame_handler)
 connection_thread = threading.Thread(target=live_connection.start_connection,args=(nolog,))
 
 ## setup varible list
+tkwindow = tkwindow()
 variables = (
-    tkvariables("lyingbed",tkinter.BooleanVar(),lambda: detection.person.lying_bed),
-    tkvariables("TouchingPhone", tkinter.BooleanVar(), lambda: detection.person.touching_phone),
-    tkvariables("Moving", tkinter.BooleanVar(), lambda: detection.person.moving),
-    tkvariables("Sleeping", tkinter.BooleanVar(), lambda: detection.person.sleeping),
+    tkvariables("lyingbed",tkinter.BooleanVar(),lambda: detection.person.lying_bed.status),
+    tkvariables("TouchingPhone", tkinter.BooleanVar(), lambda: detection.person.touching_phone.status),
+    tkvariables("Moving", tkinter.BooleanVar(), lambda: detection.person.moving.status),
+    tkvariables("Sleeping", tkinter.BooleanVar(), lambda: detection.person.sleeping.status),
     tkvariables("Temperature", tkinter.IntVar(), lambda: detection.person.temperature),
     tkvariables("BedTemperature", tkinter.IntVar(), lambda: detection.bed.temperature),
     tkvariables("Ambulance", tkinter.BooleanVar(), lambda: action.ambulance.status),
     tkvariables("Aircon", tkinter.BooleanVar(), lambda: action.aircon.status),
     tkvariables("AirconTemp", tkinter.IntVar(), lambda: action.aircon.temperature),
-    tkvariables("Light", tkinter.BooleanVar(), lambda: action.light.status),
+    tkvariables("Light", tkinter.BooleanVar(), lambda: action.light.get_light_state()),
 )
 
-def updateVariables(variables:tuple(tkvariables)) -> None:
+def updateVariables(variables) -> None:
     for i,var in enumerate(variables):
         name = tkinter.Label(tkwindow.window,text=var.name)
         name.place(x=480,y=0+i*20,width=100,height=20)
         name.pack()
-        item = tkinter.Label(tkwondow.window,textvariable=var.tkvar)
+        item = tkinter.Label(tkwindow.window,textvariable=var.tkvar)
         item.place(x=580,y=0+i*20,width=100,height=20)
         item.pack()
         var.update()

@@ -64,9 +64,11 @@ class Person:
             self.sleeping = False
         event.set()
 class Bed:
-    def __init__(self,box):
-        self.box = box
+    def __init__(self):
+        self.box = None
         self.temperature = 0
+    def update_box(self,box):
+        self.box = box
     def update_temperature(self,thermal,other_object,personxyxy,event):
         (x1,y1,x2,y2) = self.box.xyxy
         thermal = thermal * other_object
@@ -87,18 +89,19 @@ class detection:
         self.person_prensence = StatusManager(0,2)
         self.lock = threading.RLock()
         self.timenow = 0
-        self.events = tuple(threading.Event() * 6)
+        self.events = tuple(threading.Event() for _ in range(6))
         self.condition_self = threading.Condition()
+        self.bed = Bed()
         ## 0: lying_bed, 1: touching_phone, 2: moving, 3: temperature, 4: bed_temperature, 5: sleep
     def update(self,result,thermal,timenow):
 
         ## timenow is now perserve, may still use later is fps is fluctuating too much
         # Persons = list()
         phones =  list()
-        bed = None
         updated = False
         other_object = np.ones((640,480))
         boxs = None
+        bboxs = None
         for box in result.boxes:
             if box.cls == 0:
                 ## cannot actually does multi user
@@ -109,7 +112,7 @@ class detection:
                 updated = True
                 
             elif box.cls == 59:
-                bed = Bed(box)
+                bboxs = box
             elif box.cls == 63 or box.cls == 67:
                 phones.append(Phone(box))
                 ## set other object to 1 with box.xyxy
@@ -119,6 +122,7 @@ class detection:
         self.events.clear()
         self.condition_self.notify_all()
         self.person.update_box(boxs)
+        self.bed.update_box(bboxs)
         self.timenow = timenow
         if not updated:
             if self.person_prensence.update_status(False,timenow):
@@ -136,7 +140,8 @@ class detection:
         threading.Thread(target=self.person.update_touching_phone,args=(phones,timenow,self.events[1])).start()
         threading.Thread(target=self.person.update_moving,args=(timenow,self.events[2])).start()
         threading.Thread(target=self.person.update_temperature,args=(thermal,other_object,self.evnets[3])).start()
-        if bed is not None:
-            threading.Thread(target=bed.update_temperature,args=(thermal,other_object,self.person.box.xyxy,self.events[4])).start()
+        if bboxs is not None:
+            threading.Thread(target=self.bed.update_temperature,args=(thermal,other_object,self.person.box.xyxy,self.events[4])).start()
+        else:
             self.events[4].set()
         self.lock.release()
