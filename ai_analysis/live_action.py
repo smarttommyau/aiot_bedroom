@@ -1,4 +1,5 @@
 import threading
+from audioplayer import AudioPlayer
     ## Thread structure
     ##1. lying bed
     ##2. touching phone
@@ -12,10 +13,12 @@ import threading
     ##2. light(sleep,touchphone)
     ##3. callambulance(moving or body temp)
     ##4. music(lying)
+
 class action:
-    def __init__(self,aircon,light,detection) -> None:
+    def __init__(self,aircon,light,ambulance,detection) -> None:
         self.aricon    = aircon
         self.light     = light
+        self.ambulance = ambulance
         self.events    = detection.events
         self.detection = detection
         self.rlock    = detection.lock
@@ -24,13 +27,16 @@ class action:
         # self.buzzer = buzzer
         ## Start all actions
         threading.Thread(target=self.Aircon,args=(self.events[0],self.events[3],self.events[4]))
+        threading.Thread(target=self.Light,args=(self.events[5],self.events[1]))
+        threading.Thread(target=self.Ambulance,args=(self.events[2],self.events[3]))
+        threading.Thread(target=self.Music,args=(self.events[0],self.events[5]))
 
     def Aircon(self,lying,temperature,bed_temperature):
         while True:
             self.rlock.aquire(blocking=False)
             self.condition.wait()
             lying.wait(),bed_temperature.wait()#,temperature.wait()
-            if not self.person.lying_bed.status:
+            if not self.detection.person_presence.status or not self.person.lying_bed.status:
                 self.aricon.Power(False)
                 self.rlock.release()
                 continue
@@ -46,6 +52,59 @@ class action:
                 self.aricon.temp_change(+1)
             elif self.detection.bed.temperature > 31:
                 self.aricon.temp_change(-1)
+            self.rlock.release()
+    def Light(self,sleep,touching_phone):
+        while True:
+            self.rlock.aquire(blocking=False)
+            self.condition.wait()
+            sleep.wait(),touching_phone.wait()
+            if not self.detection.person_presence.status:
+                self.light.power(False)
+                self.rlock.release()
+                continue
+            if self.person.sleeping.status and not self.person.touching_phone.status:
+                self.light.power(False)
+            else:
+                self.light.power(True)
+            self.rlock.release()
+    def Ambulance(self,moving,temperature):
+        while True:
+            self.rlock.aquire(blocking=False)
+            self.condition.wait()
+            moving.wait(),temperature.wait()
+            if not self.detection.person_presence.status:
+                self.ambulance.power(False)
+                self.rlock.release()
+                continue
+            if self.person.temperature >40 or self.person.temperature < 30:
+                self.ambulance.power(True)
+                self.rlock.release()
+                continue
+            # not moving for 20 seconds
+            if not self.person.moving.status and self.person.moving.start -self.detection.timenow > 20:
+                self.ambulance.power(True)
+                self.rlock.release()
+                continue
+            self.ambulance.power(False)
+            self.rlock.release()
+    def Music(self,lying):
+        music_player = AudioPlayer('music/Chopin_Nocturne_E_Flat_Major_Op9_No2.mp3')
+        # lying time >5
+        while True:
+            self.rlock.aquire(blocking=False)
+            self.condition.wait()
+            lying.wait()
+            if not self.detection.person_presence.status:           
+                if music_player.state == 'playing':
+                    music_player.stop()   
+                self.rlock.release()
+                continue
+            if self.person.lying_bed.status and self.person.lying_bed.start -self.detection.timenow > 5:
+                if music_player.state != 'playing':
+                    music_player.play(block=False)
+            elif not self.lying_bed.status and self.person.lying_bed.end -self.detection.timenow > 5 and music_player.state == 'playing':
+                music_player.stop()   
+            self.rlock.release()
 
 
 

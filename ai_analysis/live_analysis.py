@@ -65,14 +65,50 @@ class aircon:
             self.status = onOff
             fan.set_fan_state(onOff)
             logger.info("Aircon "+("On" if onOff else "Off"))
+class ambulance:
+    def __init__(self,buzzer) -> None:
+        self.status = False
+        self.buzzer = buzzer
+        self.tolerance = 3
+        self.tolerance_counter = 3
+        self.lock = threading.Event()
+        self.thread = threading.Thread(target=self.__play_ambulace)
+        self.thread.start()
 
-aircon = aircon()
+    def power(self,onOff):
+
+        if onOff:
+            self.tolerance_counter -=1
+            if self.tolerance_counter <=0:
+                self.status = True
+                logger.info("Ambulance Called")
+                self.lock.set()
+        else:
+            self.tolerance_counter = self.tolerance
+            if self.status: 
+                self.status = False           
+                logger.info("Ambulance Cancelled")
+                self.lock.clear()
+    def __play_ambulace(self):
+        flutuator = False
+        while True:
+            self.lock.wait()
+            if flutuator:
+                flutuator = False
+            else:
+                flutuator = True
+            self.buzzer.send_buzzer_command(1480 if flutuator else 1407, 1000)
+            time.sleep(1)
+
+
+aircon = aircon(fan)
+ambulance = ambulance(buzzer)
 
 dialog = tkdialog("Prompt for setting up server for thermal camera",("IP(local)","Port"),("192.168.210","7777"))
 (addr,port) = dialog.input
 ## Setup detection
 detection = detection()
-action = action(aircon,light,detection)
+action = action(aircon,light,ambulance,detection)
 
 ## Setup live connection to thermal camera
 def new_frame_handler():

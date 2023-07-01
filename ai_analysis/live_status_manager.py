@@ -7,6 +7,7 @@ class StatusManager:
         self.__counter_tolerance_negative = tolerance_negative
         self.status  = status
         self.start = 0
+        self.end = 0
     def update_status(self,status,timenow) -> bool:
         if status == self.status:
             self.__counter_tolerance_positive = self.__default_tolerance_positive
@@ -16,6 +17,7 @@ class StatusManager:
             self.__counter_tolerance_negative -= 1
             if self.__counter_tolerance_negative <=0:
                 self.status = False
+                self.end = timenow
                 return True
         else:
             self.__counter_tolerance_positive -= 1
