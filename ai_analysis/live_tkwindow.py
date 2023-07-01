@@ -3,12 +3,21 @@ import tkinter
 from io import BytesIO
 from os import _exit 
 
+
+class tkvariables:
+    def __init__(self,name,tkvar,update) -> None:
+        self.name = name
+        self.tkvar = tkvar
+        self.getter = update
+    def update(self):
+        self.tkvar.set(self.getter())
+        ## update should call after method to update the value
 class tkwindow:
     def __init__(self) -> None:
         # TODO: design for status indicator
         # TODO: design IoT indicator  
         self.window = tkinter.Tk()
-        self.window.geometry('{}x{}'.format(480,700))
+        self.window.geometry('{}x{}'.format(480,1000))
         self.window.title('Frame Viewer')
         self.window.protocol("WM_DELETE_WINDOW", self.__onQuit)
         self.__imageLabel = tkinter.Label(self.window,text="Waiting...");
@@ -18,7 +27,7 @@ class tkwindow:
         button.place(x=0,y=640,width=480,height=60)
         button.pack()
         self.window.after(100,self.__updateImageLabel)
-        return None
+            
 
 
 

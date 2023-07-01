@@ -1,6 +1,6 @@
 # Version tends to fix performance issue by using native python instead of ipy
 from live_connection import Live_connection 
-from live_tkwindow import tkwindow, tkdialog
+from live_tkwindow import tkwindow, tkdialog,tkvariables
 from live_detections import detection
 from IoT.IoT import Fan_Control,Light_Control,Buzzer_Control
 from audioplayer import AudioPlayer
@@ -122,6 +122,31 @@ def new_frame_handler():
 
 live_connection = Live_connection(addr,port,new_frame_handler)
 connection_thread = threading.Thread(target=live_connection.start_connection,args=(nolog,))
+
+## setup varible list
+variables = (
+    tkvariables("lyingbed",tkinter.BooleanVar(),lambda: detection.person.lying_bed),
+    tkvariables("TouchingPhone", tkinter.BooleanVar(), lambda: detection.person.touching_phone),
+    tkvariables("Moving", tkinter.BooleanVar(), lambda: detection.person.moving),
+    tkvariables("Sleeping", tkinter.BooleanVar(), lambda: detection.person.sleeping),
+    tkvariables("Temperature", tkinter.IntVar(), lambda: detection.person.temperature),
+    tkvariables("BedTemperature", tkinter.IntVar(), lambda: detection.bed.temperature),
+    tkvariables("Ambulance", tkinter.BooleanVar(), lambda: action.ambulance.status),
+    tkvariables("Aircon", tkinter.BooleanVar(), lambda: action.aircon.status),
+    tkvariables("AirconTemp", tkinter.IntVar(), lambda: action.aircon.temperature),
+    tkvariables("Light", tkinter.BooleanVar(), lambda: action.light.status),
+)
+
+def updateVariables(variables:tuple(tkvariables)) -> None:
+    for i,var in enumerate(variables):
+        name = tkinter.Label(tkwindow.window,text=var.name)
+        name.place(x=480,y=0+i*20,width=100,height=20)
+        name.pack()
+        item = tkinter.Label(tkwondow.window,textvariable=var.tkvar)
+        item.place(x=580,y=0+i*20,width=100,height=20)
+        item.pack()
+        var.update()
+updateVariables(variables)
 
 def main_threadf():
     pass
