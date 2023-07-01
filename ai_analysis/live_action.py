@@ -21,12 +21,17 @@ class action:
         self.ambulance = ambulance
         self.events    = detection.events
         self.detection = detection
-        self.rlock    = detection.lock
         self.person    = detection.person
         self.condition = detection.condition_self
         self.logger    = logger
+        for i in range(4):
+            detection.action_lock.append(threading.Event())
+        self.action_lock = detection.action_lock
+        for action in detection.action_lock:
+            action.set()
         # self.buzzer = buzzer
         ## Start all actions
+        
         threading.Thread(target=self.Aircon,args=(self.events[0],self.events[3],self.events[4])).start()
         threading.Thread(target=self.Light,args=(self.events[5],self.events[1])).start()
         threading.Thread(target=self.Ambulance,args=(self.events[2],self.events[3])).start()
@@ -36,84 +41,83 @@ class action:
         while True:
             with self.condition:
                 self.condition.wait()
-            self.rlock.acquire(blocking=False)
+
+            
             lying.wait(),bed_temperature.wait()#,temperature.wait()
             self.logger.info("Aircon updating...")
             if not self.detection.person_presence.status or not self.person.lying_bed.status:
-                self.aricon.Power(False)
-                self.rlock.release()
+                self.aircon.power(False)
+                self.action_lock[0].set()
                 continue
             else:
-                self.aricon.power(True)
+                self.aircon.power(True)
             if self.detection.bed is None:
-                self.rlock.release()
+                self.action_lock[0].set()
                 continue
             #TODO:  bias on human temp and environment temp
                 # ideal bed temp is betweeen 27 - 31
                 # body temp is 36
             if self.detection.bed.temperature < 27:
-                self.aricon.temp_change(+1)
+                self.aircon.temp_change(+1)
             elif self.detection.bed.temperature > 31:
-                self.aricon.temp_change(-1)
-            self.rlock.release()
+                self.aircon.temp_change(-1)
+            self.action_lock[0].set()
     def Light(self,sleep,touching_phone):
         while True:
             with self.condition:
                 self.condition.wait()
-            self.rlock.acquire(blocking=False)
             sleep.wait(),touching_phone.wait()
             self.logger.info("Light updating...")
             if not self.detection.person_presence.status:
-                self.light.power(False)
-                self.rlock.release()
+                self.light.set_light_state(False)
+                self.action_lock[1].set()
                 continue
             if self.person.sleeping.status and not self.person.touching_phone.status:
-                self.light.power(False)
+                self.light.set_light_state(False)
             else:
-                self.light.power(True)
-            self.rlock.release()
+                self.light.set_light_state(True)
+            self.action_lock[1].set()
     def Ambulance(self,moving,temperature):
         while True:
             with self.condition:
                 self.condition.wait()
-            self.rlock.acquire(blocking=False)
             moving.wait(),temperature.wait()
             self.logger.info("Ambulance updating...")
             if not self.detection.person_presence.status:
                 self.ambulance.power(False)
-                self.rlock.release()
+                self.action_lock[2].set()                
                 continue
             if self.person.temperature >40 or self.person.temperature < 30:
                 self.ambulance.power(True)
-                self.rlock.release()
+                self.action_lock[2].set()
                 continue
             # not moving for 20 seconds
             if not self.person.moving.status and self.person.moving.start -self.detection.timenow > 20:
                 self.ambulance.power(True)
-                self.rlock.release()
+                self.action_lock[2].set()
                 continue
             self.ambulance.power(False)
-            self.rlock.release()
+            self.action_lock[2].set()
     def Music(self,lying):
         music_player = AudioPlayer('music/Chopin_Nocturne_E_Flat_Major_Op9_No2.mp3')
+        playing = False
         # lying time >5
         while True:
             with self.condition:
                 self.condition.wait()
-            self.rlock.acquire(blocking=False)
             lying.wait()
             self.logger.info("Music updating...")
             if not self.detection.person_presence.status:           
-                if music_player.state == 'playing':
-                    music_player.stop()   
-                self.rlock.release()
+                if playing:
+                    music_player.stop()  
+                self.action_lock[3].set() 
                 continue
             if self.person.lying_bed.status and self.person.lying_bed.start -self.detection.timenow > 5:
-                if music_player.state != 'playing':
+                if not playing:
                     music_player.play(block=False)
-            elif not self.lying_bed.status and self.person.lying_bed.end -self.detection.timenow > 5 and music_player.state == 'playing':
-                music_player.stop()   
-            self.rlock.release()
+            elif not self.lying_bed.status and self.person.lying_bed.end -self.detection.timenow > 5 and playing:
+                music_player.stop() 
+            self.action_lock[3].set()  
 
 
 

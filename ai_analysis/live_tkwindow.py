@@ -25,6 +25,7 @@ class tkwindow:
         self.__imageLabel = tkinter.Label(self.window,text="Waiting...");
         self.__imageLabel.pack()
         self.__imageLabel.place(x=0,y=0,width=480,height=640)
+        self.__tkpi = None
         button = tkinter.Button(self.window,text="!!Force Kill!!",command=self.__onQuit)
         button.place(x=0,y=641,width=480,height=60)
         button.pack()
@@ -35,9 +36,10 @@ class tkwindow:
 
 
     def __updateImageLabel(self,direct=False):
-        self.__imageLabel.config()
+        if self.__tkpi is not None:
+            self.__imageLabel.config(image=self.__tkpi)
         if direct != True:
-            self.window.after(100,self.__updateImageLabel)
+            self.window.after(500,self.__updateImageLabel)
 
     def __onQuit(self):
         self.__imageLabel.destroy()
@@ -50,7 +52,7 @@ class tkwindow:
         self.window.mainloop()
 
     def updateImage(self,frame=None,image=None):
-
+        img = None
         if frame is None and image is None:
             return
         elif frame is None:
@@ -59,8 +61,8 @@ class tkwindow:
             memoryFile = BytesIO(frame)
             img = Image.open(memoryFile)
         try:
-            tkpi = ImageTk.PhotoImage(img)
-            self.__imageLabel.config(image=tkpi)
+            self.__tkpi = ImageTk.PhotoImage(img)
+            self.__imageLabel.config(image=self.__tkpi)
             self.logger.info("Update Image")
         except:
             pass
