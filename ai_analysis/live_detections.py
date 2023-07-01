@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 import threading
-import live_status_manager
+from live_status_manager import StatusManager
 class Person:
     def __init__(self):
         self.box = None

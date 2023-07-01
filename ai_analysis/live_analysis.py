@@ -131,8 +131,8 @@ def main_threadf():
 
 
 ## start internet incomming
-tkwindow.start()
 connection_thread.start()
 main_thread = threading.Thread(target=main_threadf)
 main_thread.start()
+tkwindow.start()
 
