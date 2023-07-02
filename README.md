@@ -13,7 +13,7 @@ Project that aims to provide the best bedroom environment with AI and IoT
 - use the [**live_analysis.ipynb**](./ai_analysis/live_analysis.ipynb) as the main program(For pc)
 ## AI analysis V2
 - use the [**live_analysis.py**](./ai_analysis/live_analysis.py) as the main program(For pc)
-＞Huge performance increase and huge improve in stability. Also, a better UI. 
+＞ Huge performance increase and huge improve in stability. Also, a better UI. 
 ### IoT
 Adurino project devices(ESP8266)
 - [**IoT/esp8826**](./ai_analysis/IoT/esp8826/esp8826.ino) is the code for the board
