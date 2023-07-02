@@ -70,7 +70,7 @@ class aircon:
     def temp_change(self,increment):
         timenow = time.time()
         if timenow - self.lastchange >300: #i.e. 5min
-            aircon += increment
+            self.temperature += increment
             self.lastchange = timenow
     def power(self,onOff):
         if self.status != onOff:
@@ -143,7 +143,7 @@ live_connection = Live_connection(addr,int(port),new_frame_handler)
 connection_thread = threading.Thread(target=live_connection.start_connection,args=(nolog,))
 
 ## setup varible list
-tkwindow = tkwindow(logger)
+tkwindow = tkwindow(logger,(lambda:fan.set_fan_state(False),lambda:light.set_light_state(False),lambda:live_connection.terminate()))
 variables = (
     tkvariables("lyingbed",tkinter.BooleanVar(),tkwindow.window,lambda: detection.person.lying_bed.status),
     tkvariables("TouchingPhone", tkinter.BooleanVar(), tkwindow.window, lambda: detection.person.touching_phone.status),

@@ -15,7 +15,7 @@ class tkvariables:
         self.window.after(1000,self.update)
         ## update should call after method to update the value
 class tkwindow:
-    def __init__(self,logger) -> None:
+    def __init__(self,logger,quithandlers:tuple=None) -> None:
         # TODO: design for status indicator
         # TODO: design IoT indicator  
         self.window = tkinter.Tk()
@@ -26,6 +26,7 @@ class tkwindow:
         self.__imageLabel.pack()
         self.__imageLabel.place(x=0,y=0,width=480,height=640)
         self.__tkpi = None
+        self.__quithandlers = quithandlers
         button = tkinter.Button(self.window,text="!!Force Kill!!",command=self.__onQuit)
         button.place(x=2,y=642,width=476,height=54)
         button.pack()
@@ -44,6 +45,9 @@ class tkwindow:
     def __onQuit(self):
         self.__imageLabel.destroy()
         self.window.destroy()
+        if self.__quithandlers is not None:
+            for handler in self.__quithandlers:
+                handler()
         ## Be carefuk of this _exit as it kill everthing in a bad way
         _exit(0)
 
