@@ -151,8 +151,8 @@ variables = (
     tkvariables("Sleeping", tkinter.BooleanVar(), tkwindow.window, lambda: detection.person.sleeping.status,lambda: time.time() - max(detection.person.sleeping.start,detection.person.sleeping.end)),
     tkvariables("Temperature", tkinter.IntVar(), tkwindow.window, lambda: detection.person.temperature),
     tkvariables("BedTemperature", tkinter.IntVar(), tkwindow.window, lambda: detection.bed.temperature),
-    tkvariables("Ambulance", tkinter.BooleanVar(), tkwindow.window, lambda: action.ambulance.status,lambda: time.time() - max(action.ambulance.start,action.ambulance.end)),
-    tkvariables("Aircon", tkinter.BooleanVar(), tkwindow.window, lambda: action.aircon.status,lambda: time.time() - max(action.aircon.start,action.aircon.end)),
+    tkvariables("Ambulance", tkinter.BooleanVar(), tkwindow.window, lambda: action.ambulance.status),
+    tkvariables("Aircon", tkinter.BooleanVar(), tkwindow.window, lambda: action.aircon.status),
     tkvariables("AirconTemp", tkinter.IntVar(), tkwindow.window, lambda: action.aircon.temperature),
     tkvariables("Light", tkinter.BooleanVar(), tkwindow.window, lambda: action.light.get_light_state()),
 )
@@ -166,7 +166,7 @@ def updateVariables(variables) -> None:
         item.place(x=582,y=2+i*22,width=100,height=20)
         item.pack()
         if var.time_getter is not None:
-            time = tkinter.Label(tkwindow.window,textvariable=var.time)
+            time = tkinter.Label(tkwindow.window,textvariable=var.timetk)
             time.place(x=682,y=2+i*22,width=100,height=20)
             time.pack()
             var.time_update()
