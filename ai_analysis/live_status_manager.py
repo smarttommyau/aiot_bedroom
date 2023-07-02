@@ -16,14 +16,15 @@ class StatusManager:
         if status:
             self.__counter_tolerance_negative -= 1
             if self.__counter_tolerance_negative <=0:
-                self.status = False
+                self.status = True
                 self.end = timenow
                 return True
         else:
             self.__counter_tolerance_positive -= 1
             if self.__counter_tolerance_positive <=0:
-                self.status = True
+                self.status = False
                 self.start = timenow
                 return True
+        return False
 
             

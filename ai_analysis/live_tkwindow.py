@@ -5,11 +5,17 @@ from os import _exit
 
 
 class tkvariables:
-    def __init__(self,name,tkvar,window,update) -> None:
+    def __init__(self,name,tkvar,window,update,time_getter=None) -> None:
         self.name = name
         self.tkvar = tkvar
         self.getter = update
         self.window = window
+        self.time_getter = time_getter
+        if time_getter is not None:
+            self.timetk = tkinter.IntVar()
+    def time_update(self):
+        self.timetk.set(self.time_getter())
+        self.window.after(1000,self.time_update)
     def update(self):
         self.tkvar.set(self.getter())
         self.window.after(1000,self.update)
