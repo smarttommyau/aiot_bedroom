@@ -53,11 +53,13 @@ class action:
             #TODO:  bias on human temp and environment temp
                 # ideal bed temp is betweeen 27 - 31
                 # body temp is 36
+            ## TODO:Aircon change with function to determine the magnitude of change
             if self.detection.bed.temperature < 27:
                 self.aircon.temp_change(+1)
             elif self.detection.bed.temperature > 31:
                 self.aircon.temp_change(-1)
     def Light(self,sleep,touching_phone):
+        ##FIXME: Testing
         self.logger.info("Light action started")
         while True:
             self.action_lock[1].set()
@@ -73,6 +75,7 @@ class action:
             else:
                 self.light.set_light_state(True)
     def Ambulance(self,moving,temperature,lying):
+        ## FIXME: Testing
         self.logger.info("Ambulance action started")
         while True:
             self.action_lock[2].set()                
@@ -91,6 +94,7 @@ class action:
                 continue
             self.ambulance.power(False)
     def Music(self,lying):
+        ## FIXME: Testing
         self.logger.info("Music action started")
         music_player = AudioPlayer('music/Chopin_Nocturne_E_Flat_Major_Op9_No2.mp3')
         playing = False
@@ -111,3 +115,4 @@ class action:
             elif not self.person.lying_bed.status and self.person.lying_bed.end -self.detection.timenow > 5 and playing:
                 music_player.stop() 
 
+## FIXME: elederly func
