@@ -135,7 +135,7 @@ def new_frame_handler():
     image = Image.fromarray(results[0].plot())
     b, g, r = image.split()
     image = Image.merge("RGB", (r, g, b))
-    tkwindow.updateImage(image=image))
+    tkwindow.updateImage(image=image)
     # tkwindow.updateImage(image=image)
     
 
