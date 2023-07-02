@@ -68,6 +68,8 @@ class Person:
     def update_temperature(self,thermal,other_object,event):
         self.logger.info("Temperature updating...")
         (x1,y1,x2,y2) = self.box.xyxy.flatten().long()
+        other_object[thermal<30] = 0 
+        other_object[theraml>40] = 0
         thermal = thermal * other_object
         self.temperature = (np.sum(thermal[x1:x2+1 , y1:y2+1])/np.sum(other_object[x1:x2+1 , y1:y2+1]))/100 - 273
         event.set()
