@@ -6,8 +6,11 @@ class Person:
     def __init__(self,logger):
         self.box = None
         self.lying_bed = StatusManager(2,2)
+        # self.lying_bed = StatusManager(0,0)
         self.touching_phone = StatusManager(2,2)
-        self.moving = StatusManager(2,10)
+        # self.touching_phone = StatusManager(0,0)
+        self.moving = StatusManager(2,5)
+        # self.moving = StatusManager(0,0)
         self.sleeping = StatusManager()
         self.temperature = 0
         self.xyxy = torch.tensor([0,0,0,0])
@@ -23,42 +26,49 @@ class Person:
         xyxy = box.xyxy.flatten()
         xywh = box.xywh.flatten()
         lying_bed = False
-        if(bed is None):
+        if bed is None:
             ## fallback to only checking posture is lying or not
             length = max(xywh[2],xywh[3])
             width = min(xywh[2],xywh[3])
             if(length/width>3 and length/width<5):
-                lying_bed = True
+                lying_bed = None
+            else:
+                lying_bed = False
         else:
             ## check if the person is on the bed
             bxyxy = bed.box.xyxy.flatten()
             bxywh = bed.box.xywh.flatten()
-            if torch.all(xyxy[0:2] >= bxyxy[0:2]) and torch.all(xyxy[2:4] <= bxyxy[2:4]):
+            ## tolerance of 30 pixels
+            if torch.all(xyxy[0:2] >= bxyxy[0:2] - 30) and torch.all(xyxy[2:4] <= bxyxy[2:4] + 30):
                 ## check if person is lying
                 if bxywh[2] > bxywh[3]:
                     if xywh[2]/bxywh[2] > 0.6:
                         lying_bed = True
+
                 else:
                     if xywh[3]/bxywh[3] > 0.6:
                         lying_bed = True
         event.set()
-        self.lying_bed.update_status(lying_bed,timenow)
+        if lying_bed is not None:
+            self.lying_bed.update_status(lying_bed,timenow)
     def update_touching_phone(self,phones,timenow,event):
         self.logger.info("Touching phone updating...")
         xyxy = self.box.xyxy.flatten()
 
         for phone in phones:
             pxyxy = phone.box.xyxy.flatten()
-            if torch.all(pxyxy[0:2] >= xyxy[0:2]) and torch.all(pxyxy[2:4] <= xyxy[2:4]):
+            ## tolerance of 10 pixels
+            if torch.all(pxyxy[0:2] >= xyxy[0:2] - 10) and torch.all(pxyxy[2:4] <= xyxy[2:4] + 10):
                 self.touching_phone.update_status(True,timenow)
+                event.set()
                 return
         self.touching_phone.update_status(False,timenow)
         event.set()
     def update_moving(self,timenow,event):
         self.logger.info("Moving updating...")
         xyxy = self.box.xyxy
-        # tolerance of movement is 10 pixels
-        if torch.all(torch.abs(xyxy - self.xyxy) < 10):
+        # tolerance of movement is 15 pixels
+        if torch.all(torch.abs(xyxy - self.xyxy) < 15):
             self.moving.update_status(False,timenow)
         else:
             self.moving.update_status(True,timenow)
@@ -123,7 +133,6 @@ class detection:
         ## timenow is now perserve, may still use later is fps is fluctuating too much
         # Persons = list()
         phones =  list()
-        updated = False
         other_object = np.ones((640,480))
         boxs = None
         bboxs = None
@@ -147,6 +156,8 @@ class detection:
         for i,action in enumerate(self.action_lock):
             action.wait()
             action.clear()
+        with self.condition_self:
+            self.condition_self.notify_all()
         self.logger.info("Through Lock")
 
 
