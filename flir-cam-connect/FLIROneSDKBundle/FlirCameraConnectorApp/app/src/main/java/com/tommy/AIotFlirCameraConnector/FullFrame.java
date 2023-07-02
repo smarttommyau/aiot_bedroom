@@ -96,9 +96,8 @@ public class FullFrame {
                 try{
                     // *2/8 to /4
                     final OutputStream outputStream = streamSocket.getOutputStream();
-                    byte[] headerBytes = ByteBuffer.allocate(Integer.SIZE  / 4).putInt(thermal.length).putInt(visual.length).array();
                     Log.i("Socket","sending");
-                    byte[] send_data = ByteBuffer.allocate(headerBytes.length + thermal.length + visual.length).put(headerBytes).put(thermal).put(visual).array();
+                    byte[] send_data = ByteBuffer.allocate(Integer.SIZE  / 4 + thermal.length + visual.length).putInt(thermal.length).putInt(visual.length).put(thermal).put(visual).array();
 
                     synchronized (streamSocket) {
                         outputStream.write(send_data);

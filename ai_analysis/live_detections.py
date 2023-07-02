@@ -69,7 +69,7 @@ class Person:
         self.logger.info("Temperature updating...")
         (x1,y1,x2,y2) = self.box.xyxy.flatten().long()
         other_object[thermal<30] = 0 
-        other_object[theraml>40] = 0
+        other_object[thermal>40] = 0
         thermal = thermal * other_object
         self.temperature = (np.sum(thermal[x1:x2+1 , y1:y2+1])/np.sum(other_object[x1:x2+1 , y1:y2+1]))/100 - 273
         event.set()
@@ -93,9 +93,11 @@ class Bed:
     def update_temperature(self,thermal,other_object,personxyxy,event):
         self.logger.info("Bed temperature updating...")
         (x1,y1,x2,y2) = self.box.xyxy.flatten().long()
-        thermal = thermal * other_object
         ## set overlap with person to 0
-        (x1p,y1p,x2p,y2p) = personxyxy.long()
+        if personxyxy is not None:
+            (x1p,y1p,x2p,y2p) = personxyxy.long()
+            other_object[x1p:x2p+1 , y1p:y2p+1] = 0
+        thermal = thermal * other_object
         self.temperature = (np.sum(thermal[x1:x2+1 , y1:y2+1])/np.sum(other_object[x1:x2+1 , y1:y2+1]))/100 - 273
         event.set()
     
@@ -129,10 +131,9 @@ class detection:
             if box.cls == 0:
                 ## cannot actually does multi user
                 # Persons.append(Person(box))
-                if updated:
+                if boxs is not None:
                     continue
                 boxs = box
-                updated = True
                 
             elif box.cls == 59:
                 bboxs = box
@@ -143,22 +144,41 @@ class detection:
                 other_object[x1:x2+1 , y1:y2+1] = 0
         self.logger.info("Lock aquired")
         self.lock.acquire(blocking=True)
-        for action in self.action_lock:
+        for i,action in enumerate(self.action_lock):
             action.wait()
             action.clear()
         self.logger.info("Through Lock")
+
+
         for event in self.events:
             event.clear()
-        with self.condition_self:
-            self.condition_self.notify_all()
-        self.person.update_box(boxs)
+
+        self.timenow = timenow
+
+
+        if boxs is not None:
+            self.person.update_box(boxs)
+
         if bboxs is not None:
             self.bed.update_box(bboxs)
-        self.timenow = timenow
-        if not updated:
+            threading.Thread(target=self.bed.update_temperature,args=(thermal,other_object,boxs.xyxy.flatten() if boxs is not None else None,self.events[4])).start()
+        else:
+            self.events[4].set()
+            self.logger.info("No Bed!!")
+
+
+        if boxs is None:
+            for action_lock in self.action_lock:
+                action_lock.set()
             if self.person_presence.update_status(False,timenow):
-                for event in self.events:
-                    event.set()
+                self.person.sleeping.status = False
+                self.person.touching_phone.status = False
+                self.person.lying_bed.status = False
+                self.person.moving.status = False
+                self.person.temperature = 0
+                self.events[0].set(),self.events[1].set(),self.events[2].set(),self.events[3].set(),self.events[5].set()
+                self.lock.release()
+                return                
             else:
                 self.lock.release()
                 return
@@ -171,9 +191,4 @@ class detection:
         threading.Thread(target=self.person.update_touching_phone,args=(phones,timenow,self.events[1])).start()
         threading.Thread(target=self.person.update_moving,args=(timenow,self.events[2])).start()
         threading.Thread(target=self.person.update_temperature,args=(thermal,other_object,self.events[3])).start()
-        if bboxs is not None:
-            threading.Thread(target=self.bed.update_temperature,args=(thermal,other_object,self.person.box.xyxy.flatten(),self.events[4])).start()
-        else:
-            self.events[4].set()
-            self.logger.info("No Bed!!")
         self.lock.release()

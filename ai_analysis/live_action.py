@@ -22,7 +22,6 @@ class action:
         self.events    = detection.events
         self.detection = detection
         self.person    = detection.person
-        self.condition = detection.condition_self
         self.logger    = logger
         for i in range(4):
             detection.action_lock.append(threading.Event())
@@ -39,10 +38,6 @@ class action:
 
     def Aircon(self,lying,temperature,bed_temperature):
         while True:
-            with self.condition:
-                self.condition.wait()
-
-            
             lying.wait(),bed_temperature.wait()#,temperature.wait()
             self.logger.info("Aircon updating...")
             if not self.detection.person_presence.status or not self.person.lying_bed.status:
@@ -64,8 +59,6 @@ class action:
             self.action_lock[0].set()
     def Light(self,sleep,touching_phone):
         while True:
-            with self.condition:
-                self.condition.wait()
             sleep.wait(),touching_phone.wait()
             self.logger.info("Light updating...")
             if not self.detection.person_presence.status:
@@ -79,8 +72,6 @@ class action:
             self.action_lock[1].set()
     def Ambulance(self,moving,temperature):
         while True:
-            with self.condition:
-                self.condition.wait()
             moving.wait(),temperature.wait()
             self.logger.info("Ambulance updating...")
             if not self.detection.person_presence.status:
@@ -102,8 +93,6 @@ class action:
         playing = False
         # lying time >5
         while True:
-            with self.condition:
-                self.condition.wait()
             lying.wait()
             self.logger.info("Music updating...")
             if not self.detection.person_presence.status:           
