@@ -148,11 +148,11 @@ variables = (
     tkvariables("lyingbed",tkinter.BooleanVar(),tkwindow.window,lambda: detection.person.lying_bed.status,lambda: time.time() - max(detection.person.lying_bed.start,detection.person.lying_bed.end)),
     tkvariables("TouchingPhone", tkinter.BooleanVar(), tkwindow.window, lambda: detection.person.touching_phone.status,lambda: time.time() - max(detection.person.touching_phone.start,detection.person.touching_phone.end)),
     tkvariables("Moving", tkinter.BooleanVar(), tkwindow.window, lambda: detection.person.moving.status,lambda: time.time() - max(detection.person.moving.start,detection.person.moving.end)),
-    tkvariables("Sleeping", tkinter.BooleanVar(), tkwindow.window, lambda: detection.person.sleeping.status,lambda: time.time() - max(detection.person.sleeping.start,detection.person.sleeping.end)
+    tkvariables("Sleeping", tkinter.BooleanVar(), tkwindow.window, lambda: detection.person.sleeping.status,lambda: time.time() - max(detection.person.sleeping.start,detection.person.sleeping.end)),
     tkvariables("Temperature", tkinter.IntVar(), tkwindow.window, lambda: detection.person.temperature),
     tkvariables("BedTemperature", tkinter.IntVar(), tkwindow.window, lambda: detection.bed.temperature),
-    tkvariables("Ambulance", tkinter.BooleanVar(), tkwindow.window, lambda: action.ambulance.status,lambda: time.time() - max(action.ambulance.start,action.ambulance.end)
-    tkvariables("Aircon", tkinter.BooleanVar(), tkwindow.window, lambda: action.aircon.status,lambda: time.time() - max(action.aircon.start,action.aircon.end
+    tkvariables("Ambulance", tkinter.BooleanVar(), tkwindow.window, lambda: action.ambulance.status,lambda: time.time() - max(action.ambulance.start,action.ambulance.end)),
+    tkvariables("Aircon", tkinter.BooleanVar(), tkwindow.window, lambda: action.aircon.status,lambda: time.time() - max(action.aircon.start,action.aircon.end)),
     tkvariables("AirconTemp", tkinter.IntVar(), tkwindow.window, lambda: action.aircon.temperature),
     tkvariables("Light", tkinter.BooleanVar(), tkwindow.window, lambda: action.light.get_light_state()),
 )
