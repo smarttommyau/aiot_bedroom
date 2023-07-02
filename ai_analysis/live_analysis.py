@@ -131,8 +131,12 @@ def new_frame_handler():
     image = Image.open(BytesIO(frame))
     results = model.predict(image,classes=[0,59,63,67])
     # person, bed, laptop(as some phone can be detact by laptop), cell phone 
-    tkwindow.updateImage(image=Image.fromarray(results[0].plot(pil=True)))
     detection.update(results[0],thermal,time.time())
+    image = Image.fromarray(results[0].plot())
+    b, g, r = image.split()
+    image = Image.merge("RGB", (r, g, b))
+    tkwindow.updateImage(image=image))
+    # tkwindow.updateImage(image=image)
     
 
 live_connection = Live_connection(addr,int(port),new_frame_handler)
