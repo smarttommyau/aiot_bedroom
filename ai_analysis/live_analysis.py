@@ -156,10 +156,10 @@ variables = (
 def updateVariables(variables) -> None:
     for i,var in enumerate(variables):
         name = tkinter.Label(tkwindow.window,text=var.name)
-        name.place(x=480,y=0+i*20,width=100,height=20)
+        name.place(x=482,y=2+i*22,width=100,height=20)
         name.pack()
         item = tkinter.Label(tkwindow.window,textvariable=var.tkvar)
-        item.place(x=580,y=0+i*20,width=100,height=20)
+        item.place(x=582,y=2+i*22,width=100,height=20)
         item.pack()
         var.update()
 updateVariables(variables)
