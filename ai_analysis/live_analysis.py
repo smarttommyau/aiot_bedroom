@@ -4,17 +4,13 @@ from live_tkwindow import tkwindow, tkdialog,tkvariables
 from live_detections import detection
 from live_action import action
 from IoT.IoT import Fan_Control,Light_Control,Buzzer_Control
-from audioplayer import AudioPlayer
 import threading
 from ultralytics import YOLO
-from PIL import Image
 from io import BytesIO, StringIO
-import math
 import time
-import numpy as np
 from loguru import logger
 from collections import deque
-from PIL import Image, ImageTk
+from PIL import Image
 import tkinter
 from sys import argv
 

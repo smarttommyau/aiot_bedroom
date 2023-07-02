@@ -27,7 +27,7 @@ class tkwindow:
         self.__imageLabel.place(x=0,y=0,width=480,height=640)
         self.__tkpi = None
         button = tkinter.Button(self.window,text="!!Force Kill!!",command=self.__onQuit)
-        button.place(x=0,y=641,width=480,height=60)
+        button.place(x=2,y=642,width=476,height=54)
         button.pack()
         self.window.after(100,self.__updateImageLabel)
         self.logger = logger

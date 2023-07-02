@@ -90,7 +90,6 @@ class action:
             if self.person.temperature >40 or self.person.temperature < 30:
                 self.ambulance.power(True)
                 self.action_lock[2].set()
-                continue
             # not moving for 20 seconds
             if not self.person.moving.status and self.person.moving.start -self.detection.timenow > 20:
                 self.ambulance.power(True)
@@ -119,15 +118,3 @@ class action:
                 music_player.stop() 
             self.action_lock[3].set()  
 
-
-
-
-
-              
-
-        
-        
-
-
-
-    

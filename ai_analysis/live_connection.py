@@ -1,7 +1,6 @@
 import socket # networking
 import numpy as np # better array
 import threading # multithreading
-from time import sleep # delay
 import zlib # for decompressing the data
 class Live_connection:
     # format of new_frame_handler
