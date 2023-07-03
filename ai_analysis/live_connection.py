@@ -4,7 +4,7 @@ import threading # multithreading
 import zlib # for decompressing the data
 class Live_connection:
     # format of new_frame_handler
-    def __init__(self,host:str,port:int,new_frame_handler=None):
+    def __init__(self,host:str,port:int,new_frame_handler=None,prompt_handler=None):
         self.ss = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         self.host = host
         self.port = port
@@ -17,6 +17,7 @@ class Live_connection:
         self.new_frame_avaliable = False
         self.__decompress = True
         self.__frame_handler = new_frame_handler
+        self.prompt_handler = prompt_handler
 
         
     def printer(self,*values: object,nolog:bool):
@@ -42,8 +43,11 @@ class Live_connection:
                 csocket,addr = ss.accept()
                 print("%s connected"% str(addr))
                 if(addrlist.count(addr[0]) == 0):
-                    print("accept?(y/n)")
-                    prompt = input()
+                    if self.prompt_handler is not None:
+                        prompt = self.prompt_handler(str(addr))
+                    else:    
+                        print("accept?(y/n)")
+                        prompt = input()
                 else:
                     prompt= "y"
                 if(prompt != "y" and prompt != ""):

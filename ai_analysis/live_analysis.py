@@ -138,8 +138,14 @@ def new_frame_handler():
     tkwindow.updateImage(image=image)
     # tkwindow.updateImage(image=image)
     
+def prompt_handler(addr:str):
+    dialog = tkinter.messagebox.askquestion("Do you want to accept?",addr)
+    if dialog == "yes":
+        return "y"
+    else:
+        return "n"
 
-live_connection = Live_connection(addr,int(port),new_frame_handler)
+live_connection = Live_connection(addr,int(port),new_frame_handler,prompt_handler)
 connection_thread = threading.Thread(target=live_connection.start_connection,args=(nolog,))
 
 ## setup varible list
