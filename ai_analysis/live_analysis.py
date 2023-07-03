@@ -10,7 +10,7 @@ from io import BytesIO, StringIO
 import time
 from loguru import logger
 from collections import deque
-from PIL import Image
+from PIL import Image, ImageTk
 import tkinter
 from sys import argv
 
@@ -33,8 +33,23 @@ logger.info("Start main")
 # Load and Setup model
 ## you can change to other yolo model(they are not tested,but less cpu usage)
 ## TODO: Update to v8
+## Select model
+def modelimg():
+    img = ImageTk.PhotoImage(Image.open("yolo-comparison-plots.png").resize((960,360), Image.LANCZOS))
+    tk = tkinter.Label(image=img)
+    tk.image = img
+    tk.pack()
+dialog = tkdialog("Prompt for model",("Model",),("yolov8n.pt",),((modelimg, True),),width=1000,height=450)
+logger.info("Prompt for model")
+dialog.start()
+modelname = None
+try:
+    (modelname,) = dialog.input
+except:
+    pass
+logger.info("Model: "+modelname if modelname is not None else "yolov8n.pt")
 logger.info("Loading model")
-model = YOLO("yolov8n.pt") # default yolov5x6
+model = YOLO("yolov8n.pt" if modelname is None else modelname) # default yolov5x6
 logger.info("Model loaded")
 # Start up Network
 ## Setup Hardware

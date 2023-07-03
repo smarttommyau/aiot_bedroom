@@ -79,18 +79,38 @@ class tkwindow:
         self.window.after_idle(self.__updateImageLabel, True);
 
 class tkdialog:
-    def __init__(self,title:str,label:tuple,default:tuple):
+    ## extratk ((lambda,bool(before is true,after is false)))
+    ## Lambda: please call pack()
+    def __init__(self,title:str,label:tuple,default:tuple,extratk:tuple(tuple())=None,**kwargs):
         self.input = list()
         self.__window = tkinter.Tk()
-        self.__window.geometry('{}x{}'.format(300,150))
+        self.__width = 300
+        self.__height = 150
+        for key,value in kwargs.items():
+            if key == 'width':
+                self.__width = value
+            elif key == 'height':
+                self.__height = value
+        
+        self.__window.geometry('{}x{}'.format(self.__width,self.__height))
         self.__window.title(title)
         self.__entry = list()
+        if extratk is not None:
+            for item in extratk:
+                (func,before) = item
+                if before:
+                    func()
         # create an entry widget for user input
         for txt,detxt in zip(label,default):
             tkinter.Label(self.__window,text=txt).pack()
             self.__entry.append(tkinter.Entry(self.__window))
             self.__entry[-1].insert(0,detxt)
             self.__entry[-1].pack()
+        if extratk is not None:
+            for item in extratk:
+                (func,before) = item
+                if not before:
+                    func()
         # create a button to submit the input
         self.__button = tkinter.Button(self.__window, text="Submit", command=self.__submit)
         self.__window.bind_all('<Return>',self.__submit)

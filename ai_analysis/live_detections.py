@@ -92,6 +92,11 @@ class Person:
             sleeping = True
         self.sleeping.update_status(sleeping,timenow)
         event.set()
+    ## FIXME: not able to sleep or bad sleep(exclude using phone situation)
+    ## List of probale situations:
+    ## 1. eyes open(hard to implement)
+    ## 2. High average movement
+
 class Bed:
     def __init__(self,logger):
         self.box = None

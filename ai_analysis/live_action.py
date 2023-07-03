@@ -116,3 +116,8 @@ class action:
                 music_player.stop() 
 
 ## FIXME: elederly func
+## FIXME: care service(lower class of ambulance)
+# work flow
+# first connect to service center
+# then let human check if its the case
+# last let human start talk with the patient
