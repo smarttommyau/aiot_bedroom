@@ -145,6 +145,7 @@ def new_frame_handler():
     (frame,thermal) = live_connection.getcurrentframe()
     image = Image.open(BytesIO(frame))
     results = model.predict(image,classes=[0,59,63,67])
+    ##TODO: use track for multi-user support(need to consider extra cases)
     # person, bed, laptop(as some phone can be detact by laptop), cell phone 
     detection.update(results[0],thermal,time.time())
     image = Image.fromarray(results[0].plot())

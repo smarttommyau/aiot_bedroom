@@ -123,6 +123,7 @@ class Phone:
 # Class for detection algorithms
 class detection:
     def __init__(self,logger):
+        ##TODO multi-user support by using yolo track
         self.person = Person(logger)
         self.person_presence = StatusManager(0,2)
         self.lock = threading.Lock()
