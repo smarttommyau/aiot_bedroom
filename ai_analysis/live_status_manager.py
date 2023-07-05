@@ -40,7 +40,18 @@ class AverageManagerByValue:
         self.__deque.append(value)
         self.average = sum(self.__deque)/self.__numOf_value
 
-
+#     self._target(*self._args, **self._kwargs)
+#   File "D:\my programs\python\Aiot\aiot_bedroom\ai_analysis\live_detections.py", line 74, in update_moving
+#     self.avgKE.update_value(torch.sum(value),timenow)
+#   File "D:\my programs\python\Aiot\aiot_bedroom\ai_analysis\live_status_manager.py", line 59, in update_value
+#     x = mean(self.__list)
+#   File "C:\Users\Tommy AU\.conda\envs\myenv\lib\statistics.py", line 329, in mean
+#     T, total, count = _sum(data)
+#   File "C:\Users\Tommy AU\.conda\envs\myenv\lib\statistics.py", line 188, in _sum
+#     for n, d in map(_exact_ratio, values):
+#   File "C:\Users\Tommy AU\.conda\envs\myenv\lib\statistics.py", line 261, in _exact_ratio
+#     raise TypeError(msg)
+# TypeError: can't convert type 'Tensor' to numerator/denominator
 class AverageManagerByTime:
     ## Use list as it has better stability while they have similar performance even in scale
     def __init__(self,period=60,least_item=10) -> None:
@@ -55,7 +66,7 @@ class AverageManagerByTime:
         while self.__list_time[0] < timenow - self.__period:
             self.__list_time.pop(0)
             self.__list.pop(0)
-        if len(self.__list) >= self.__least_items:
+        if len(self.__list) >= self.__least_item:
             x = mean(self.__list)
         else:
             x = sum(self.__list)/self.__least_item

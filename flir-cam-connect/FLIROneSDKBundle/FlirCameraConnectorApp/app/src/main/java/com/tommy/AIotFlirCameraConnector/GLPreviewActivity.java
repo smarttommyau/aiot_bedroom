@@ -39,6 +39,7 @@ import java.text.NumberFormat;
 import java.util.EnumSet;
 
 import java.net.Socket;
+// FIXME: urgent fix to drop frames when there is already too much frames in the queue
 
 public class GLPreviewActivity extends Activity implements Device.Delegate, FrameProcessor.Delegate, Device.StreamDelegate{
     GLSurfaceView thermalSurfaceView;
@@ -176,12 +177,24 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
 
     // Frame Processor Delegate method, will be called each time a rendered frame is produced
     public void onFrameProcessed(final RenderedImage renderedImage){
-        if (StreamSocket != null && StreamSocket.isConnected() && socketsetup) {
+        if (StreamSocket != null && StreamSocket.isConnected() && !StreamSocket.isClosed() && socketsetup) {
             if (fullframemanager == null) {
                 fullframemanager = new FullFrameManager(StreamSocket);
             }
             if (renderedImage.imageType() == RenderedImage.ImageType.VisibleAlignedRGBA8888Image || renderedImage.imageType() == RenderedImage.ImageType.ThermalRadiometricKelvinImage) {
                 fullframemanager.add(renderedImage);
+            }
+        }
+        if(StreamSocket != null && StreamSocket.isClosed()){
+            Toast.makeText(getApplicationContext(),"Closing socket",Toast.LENGTH_SHORT);
+
+            try {
+                StreamSocket.close();
+                socketsetup = false;
+                fullframemanager = null;
+                ((Button)findViewById(R.id.AdressUpdate)).setText("START");
+            }catch (Exception ex) {
+                Log.e("Socket","Close failed");
             }
         }
 //        if(this.socketConnection!= null && this.socketConnection.success) {

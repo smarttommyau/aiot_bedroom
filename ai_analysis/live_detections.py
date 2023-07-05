@@ -11,7 +11,7 @@ class Person:
         # self.touching_phone = StatusManager(0,0)
         self.moving = StatusManager(2,5)
         # self.moving = StatusManager(0,0)
-        self.sleeping = StatusManager()
+        self.sleeping = StatusManager(1,1)
         self.temperature = 0
         self.avgKE = AverageManagerByTime(120,20)
         self.xyxy = torch.tensor([0,0,0,0])
@@ -71,7 +71,8 @@ class Person:
         xyxy = self.box.xyxy
         # tolerance of movement is 15 pixels
         value = torch.abs(xyxy - self.xyxy)
-        self.avgKE.update_value(torch.sum(value),timenow)
+        # self.avgKE.update_value(torch.sum(value),timenow)##FIXME: Thousands of bugs
+
         if torch.all(value < 15):
             self.moving.update_status(False,timenow)
         else:

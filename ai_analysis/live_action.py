@@ -31,7 +31,7 @@ class action:
         ## Start all actions
         
         threading.Thread(target=self.Aircon,args=(self.events[0],self.events[3],self.events[4])).start()
-        threading.Thread(target=self.Light,args=(self.events[5],self.events[1])).start()
+        threading.Thread(target=self.Light,args=(self.events[5],)).start()
         threading.Thread(target=self.Ambulance,args=(self.events[2],self.events[3],self.events[1])).start()
         threading.Thread(target=self.Music,args=(self.events[0],)).start()
 
@@ -58,22 +58,26 @@ class action:
                 self.aircon.temp_change(+1)
             elif self.detection.bed.temperature > 31:
                 self.aircon.temp_change(-1)
-    def Light(self,sleep,touching_phone):
+    def Light(self,sleep):
         ##FIXME: Testing
         self.logger.info("Light action started")
         while True:
             self.action_lock[1].set()
             with self.main_lock:
                 self.main_lock.wait()
-            sleep.wait(),touching_phone.wait()
+            sleep.wait()
             self.logger.info("Light updating...")
             if not self.detection.person_presence.status:
+                self.logger.info("Light updating... no person")
                 self.light.set_light_state(False)
                 continue
-            if self.person.sleeping.status and not self.person.touching_phone.status:
-                self.light.set_light_state(False)
-            else:
+            self.logger.info(str(self.person.sleeping.status) +","+ str(self.person.sleeping.start -self.detection.timenow))
+            if self.person.sleeping.status and self.detection.timenow - self.person.sleeping.start > 5:
+                self.logger.info("Light updating... sleeping")
                 self.light.set_light_state(True)
+            elif not self.person.sleeping.status and self.detection.timenow - self.person.sleeping.end > 5:
+                self.logger.info("Light updating... not sleeping")
+                self.light.set_light_state(False)
     def Ambulance(self,moving,temperature,lying):
         ## FIXME: Testing
         self.logger.info("Ambulance action started")
@@ -89,7 +93,7 @@ class action:
             if self.person.temperature >40 or self.person.temperature < 30:
                 self.ambulance.power(True)
             # not moving for 20 seconds
-            if not self.person.moving.status and self.person.moving.start -self.detection.timenow > 20 and not self.person.lying_bed.status:
+            if not self.person.moving.status and self.detection.timenow - self.person.moving.start > 20 and not self.person.lying_bed.status:
                 self.ambulance.power(True)
                 continue
             self.ambulance.power(False)
@@ -109,10 +113,10 @@ class action:
                 if playing:
                     music_player.stop()  
                 continue
-            if self.person.lying_bed.status and self.person.lying_bed.start -self.detection.timenow > 5:
+            if self.person.lying_bed.status and self.detection.timenow - self.person.lying_bed.start > 5:
                 if not playing:
                     music_player.play(block=False)
-            elif not self.person.lying_bed.status and self.person.lying_bed.end -self.detection.timenow > 5 and playing:
+            elif not self.person.lying_bed.status and self.detection.timenow - self.person.lying_bed.end > 5 and playing:
                 music_player.stop() 
 
 ## FIXME: elederly func
