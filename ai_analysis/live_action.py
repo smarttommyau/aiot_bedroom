@@ -90,6 +90,7 @@ class action:
             if not self.detection.person_presence.status:
                 self.ambulance.power(False)
                 continue
+            ## FIXME: tolerances for this case
             if self.person.temperature >40 or self.person.temperature < 30:
                 self.ambulance.power(True)
             # not moving for 20 seconds
