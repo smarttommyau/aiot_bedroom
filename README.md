@@ -1,5 +1,6 @@
 # aiot_bedroom
 Project that aims to provide the best bedroom environment with AI and IoT
+> Image from V1, V2 images to be update later
 <p float="left" align="middle">
 <img width="32%" src="img/not_moving.png"/>
 <img width="32%" src="img/not_moving_end.png"/>
