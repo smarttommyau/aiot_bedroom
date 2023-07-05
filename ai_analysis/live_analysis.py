@@ -40,7 +40,8 @@ def modelimg():
     tk = tkinter.Label(image=img)
     tk.image = img
     tk.pack()
-dialog = tkdialog("Prompt for model",("Model",),("yolov8n.pt",),((modelimg, True),),width=1000,height=450)
+dialog = tkdialog("Prompt for model(Recommend to stay as what it is)",("Model",),("yolov8m.pt",),((modelimg, True),),width=1000,height=450)
+# Using lighter model may cause high random KE making KE detection unusable
 logger.info("Prompt for model")
 dialog.start()
 modelname = None
@@ -48,9 +49,9 @@ try:
     (modelname,) = dialog.input
 except:
     pass
-logger.info("Model: "+modelname if modelname is not None else "yolov8n.pt")
+logger.info("Model: "+modelname if modelname is not None else "yolov8m.pt")
 logger.info("Loading model")
-model = YOLO("yolov8n.pt" if modelname is None else modelname) # default yolov5x6
+model = YOLO("yolov8m.pt" if modelname is None else modelname) # default yolov5x6
 logger.info("Model loaded")
 # Start up Network
 ## Setup Hardware

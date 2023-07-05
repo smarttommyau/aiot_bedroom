@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 import threading
-from live_status_manager import StatusManager
+from live_status_manager import StatusManager , AverageManagerByTime
 class Person:
     def __init__(self,logger):
         self.box = None
@@ -13,6 +13,7 @@ class Person:
         # self.moving = StatusManager(0,0)
         self.sleeping = StatusManager()
         self.temperature = 0
+        self.avgKE = AverageManagerByTime(120,20)
         self.xyxy = torch.tensor([0,0,0,0])
         self.logger = logger
     ## This function must be called before other operations
@@ -64,11 +65,14 @@ class Person:
                 return
         self.touching_phone.update_status(False,timenow)
         event.set()
+    ## AVG KE update with mving
     def update_moving(self,timenow,event):
         self.logger.info("Moving updating...")
         xyxy = self.box.xyxy
         # tolerance of movement is 15 pixels
-        if torch.all(torch.abs(xyxy - self.xyxy) < 15):
+        value = torch.abs(xyxy - self.xyxy)
+        self.avgKE.update_value(torch.sum(value),timenow)
+        if torch.all(value < 15):
             self.moving.update_status(False,timenow)
         else:
             self.moving.update_status(True,timenow)
@@ -95,7 +99,7 @@ class Person:
     ## FIXME: not able to sleep or bad sleep(exclude using phone situation)
     ## List of probale situations:
     ## 1. eyes open(hard to implement)
-    ## 2. High average movement
+    ## 2. High average movement(implementation done)
 
 class Bed:
     def __init__(self,logger):

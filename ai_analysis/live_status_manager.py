@@ -43,15 +43,19 @@ class AverageManagerByValue:
 
 class AverageManagerByTime:
     ## Use list as it has better stability while they have similar performance even in scale
-    def __init__(self,period=10) -> None:
+    def __init__(self,period=60,least_item=10) -> None:
         self.__list = []
         self.__list_time = []
         self.average = 0
         self.__period = period
+        self.__least_item = least_item
     def update_value(self,value,timenow):
         self.__list.append(value)
         self.__list_time.append(timenow)
         while self.__list_time[0] < timenow - self.__period:
             self.__list_time.pop(0)
             self.__list.pop(0)
-        self.average = mean(self.__list)
+        if len(self.__list) >= self.__least_items:
+            x = mean(self.__list)
+        else:
+            x = sum(self.__list)/self.__least_item
