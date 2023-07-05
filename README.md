@@ -49,5 +49,13 @@ We offer 2 LICENSES:
 - Enterprise License: You can get more freedom for commercial development, you may contact me to negotiate for the License.
 
 # TODO
-- [x] Optimize performance
+- [ ] Optimize performance
+    - [x] FPS improvement
+    - [x] analysis efficiency
+    - [ ] Ping improvement(Not dropping extra frames)
+    - [x] stability on pc
+    - [ ] stability on camera side(OOM problems)
 - [ ] Update for Elderly edition
+    - [ ] Not sleeping well
+    - [ ] Care service
+    - [ ] ...
