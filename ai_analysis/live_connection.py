@@ -52,9 +52,12 @@ class Live_connection:
                     prompt= "y"
                 if(prompt != "y" and prompt != ""):
                     csocket.send("rejected\n".encode('ascii'))
+                    csocket.close()
+                    print("rejected")
                 else:
                     addrlist.append(addr[0])
                     csocket.send("accepted\n".encode('ascii'))
+                    print("accepted")
                     t1 = threading.Thread(target = self.start_recieve,args=(csocket,nolog))
                     t1.start()
             count+=1 

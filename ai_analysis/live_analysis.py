@@ -12,6 +12,7 @@ from loguru import logger
 from collections import deque
 from PIL import Image, ImageTk
 import tkinter
+from tkinter import messagebox
 from sys import argv
 
 # Set whether print log
@@ -53,7 +54,7 @@ model = YOLO("yolov8n.pt" if modelname is None else modelname) # default yolov5x
 logger.info("Model loaded")
 # Start up Network
 ## Setup Hardware
-dialog = tkdialog("Prompt for IoT server",("Address",),("http://192.168.0.240:7777/controller",))
+dialog = tkdialog("Prompt for IoT server",("Address",),("http://192.168.50.43:7777/controller",))
 logger.info("Prompt for IoT server")
 dialog.start()
 (IoT_addr,) = dialog.input
@@ -131,7 +132,7 @@ class ambulance:
 aircon_ = aircon(fan)
 ambulance_ = ambulance(buzzer)
 
-dialog = tkdialog("Prompt for setting up server for thermal camera",("IP(local)","Port"),("192.168.0.210","7777"))
+dialog = tkdialog("Prompt for setting up server for thermal camera",("IP(local)","Port"),("192.168.50.250","7777"))
 logger.info("Prompt for setting up server for thermal camera")
 dialog.start()
 (addr,port) = dialog.input
@@ -153,10 +154,9 @@ def new_frame_handler():
     image = Image.merge("RGB", (r, g, b))
     tkwindow.updateImage(image=image)
     # tkwindow.updateImage(image=image)
-    
 def prompt_handler(addr:str):
-    dialog = tkinter.messagebox.askquestion("Do you want to accept?",addr)
-    if dialog == "yes":
+    dialog = tkinter.messagebox.askyesno("Do you want to accept?",addr)
+    if dialog:
         return "y"
     else:
         return "n"
@@ -165,12 +165,12 @@ live_connection = Live_connection(addr,int(port),new_frame_handler,prompt_handle
 connection_thread = threading.Thread(target=live_connection.start_connection,args=(nolog,))
 
 ## setup varible list
-tkwindow = tkwindow(logger,(lambda:fan.set_fan_state(False),lambda:light.set_light_state(False),lambda:live_connection.terminate()))
+tkwindow = tkwindow(logger,(lambda:live_connection.terminate(),lambda:fan.set_fan_state(False),lambda:light.set_light_state(False)))
 variables = (
-    tkvariables("lyingbed",tkinter.BooleanVar(),tkwindow.window,lambda: detection.person.lying_bed.status,lambda: time.time() - max(detection.person.lying_bed.start,detection.person.lying_bed.end)),
-    tkvariables("TouchingPhone", tkinter.BooleanVar(), tkwindow.window, lambda: detection.person.touching_phone.status,lambda: time.time() - max(detection.person.touching_phone.start,detection.person.touching_phone.end)),
-    tkvariables("Moving", tkinter.BooleanVar(), tkwindow.window, lambda: detection.person.moving.status,lambda: time.time() - max(detection.person.moving.start,detection.person.moving.end)),
-    tkvariables("Sleeping", tkinter.BooleanVar(), tkwindow.window, lambda: detection.person.sleeping.status,lambda: time.time() - max(detection.person.sleeping.start,detection.person.sleeping.end)),
+    tkvariables("lyingbed",tkinter.BooleanVar(),tkwindow.window,lambda: detection.person.lying_bed.status,lambda: time.time() - max(detection.person.lying_bed.start,detection.person.lying_bed.end) if max(detection.person.lying_bed.start,detection.person.lying_bed.end) else 0),
+    tkvariables("TouchingPhone", tkinter.BooleanVar(), tkwindow.window, lambda: detection.person.touching_phone.status,lambda: time.time() - max(detection.person.touching_phone.start,detection.person.touching_phone.end) if max(detection.person.touching_phone.start,detection.person.touching_phone.end) else 0),
+    tkvariables("Moving", tkinter.BooleanVar(), tkwindow.window, lambda: detection.person.moving.status,lambda: time.time() - max(detection.person.moving.start,detection.person.moving.end) if max(detection.person.moving.start,detection.person.moving.end) else 0),
+    tkvariables("Sleeping", tkinter.BooleanVar(), tkwindow.window, lambda: detection.person.sleeping.status,lambda: time.time() - max(detection.person.sleeping.start,detection.person.sleeping.end) if max(detection.person.sleeping.start,detection.person.sleeping.end) else 0),
     tkvariables("Temperature", tkinter.IntVar(), tkwindow.window, lambda: detection.person.temperature),
     tkvariables("BedTemperature", tkinter.IntVar(), tkwindow.window, lambda: detection.bed.temperature),
     tkvariables("Ambulance", tkinter.BooleanVar(), tkwindow.window, lambda: action.ambulance.status),
@@ -188,8 +188,11 @@ def updateVariables(variables) -> None:
         item.place(x=582,y=2+i*22,width=100,height=20)
         item.pack()
         if var.time_getter is not None:
+            time_header = tkinter.Label(tkwindow.window,text="Time: ")
+            time_header.place(x=682,y=2+i*22,width=100,height=20)
+            time_header.pack()
             time = tkinter.Label(tkwindow.window,textvariable=var.timetk)
-            time.place(x=682,y=2+i*22,width=100,height=20)
+            time.place(x=782,y=2+i*22,width=100,height=20)
             time.pack()
             var.time_update()
         var.update()

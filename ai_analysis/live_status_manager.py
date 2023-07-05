@@ -11,10 +11,6 @@ class StatusManager:
         self.status  = status
         self.start = 0
         self.end = 0
-        if self.status:
-            self.start = time()
-        else:
-            self.end = time()
     def update_status(self,status,timenow) -> bool:
         if status == self.status:
             self.__counter_tolerance_positive = self.__default_tolerance_positive
