@@ -13,8 +13,9 @@ class Person:
         # self.moving = StatusManager(0,0)
         self.sleeping = StatusManager(1,1)
         self.temperature = 0
-        self.avgKE = AverageManagerByTime(120,20)
-        self.xyxy = torch.tensor([0,0,0,0])
+        self.avgKE = AverageManagerByTime(150,30)
+        # self.xyxy = torch.tensor([0,0,0,0])
+        self.xyxy = None
         self.logger = logger
     ## This function must be called before other operations
     def update_box(self,box):
@@ -68,10 +69,14 @@ class Person:
     ## AVG KE update with mving
     def update_moving(self,timenow,event):
         self.logger.info("Moving updating...")
+        if self.xyxy is None:
+            self.xyxy = self.box.xyxy
+            event.set()
+            return
         xyxy = self.box.xyxy
         # tolerance of movement is 15 pixels
         value = torch.abs(xyxy - self.xyxy)
-        # self.avgKE.update_value(torch.sum(value),timenow)##FIXME: Thousands of bugs
+        self.avgKE.update_value(torch.sum(value).item(),timenow)##FIXME: Thousands of bugs
 
         if torch.all(value < 15):
             self.moving.update_status(False,timenow)
@@ -214,17 +219,22 @@ class detection:
         threading.Thread(target=self.person.update_moving,args=(timenow,self.events[2])).start()
         threading.Thread(target=self.person.update_temperature,args=(thermal,other_object,self.events[3])).start()
         self.lock.release()
-    def TurnOffStatus(self):
+    def reset(self):
+        self.logger.info("Lock aquired")
         self.lock.acquire(blocking=True)
         for i,action in enumerate(self.action_lock):
             action.wait()
             action.clear()
-        self.person_presence.status = False
-        self.person.sleeping.status = False
-        self.person.touching_phone.status = False
-        self.person.lying_bed.status = False
-        self.person.moving.status = False
+        with self.condition_self:
+            self.condition_self.notify_all()
+        self.logger.info("Through Lock")
+        self.person_presence.reset()
+        self.person.sleeping.reset()
+        self.person.touching_phone.reset()
+        self.person.lying_bed.reset()
+        self.person.moving.reset()
         self.person.temperature = 0
+        self.person.xyxys = None
         for event in self.events:
             event.set()
         self.lock.release()
