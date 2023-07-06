@@ -29,13 +29,11 @@ class tkwindow:
         self.window.title('Frame Viewer')
         self.window.protocol("WM_DELETE_WINDOW", self.__onQuit)
         self.__imageLabel = tkinter.Label(self.window,text="Waiting...");
-        # self.__imageLabel.pack(anchor=tkinter.NW)
         self.__imageLabel.place(x=0,y=0,relwidth=0.48,relheight=0.64)
         self.__tkpi = None
         self.__quithandlers = quithandlers
         button = tkinter.Button(self.window,text="!!Force Kill!!",command=self.__onQuit)
         button.place(x=0,rely=0.8,relwidth=0.48,relheight=0.13)
-        # button.pack()
         self.window.after(100,self.__updateImageLabel)
         self.logger = logger
             

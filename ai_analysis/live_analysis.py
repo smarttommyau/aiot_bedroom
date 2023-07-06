@@ -199,17 +199,13 @@ def updateVariables(variables) -> None:
     for i,var in enumerate(variables):
         name = tkinter.Label(tkwindow.window,text=var.name)
         name.place(relx=0.5,rely=i/length,relheight=height,relwidth=0.1)
-        # name.pack()
         item = tkinter.Label(tkwindow.window,textvariable=var.tkvar)
         item.place(relx=0.61,rely=i/length,relheight=height,relwidth=0.1)
-        # item.pack()
         if var.time_getter is not None:
             time_header = tkinter.Label(tkwindow.window,text="Time: ")
             time_header.place(relx=0.72,rely=i/length,relheight=height,relwidth=0.1)
-            # time_header.pack()
             time = tkinter.Label(tkwindow.window,textvariable=var.timetk)
             time.place(relx=0.83,rely=i/length,relheight=height,relwidth=0.1)
-            # time.pack()
             var.time_update()
         var.update()
 updateVariables(variables)
