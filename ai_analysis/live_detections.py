@@ -13,7 +13,7 @@ class Person:
         # self.moving = StatusManager(0,0)
         self.sleeping = StatusManager(1,1)
         self.temperature = 0
-        self.avgKE = AverageManagerByTime(150,30)
+        self.avgKE = AverageManagerByTime(300,60)
         # self.xyxy = torch.tensor([0,0,0,0])
         self.xyxy = None
         self.logger = logger
