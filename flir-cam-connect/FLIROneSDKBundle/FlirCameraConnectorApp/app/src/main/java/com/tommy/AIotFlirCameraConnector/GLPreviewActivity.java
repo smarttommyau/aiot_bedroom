@@ -39,7 +39,6 @@ import java.text.NumberFormat;
 import java.util.EnumSet;
 
 import java.net.Socket;
-// FIXME: urgent fix to drop frames when there is already too much frames in the queue
 
 public class GLPreviewActivity extends Activity implements Device.Delegate, FrameProcessor.Delegate, Device.StreamDelegate{
     GLSurfaceView thermalSurfaceView;
