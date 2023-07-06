@@ -22,8 +22,6 @@ class tkvariables:
         ## update should call after method to update the value
 class tkwindow:
     def __init__(self,logger,quithandlers:tuple=None) -> None:
-        # TODO: design for status indicator
-        # TODO: design IoT indicator  
         self.window = tkinter.Tk()
         self.window.geometry('{}x{}'.format(1000,800))
         self.window.title('Frame Viewer')

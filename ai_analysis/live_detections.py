@@ -76,7 +76,7 @@ class Person:
         xyxy = self.box.xyxy
         # tolerance of movement is 15 pixels
         value = torch.abs(xyxy - self.xyxy)
-        self.avgKE.update_value(torch.sum(value).item(),timenow)##FIXME: Thousands of bugs
+        self.avgKE.update_value(torch.sum(value).item(),timenow)
 
         if torch.all(value < 15):
             self.moving.update_status(False,timenow)

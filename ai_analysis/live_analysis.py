@@ -33,7 +33,6 @@ logger.info("Start main")
 
 # Load and Setup model
 ## you can change to other yolo model(they are not tested,but less cpu usage)
-## TODO: Update to v8
 ## Select model
 def modelimg():
     img = ImageTk.PhotoImage(Image.open("yolo-comparison-plots.png").resize((960,360), Image.LANCZOS))

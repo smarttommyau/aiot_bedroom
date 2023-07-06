@@ -27,7 +27,7 @@ class action:
         self.person    = detection.person
         self.logger    = logger
         self.main_lock = detection.condition_self
-        for _ in range(4):
+        for _ in range(5):
             detection.action_lock.append(threading.Event())
         self.action_lock = detection.action_lock
         # self.buzzer = buzzer
@@ -37,6 +37,7 @@ class action:
         threading.Thread(target=self.Light,args=(self.events[5],)).start()
         threading.Thread(target=self.Ambulance,args=(self.events[2],self.events[3],self.events[1])).start()
         threading.Thread(target=self.Music,args=(self.events[0],)).start()
+        threading.Thread(target=self.Caring,args=(self.events[2],self.events[5]))
 
     def Aircon(self,lying,temperature,bed_temperature):
         self.logger.info("Aircon action started")
@@ -109,6 +110,7 @@ class action:
             self.ambulance.power(False)
     def Music(self,lying):
         ##TODO: real music player
+        ##TODO: Music player class
         ## 1. able to select music
         ## 2. support playlist
         ## 3. rich functions(extra window to control?)
@@ -138,3 +140,15 @@ class action:
 # first connect to service center
 # then let human check if its the case
 # last let human start talk with the patient
+## FIXME: care service(mock implementation)
+## FIXME: using the data of average KE
+    def Caring(self,move,sleep):
+        self.logger.info("Caring action started")
+        while True:
+            self.action_lock[4].set() 
+            with self.main_lock:
+                self.main_lock.wait()
+            move.wait(),sleep.wait()
+            self.logger.info("Caring updating...")
+            if not self.detection.person_presence.status:
+                continue
