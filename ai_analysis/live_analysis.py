@@ -171,7 +171,7 @@ def prompt_handler(addr:str):
 def socket_close_handler():
     logger.info("Connection closed")
     tkwindow.updateImage()
-    detection.TurnOffStatus()
+    detection.reset()
 
 live_connection = Live_connection(addr,int(port),new_frame_handler,prompt_handler,socket_close_handler)
 connection_thread = threading.Thread(target=live_connection.start_connection,args=(nolog,))
@@ -179,11 +179,13 @@ connection_thread = threading.Thread(target=live_connection.start_connection,arg
 ## setup varible list
 tkwindow = tkwindow(logger,(lambda:live_connection.terminate(),lambda:fan.set_fan_state(False),lambda:light.set_light_state(False)))
 variables = (
+    tkvariables("Person",tkinter.BooleanVar(),tkwindow.window,lambda: detection.person_presence.status,lambda: time.time() - max(detection.person_presence.start,detection.person_presence.end) if max(detection.person_presence.start,detection.person_presence.end) else 0),
     tkvariables("lyingbed",tkinter.BooleanVar(),tkwindow.window,lambda: detection.person.lying_bed.status,lambda: time.time() - max(detection.person.lying_bed.start,detection.person.lying_bed.end) if max(detection.person.lying_bed.start,detection.person.lying_bed.end) else 0),
     tkvariables("TouchingPhone", tkinter.BooleanVar(), tkwindow.window, lambda: detection.person.touching_phone.status,lambda: time.time() - max(detection.person.touching_phone.start,detection.person.touching_phone.end) if max(detection.person.touching_phone.start,detection.person.touching_phone.end) else 0),
     tkvariables("Moving", tkinter.BooleanVar(), tkwindow.window, lambda: detection.person.moving.status,lambda: time.time() - max(detection.person.moving.start,detection.person.moving.end) if max(detection.person.moving.start,detection.person.moving.end) else 0),
     tkvariables("Sleeping", tkinter.BooleanVar(), tkwindow.window, lambda: detection.person.sleeping.status,lambda: time.time() - max(detection.person.sleeping.start,detection.person.sleeping.end) if max(detection.person.sleeping.start,detection.person.sleeping.end) else 0),
     tkvariables("Temperature", tkinter.IntVar(), tkwindow.window, lambda: detection.person.temperature),
+    tkvariables("AvgKE",tkinter.IntVar(),tkwindow.window,lambda: detection.person.avgKE.average),
     tkvariables("BedTemperature", tkinter.IntVar(), tkwindow.window, lambda: detection.bed.temperature),
     tkvariables("Ambulance", tkinter.BooleanVar(), tkwindow.window, lambda: action.ambulance.status),
     tkvariables("Aircon", tkinter.BooleanVar(), tkwindow.window, lambda: action.aircon.status),
