@@ -21,6 +21,7 @@ class action:
         self.light     = light
         self.ambulance = ambulance
         self.__ambulance_temperture = StatusManager(4,2)
+        self.__ambulance_moving = StatusManager(4,2)
         self.events    = detection.events
         self.detection = detection
         self.person    = detection.person
@@ -72,7 +73,6 @@ class action:
                 self.logger.info("Light updating... no person")
                 self.light.set_light_state(False)
                 continue
-            self.logger.info(str(self.person.sleeping.status) +","+ str(self.person.sleeping.start -self.detection.timenow))
             if self.person.sleeping.status and self.detection.timenow - self.person.sleeping.start > 5:
                 self.logger.info("Light updating... sleeping")
                 self.light.set_light_state(True)
@@ -89,17 +89,21 @@ class action:
             self.logger.info("Ambulance updating...")
             if not self.detection.person_presence.status:
                 self.ambulance.power(False)
-                self.update_ambulance_temperture(False)
+                self.__ambulance_temperture.update_status(False,self.detection.timenow)
                 continue
             if self.person.temperature >40 or self.person.temperature < 30:
-                self.update_ambulance_temperture(True)
+                self.__ambulance_temperture.update_status(True,self.detection.timenow)
             else:
-                self.update_ambulance_temperture(False)
-            if self.__ambulance_temperture.status:
+                self.__ambulance_temperture.update_status(False,self.detection.timenow)
+            if self.__ambulance_temperture.status and self.detection.timenow - self.__ambulance_temperture.start > 20:
                 self.ambulance.power(True)
                 continue
             # not moving for 20 seconds
-            if not self.person.moving.status and self.detection.timenow - self.person.moving.start > 20 and not self.person.lying_bed.status:
+            if not self.person.moving.status and not self.person.lying_bed.status:
+                self.__ambulance_moving.update_status(True,self.detection.timenow)
+            else:
+                self.__ambulance_moving.update_status(False,self.detection.timenow)
+            if self.__ambulance_moving.status and self.detection.timenow - self.__ambulance_moving.start > 20:
                 self.ambulance.power(True)
                 continue
             self.ambulance.power(False)
