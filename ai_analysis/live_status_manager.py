@@ -8,6 +8,7 @@ class StatusManager:
         self.__default_tolerance_negative = tolerance_negative## to become negative
         self.__counter_tolerance_positive = tolerances_positive
         self.__counter_tolerance_negative = tolerance_negative
+        self.__default_status = status
         self.status  = status
         self.start = 0
         self.end = 0
@@ -29,6 +30,12 @@ class StatusManager:
                 self.start = timenow
                 return True
         return False
+    def reset(self):
+        self.__counter_tolerance_positive = self.__default_tolerance_positive
+        self.__counter_tolerance_negative = self.__default_tolerance_negative
+        self.status = self.__default_status
+        self.start = 0
+        self.end = 0
 
 class AverageManagerByValue:
     # deque seems to have a significant edge against list 
@@ -39,19 +46,10 @@ class AverageManagerByValue:
     def update_value(self,value):
         self.__deque.append(value)
         self.average = sum(self.__deque)/self.__numOf_value
+    def reset(self):
+        self.__deque.clear()
+        self.average = 0
 
-#     self._target(*self._args, **self._kwargs)
-#   File "D:\my programs\python\Aiot\aiot_bedroom\ai_analysis\live_detections.py", line 74, in update_moving
-#     self.avgKE.update_value(torch.sum(value),timenow)
-#   File "D:\my programs\python\Aiot\aiot_bedroom\ai_analysis\live_status_manager.py", line 59, in update_value
-#     x = mean(self.__list)
-#   File "C:\Users\Tommy AU\.conda\envs\myenv\lib\statistics.py", line 329, in mean
-#     T, total, count = _sum(data)
-#   File "C:\Users\Tommy AU\.conda\envs\myenv\lib\statistics.py", line 188, in _sum
-#     for n, d in map(_exact_ratio, values):
-#   File "C:\Users\Tommy AU\.conda\envs\myenv\lib\statistics.py", line 261, in _exact_ratio
-#     raise TypeError(msg)
-# TypeError: can't convert type 'Tensor' to numerator/denominator
 class AverageManagerByTime:
     ## Use list as it has better stability while they have similar performance even in scale
     def __init__(self,period=60,least_item=10) -> None:
@@ -67,6 +65,10 @@ class AverageManagerByTime:
             self.__list_time.pop(0)
             self.__list.pop(0)
         if len(self.__list) >= self.__least_item:
-            x = mean(self.__list)
+            self.average = mean(self.__list)
         else:
-            x = sum(self.__list)/self.__least_item
+            self.average = sum(self.__list)/self.__least_item
+    def reset(self):
+        self.__list.clear()
+        self.__list_time.clear()
+        self.average = 0
