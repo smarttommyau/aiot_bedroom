@@ -64,6 +64,7 @@ class tkwindow:
     def updateImage(self,frame=None,image=None):
         img = None
         if frame is None and image is None:
+            self.__imageLabel.config(text="Waiting...")
             return
         elif frame is None:
             img = image

@@ -168,8 +168,12 @@ def prompt_handler(addr:str):
         return "y"
     else:
         return "n"
+def socket_close_handler():
+    logger.info("Connection closed")
+    tkwindow.updateImage()
+    detection.TurnOffStatus()
 
-live_connection = Live_connection(addr,int(port),new_frame_handler,prompt_handler)
+live_connection = Live_connection(addr,int(port),new_frame_handler,prompt_handler,socket_close_handler)
 connection_thread = threading.Thread(target=live_connection.start_connection,args=(nolog,))
 
 ## setup varible list

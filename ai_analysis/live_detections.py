@@ -214,3 +214,17 @@ class detection:
         threading.Thread(target=self.person.update_moving,args=(timenow,self.events[2])).start()
         threading.Thread(target=self.person.update_temperature,args=(thermal,other_object,self.events[3])).start()
         self.lock.release()
+    def TurnOffStatus(self):
+        self.lock.acquire(blocking=True)
+        for i,action in enumerate(self.action_lock):
+            action.wait()
+            action.clear()
+        self.person_presence.status = False
+        self.person.sleeping.status = False
+        self.person.touching_phone.status = False
+        self.person.lying_bed.status = False
+        self.person.moving.status = False
+        self.person.temperature = 0
+        for event in self.events:
+            event.set()
+        self.lock.release()
