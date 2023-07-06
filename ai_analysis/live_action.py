@@ -59,7 +59,6 @@ class action:
             elif self.detection.bed.temperature > 31:
                 self.aircon.temp_change(-1)
     def Light(self,sleep):
-        ##FIXME: Testing
         self.logger.info("Light action started")
         while True:
             self.action_lock[1].set()
@@ -79,7 +78,6 @@ class action:
                 self.logger.info("Light updating... not sleeping")
                 self.light.set_light_state(False)
     def Ambulance(self,moving,temperature,lying):
-        ## FIXME: Testing
         self.logger.info("Ambulance action started")
         while True:
             self.action_lock[2].set()                
@@ -99,7 +97,10 @@ class action:
                 continue
             self.ambulance.power(False)
     def Music(self,lying):
-        ## FIXME: Testing
+        ##TODO: real music player
+        ## 1. able to select music
+        ## 2. support playlist
+        ## 3. rich functions(extra window to control?)
         self.logger.info("Music action started")
         music_player = AudioPlayer('music/Chopin_Nocturne_E_Flat_Major_Op9_No2.mp3')
         playing = False
@@ -116,7 +117,7 @@ class action:
                 continue
             if self.person.lying_bed.status and self.detection.timenow - self.person.lying_bed.start > 5:
                 if not playing:
-                    music_player.play(block=False)
+                    music_player.play(block=False,loop = True)
             elif not self.person.lying_bed.status and self.detection.timenow - self.person.lying_bed.end > 5 and playing:
                 music_player.stop() 
 

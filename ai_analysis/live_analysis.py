@@ -143,7 +143,13 @@ detection = detection(logger)
 action = action(aircon_,light,ambulance_,detection,logger)
 
 ## Setup live connection to thermal camera
+concurrent_limit = 4
+concurent_counter = 0
 def new_frame_handler():
+    global concurent_counter
+    # concurent_counter += 1
+    if concurent_counter > concurrent_limit:
+        return
     (frame,thermal) = live_connection.getcurrentframe()
     image = Image.open(BytesIO(frame))
     results = model.predict(image,classes=[0,59,63,67])
@@ -154,6 +160,7 @@ def new_frame_handler():
     b, g, r = image.split()
     image = Image.merge("RGB", (r, g, b))
     tkwindow.updateImage(image=image)
+    # concurent_counter -= 1
     # tkwindow.updateImage(image=image)
 def prompt_handler(addr:str):
     dialog = tkinter.messagebox.askyesno("Do you want to accept?",addr)

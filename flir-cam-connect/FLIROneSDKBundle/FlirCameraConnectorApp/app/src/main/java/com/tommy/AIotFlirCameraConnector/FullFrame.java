@@ -21,13 +21,17 @@ public class FullFrame {
     private Socket streamSocket;
     public boolean died;
 
-    public FullFrame(Socket socket) {
+    private FullFrameManager FullFrameManager;
+    public Integer hashcode;
+    public FullFrame(Socket socket,FullFrameManager fullFrameManager,Integer hash) {
         thermal = null;
         visual = null;
         thermalFin = false;
         visualFin = false;
         streamSocket = socket;
         died = false;
+        FullFrameManager = fullFrameManager;
+        hashcode = hash;
     }
 
     public void Thermal(final RenderedImage frame) {
@@ -103,9 +107,11 @@ public class FullFrame {
                         outputStream.write(send_data);
                         outputStream.flush();
                     }
+
                 }catch(Exception e){
                     Log.e("Socket",e.toString());
                 }
+                FullFrameManager.finish(hashcode);
 
             }
         }).start();
