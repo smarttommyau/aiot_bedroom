@@ -6,11 +6,8 @@ class Person:
     def __init__(self,logger):
         self.box = None
         self.lying_bed = StatusManager(2,2)
-        # self.lying_bed = StatusManager(0,0)
         self.touching_phone = StatusManager(2,2)
-        # self.touching_phone = StatusManager(0,0)
         self.moving = StatusManager(2,5)
-        # self.moving = StatusManager(0,0)
         self.sleeping = StatusManager(1,1)
         self.temperature = 0
         self.avgKE = AverageManagerByTime(300,60)
