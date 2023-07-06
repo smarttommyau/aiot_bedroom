@@ -54,10 +54,11 @@ class action:
                 self.aircon.power(True)
             if self.detection.bed is None:
                 continue
-            #TODO:  bias on human temp and environment temp
+            #future:  bias on human temp and environment temp
                 # ideal bed temp is betweeen 27 - 31
                 # body temp is 36
-            ## TODO:Aircon change with function to determine the magnitude of change
+                # Need to be implement carefully
+            ## future:Aircon change with function to determine the magnitude of change
             if self.detection.bed.temperature < 27:
                 self.aircon.temp_change(+1)
             elif self.detection.bed.temperature > 31:
@@ -109,7 +110,7 @@ class action:
                 continue
             self.ambulance.power(False)
     def Music(self,lying):
-        ##TODO: real music player
+        ##future: real music player
         ##TODO: Music player class
         ## 1. able to select music
         ## 2. support playlist

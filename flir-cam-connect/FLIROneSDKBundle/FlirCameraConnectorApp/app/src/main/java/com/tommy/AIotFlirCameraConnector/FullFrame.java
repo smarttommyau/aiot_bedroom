@@ -69,12 +69,9 @@ public class FullFrame {
             public void run() {
                 Bitmap bitmap = frame.getBitmap();
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                ByteBuffer bytes = ByteBuffer.allocate(bitmap.getByteCount());
                 Log.i("Compress","start");
                 bitmap.compress(Bitmap.CompressFormat.WEBP, 100, stream);
                 visual = stream.toByteArray();
-//                bitmap.copyPixelsToBuffer(bytes);
-//                visual = bytes.array();
                 Log.i("Compress","end");
 
                 Log.i("Socket","visual"+visual.length);

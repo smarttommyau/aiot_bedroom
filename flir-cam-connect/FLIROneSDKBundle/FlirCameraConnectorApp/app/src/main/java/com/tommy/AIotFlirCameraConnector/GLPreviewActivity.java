@@ -42,7 +42,6 @@ import java.net.Socket;
 
 public class GLPreviewActivity extends Activity implements Device.Delegate, FrameProcessor.Delegate, Device.StreamDelegate{
     GLSurfaceView thermalSurfaceView;
-//    private volatile boolean imageCaptureRequested = false;
     private boolean chargeCableIsConnected = true;
 
     private int deviceRotation= 0;
@@ -52,7 +51,6 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
     private volatile Device flirOneDevice;
     private FrameProcessor frameProcessor;
 
-//    private String lastSavedPath;
 
 
     private Device.TuningState currentTuningState = Device.TuningState.Unknown;
@@ -70,11 +68,7 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
     private volatile Socket StreamSocket = null;
     private volatile boolean socketsetup = false;
     private volatile FullFrameManager fullframemanager = null;
-    //    private volatile SocketConnection socketConnection;
-//    private volatile SocketConnection socketConnectionTh;
-//    private volatile int frameid;
-//    private volatile int curV;
-//    private volatile int curT;
+
 
     public void onDeviceConnected(Device device){
         Log.i("ExampleApp", "Device connected!");
@@ -155,24 +149,14 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
 
     // StreamDelegate method
     public void onFrameReceived(Frame frame) {
-//        frameid++;
-//        Log.v("ExampleApp", "Frame received!");
 
         if (currentTuningState != Device.TuningState.InProgress){
             frameProcessor.processFrame(frame, FrameProcessor.QueuingOption.CLEAR_QUEUED);
             thermalSurfaceView.requestRender();
-//            if(this.socketConnection!= null && this.socketConnection.success){
-//                try{
-//                    this.socketConnection.sendFrame(frame,frameProcessor);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
         }
 
     }
 
-//    private Bitmap thermalBitmap = null;
 
     // Frame Processor Delegate method, will be called each time a rendered frame is produced
     public void onFrameProcessed(final RenderedImage renderedImage){
@@ -196,36 +180,7 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
                 Log.e("Socket","Close failed");
             }
         }
-//        if(this.socketConnection!= null && this.socketConnection.success) {
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    if (renderedImage.imageType() == RenderedImage.ImageType.VisibleAlignedRGBA8888Image) {
-//                        try {
-//                            int cur = socketConnection.frameidd;
-//                            if(socketConnection.sendrenderFrame(renderedImage,curT)){
-//                                curV = cur;
-//                            }
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                    } else if (renderedImage.imageType() == RenderedImage.ImageType.ThermalRadiometricKelvinImage) {
-//
-//                        try {
-//                            if(socketConnectionTh!= null && socketConnectionTh.success) {
-//                                int cur = socketConnectionTh.frameidd;
-//                                if(socketConnectionTh.sendTemperaturedata(renderedImage,curV)){
-//                                    curT = cur;
-//                                }
-//                            }
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }
-//            }).start();
-//
-//        }
+
         if (renderedImage.imageType() == RenderedImage.ImageType.ThermalRadiometricKelvinImage){
             // Note: this code is not optimized
             int[] thermalPixels = renderedImage.thermalPixelValues();
@@ -293,19 +248,7 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-//        if (android.os.Build.VERSION.SDK_INT > 9) {
-//            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-//            StrictMode.setThreadPolicy(policy);
-//        }
-
         setContentView(R.layout.activity_gl_preview);
-
-//        final View controlsView = findViewById(R.id.fullscreen_content_controls);
-//        final View controlsViewTop = findViewById(R.id.fullscreen_content_controls_top);
-//        final View contentView = findViewById(R.id.fullscreen_content);
-
-//        frameProcessor = new FrameProcessor(this, this, EnumSet.of(RenderedImage.ImageType.VisibleAlignedRGBA8888Image,RenderedImage.ImageType.ThermalRadiometricKelvinImage, RenderedImage.ImageType.ThermalRGBA8888Image), true);
         frameProcessor = new FrameProcessor(this, this, EnumSet.of(RenderedImage.ImageType.VisibleAlignedRGBA8888Image,RenderedImage.ImageType.ThermalRadiometricKelvinImage), true);
         frameProcessor.setImagePalette(RenderedImage.Palette.Rainbow);
         frameProcessor.setGLOutputMode(RenderedImage.ImageType.VisibleAlignedRGBA8888Image);
@@ -314,16 +257,6 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
         thermalSurfaceView.setEGLContextClientVersion(2);
         thermalSurfaceView.setRenderer(frameProcessor);
         thermalSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-//        thermalSurfaceView.setDebugFlags(GLSurfaceView.DEBUG_CHECK_GL_ERROR | GLSurfaceView.DEBUG_LOG_GL_CALLS);
-
-
-//        final String[] imageTypeNames = new String[]{ "Visible", "Thermal", "MSX" };
-//        final RenderedImage.ImageType[] imageTypeValues = new RenderedImage.ImageType[]{
-//                RenderedImage.ImageType.VisibleAlignedRGBA8888Image,
-//                RenderedImage.ImageType.ThermalRGBA8888Image,
-//                RenderedImage.ImageType.BlendedMSXRGBA8888Image,
-//        };
-
 
         //Setup socket update button
         ((Button)findViewById(R.id.AdressUpdate)).setOnClickListener(new View.OnClickListener() {
@@ -369,35 +302,12 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
                     }
 
                 }
-//                if(socketConnection != null) {
-//                    try {
-//                        socketConnection.terminate();
-//                    } catch (InterruptedException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                }
-//
-//                try {
-//                    socketConnection = new SocketConnection(ip,port,GLPreviewActivity.this);
-//                    socketConnectionTh = new SocketConnection(ip,port,GLPreviewActivity.this);
-//                    socketConnection.setup(true);
-//                    socketConnectionTh.setup(false);
-//                    if(socketConnection.success == false)
-//                        socketConnection = null;
-//                    if(socketConnectionTh.success == false)
-//                        socketConnectionTh = null;
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                frameid = 0;
             }
         });
 
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
-//        findViewById(R.id.change_view_button).setOnTouchListener(mDelayHideTouchListener);
-
 
         orientationEventListener = new OrientationEventListener(this) {
             @Override
@@ -421,13 +331,6 @@ public class GLPreviewActivity extends Activity implements Device.Delegate, Fram
             }
         });
 
-//        findViewById(R.id.fullscreen_content).setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                mScaleDetector.onTouchEvent(event);
-//                return true;
-//            }
-//        });
 
         String cameraPermission = Manifest.permission.CAMERA;
         boolean permissionGranted = false;
