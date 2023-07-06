@@ -1,5 +1,6 @@
 import threading
 from audioplayer import AudioPlayer
+from live_status_manager import StatusManager
     ## Thread structure
     ##1. lying bed
     ##2. touching phone
@@ -19,6 +20,7 @@ class action:
         self.aircon    = aircon
         self.light     = light
         self.ambulance = ambulance
+        self.__ambulance_temperture = StatusManager(4,2)
         self.events    = detection.events
         self.detection = detection
         self.person    = detection.person
@@ -87,10 +89,15 @@ class action:
             self.logger.info("Ambulance updating...")
             if not self.detection.person_presence.status:
                 self.ambulance.power(False)
+                self.update_ambulance_temperture(False)
                 continue
-            ## FIXME: tolerances for this case
             if self.person.temperature >40 or self.person.temperature < 30:
+                self.update_ambulance_temperture(True)
+            else:
+                self.update_ambulance_temperture(False)
+            if self.__ambulance_temperture.status:
                 self.ambulance.power(True)
+                continue
             # not moving for 20 seconds
             if not self.person.moving.status and self.detection.timenow - self.person.moving.start > 20 and not self.person.lying_bed.status:
                 self.ambulance.power(True)
