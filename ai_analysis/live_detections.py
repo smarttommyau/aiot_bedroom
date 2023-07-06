@@ -234,7 +234,7 @@ class detection:
         self.person.lying_bed.reset()
         self.person.moving.reset()
         self.person.temperature = 0
-        self.person.xyxys = None
+        self.person.xyxy = None
         for event in self.events:
             event.set()
         self.lock.release()
