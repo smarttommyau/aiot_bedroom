@@ -1,11 +1,16 @@
 # aiot_bedroom
 Project that aims to provide the best bedroom environment with AI and IoT
-> Image from V1, V2 images to be update later
+> Image from V1
 <p float="left" align="middle">
 <img width="32%" src="img/not_moving.png"/>
 <img width="32%" src="img/not_moving_end.png"/>
 <img width="32%" src="img/sleeping_and_lyingbed_end.png"/>
 </p>
+
+> Image from V2
+<img src="https://github.com/smarttommyau/aiot_bedroom/assets/75346987/248e7118-f15e-4265-b0e2-5e18948149e4"/>
+<img src="https://github.com/smarttommyau/aiot_bedroom/assets/75346987/98e1614c-e6c9-4acd-ac10-ca90d5e3f3bc"/>
+<img src="https://github.com/smarttommyau/aiot_bedroom/assets/75346987/63dfb274-fd5f-46d7-b135-64768435950b"/>
 
 ## 2 part 
 - [AI analysis](./ai_analysis)
