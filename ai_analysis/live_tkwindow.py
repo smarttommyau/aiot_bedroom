@@ -1,5 +1,6 @@
 from PIL import Image, ImageTk
 import tkinter
+from tkinter import font as TKfont
 from io import BytesIO
 from os import _exit 
 
@@ -23,16 +24,16 @@ class tkvariables:
         self.window.after(1000,self.update)
         ## update should call after method to update the value
 class tkwindow:
-    def __init__(self,logger,quithandlers:tuple=None) -> None:
+    def __init__(self,logger,fontsize,quithandlers:tuple=None) -> None:
         self.window = tkinter.Tk()
-        self.window.geometry('{}x{}'.format(1000,800))
+        self.window.geometry('{}x{}'.format(1000,1000))
         self.window.title('Frame Viewer')
         self.window.protocol("WM_DELETE_WINDOW", self.__onQuit)
-        self.__imageLabel = tkinter.Label(self.window,text="Waiting...");
-        self.__imageLabel.place(x=0,y=0,relwidth=0.5,relheight=0.68)
+        self.__imageLabel = tkinter.Label(self.window,text="Waiting...",font=TKfont.Font(size=fontsize));
+        self.__imageLabel.place(x=0,y=0,relwidth=0.48,relheight=0.64)
         self.__tkpi = None
         self.__quithandlers = quithandlers
-        button = tkinter.Button(self.window,text="!!Force Kill!!",command=self.__onQuit)
+        button = tkinter.Button(self.window,text="!!Force Stop!!",command=self.__onQuit,font=TKfont.Font(size=fontsize))
         button.place(x=0,rely=0.8,relwidth=0.48,relheight=0.13)
         self.window.after(100,self.__updateImageLabel)
         self.logger = logger
@@ -69,6 +70,7 @@ class tkwindow:
         else:
             memoryFile = BytesIO(frame)
             img = Image.open(memoryFile)
+            ## resize image to fit frame size while keeping ratio
         try:
             self.__tkpi = ImageTk.PhotoImage(img)
             self.__imageLabel.config(image=self.__tkpi)

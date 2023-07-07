@@ -12,6 +12,7 @@ from loguru import logger
 from collections import deque
 from PIL import Image, ImageTk
 import tkinter
+from tkinter import font as TKfont
 from tkinter import messagebox
 from audioplayer import AudioPlayer
 from sys import argv
@@ -19,7 +20,7 @@ from sys import argv
 # Set whether print log
 ## Rubbish match to set nolog
 nolog = True if len(argv)>=2 and argv[1] == 'nolog=true' else False
-
+fontsize = 15
 
 
 #Setup Logger
@@ -55,7 +56,7 @@ model = YOLO("yolov8m.pt" if modelname is None else modelname) # default yolov5x
 logger.info("Model loaded")
 # Start up Network
 ## Setup Hardware
-dialog = tkdialog("Prompt for IoT server",("Address",),("http://192.168.50.43:7777/controller",))
+dialog = tkdialog("Prompt for IoT server",("Address",),("http://192.168.137.160:7777/controller",))
 logger.info("Prompt for IoT server")
 dialog.start()
 (IoT_addr,) = dialog.input
@@ -153,7 +154,7 @@ aircon_ = aircon(fan)
 ambulance_ = ambulance(buzzer)
 caring = CaringService()
 
-dialog = tkdialog("Prompt for setting up server for thermal camera",("IP(local)","Port"),("192.168.50.250","7777"))
+dialog = tkdialog("Prompt for setting up server for thermal camera",("IP(local)","Port"),("192.168.137.1","7777"))
 logger.info("Prompt for setting up server for thermal camera")
 dialog.start()
 (addr,port) = dialog.input
@@ -204,38 +205,41 @@ live_connection = Live_connection(addr,int(port),new_frame_handler,prompt_handle
 connection_thread = threading.Thread(target=live_connection.start_connection,args=(nolog,))
 
 ## setup varible list
-tkwindow = tkwindow(logger,(lambda:live_connection.terminate(),lambda:fan.set_fan_state(False),lambda:light.set_light_state(False)))
+tkwindow = tkwindow(logger,fontsize,(lambda:live_connection.terminate(),lambda:fan.set_fan_state(False),lambda:light.set_light_state(False)))
 variables = (
-    tkvariables("Person",tkinter.BooleanVar(),tkwindow.window,lambda: detection.person_presence.status,lambda: time.time() - max(detection.person_presence.start,detection.person_presence.end) if max(detection.person_presence.start,detection.person_presence.end) else 0),
-    tkvariables("lyingbed",tkinter.BooleanVar(),tkwindow.window,lambda: detection.person.lying_bed.status,lambda: time.time() - max(detection.person.lying_bed.start,detection.person.lying_bed.end) if max(detection.person.lying_bed.start,detection.person.lying_bed.end) else 0),
-    tkvariables("TouchingPhone", tkinter.BooleanVar(), tkwindow.window, lambda: detection.person.touching_phone.status,lambda: time.time() - max(detection.person.touching_phone.start,detection.person.touching_phone.end) if max(detection.person.touching_phone.start,detection.person.touching_phone.end) else 0),
-    tkvariables("Moving", tkinter.BooleanVar(), tkwindow.window, lambda: detection.person.moving.status,lambda: time.time() - max(detection.person.moving.start,detection.person.moving.end) if max(detection.person.moving.start,detection.person.moving.end) else 0),
-    tkvariables("Sleeping", tkinter.BooleanVar(), tkwindow.window, lambda: detection.person.sleeping.status,lambda: time.time() - max(detection.person.sleeping.start,detection.person.sleeping.end) if max(detection.person.sleeping.start,detection.person.sleeping.end) else 0),
-    tkvariables("Temperature", tkinter.IntVar(), tkwindow.window, lambda: detection.person.temperature),
-    tkvariables("FLipOrBigMovement",tkinter.IntVar(),tkwindow.window,lambda: detection.person.EffectiveMoves.counter,("Reset",lambda: detection.person.EffectiveMoves.reset())),
-    tkvariables("BedTemperature", tkinter.IntVar(), tkwindow.window, lambda: detection.bed.temperature),
-    tkvariables("Ambulance", tkinter.BooleanVar(), tkwindow.window, lambda: action.ambulance.status),
-    tkvariables("Aircon", tkinter.BooleanVar(), tkwindow.window, lambda: action.aircon.status),
-    tkvariables("AirconTemp", tkinter.IntVar(), tkwindow.window, lambda: action.aircon.temperature),
-    tkvariables("Light", tkinter.BooleanVar(), tkwindow.window, lambda: action.light.get_light_state()),
+    tkvariables("Person",tkinter.StringVar(),tkwindow.window,lambda: "True" if detection.person_presence.status else "False",lambda: round(time.time() - max(detection.person_presence.start,detection.person_presence.end),2) if max(detection.person_presence.start,detection.person_presence.end) else 0),
+    tkvariables("lyingbed",tkinter.StringVar(),tkwindow.window,lambda: "True" if detection.person.lying_bed.status else "False" ,lambda: round(time.time() - max(detection.person.lying_bed.start,detection.person.lying_bed.end),2) if max(detection.person.lying_bed.start,detection.person.lying_bed.end) else 0),
+    tkvariables("TouchPhone", tkinter.StringVar(), tkwindow.window, lambda: "True" if detection.person.touching_phone.status else "False",lambda: round(time.time() - max(detection.person.touching_phone.start,detection.person.touching_phone.end),2) if max(detection.person.touching_phone.start,detection.person.touching_phone.end) else 0),
+    tkvariables("Moving", tkinter.StringVar(), tkwindow.window, lambda: "True" if detection.person.moving.status else "False",lambda: round(time.time() - max(detection.person.moving.start,detection.person.moving.end),2) if max(detection.person.moving.start,detection.person.moving.end) else 0),
+    tkvariables("Sleeping", tkinter.StringVar(), tkwindow.window, lambda: "True" if detection.person.sleeping.status else "False",lambda: round(time.time() - max(detection.person.sleeping.start,detection.person.sleeping.end),2) if max(detection.person.sleeping.start,detection.person.sleeping.end) else 0),
+    tkvariables("Temperature", tkinter.IntVar(), tkwindow.window, lambda: round(detection.person.temperature,2)),
+    tkvariables("FlipOrBigMovement",tkinter.IntVar(),tkwindow.window,lambda: detection.person.EffectiveMoves.counter,extra_button=("Reset",lambda: detection.person.EffectiveMoves.reset())),
+    tkvariables("BedTemperature", tkinter.IntVar(), tkwindow.window, lambda: round(detection.bed.temperature,2)),
+    tkvariables("Ambulance", tkinter.StringVar(), tkwindow.window, lambda: "True" if action.ambulance.status else "False"),
+    tkvariables("Aircon", tkinter.StringVar(), tkwindow.window, lambda: "True" if action.aircon.status else "False"),
+    tkvariables("AirconTemp", tkinter.IntVar(), tkwindow.window, lambda: round(action.aircon.temperature,2)),
+    tkvariables("Light", tkinter.StringVar(), tkwindow.window, lambda: "True" if action.light.get_light_state() else "False"),
 )
 
 def updateVariables(variables) -> None:
     length = len(variables) + 1
     height = 1/(length-1)
     for i,var in enumerate(variables):
-        name = tkinter.Label(tkwindow.window,text=var.name)
+        name = tkinter.Label(tkwindow.window,text=var.name,font=TKfont.Font(size=fontsize))
         name.place(relx=0.5,rely=i/length,relheight=height,relwidth=0.1)
-        item = tkinter.Label(tkwindow.window,textvariable=var.tkvar)
+        item = tkinter.Label(tkwindow.window,textvariable=var.tkvar,font=TKfont.Font(size=fontsize))
         item.place(relx=0.61,rely=i/length,relheight=height,relwidth=0.1)
+        k = False
         if var.time_getter is not None:
-            time_header = tkinter.Label(tkwindow.window,text="Time: ")
+            time_header = tkinter.Label(tkwindow.window,text="Time: ",font=TKfont.Font(size=fontsize))
             time_header.place(relx=0.72,rely=i/length,relheight=height,relwidth=0.1)
-            time = tkinter.Label(tkwindow.window,textvariable=var.timetk)
+            time = tkinter.Label(tkwindow.window,textvariable=var.timetk,font=TKfont.Font(size=fontsize))
             time.place(relx=0.83,rely=i/length,relheight=height,relwidth=0.1)
             var.time_update()
+            k = True
         if var.extra_button is not None:
-            button = tkinter.Button(tkwindow.window,text=var.extra_button[0],command=var.extra_button[1])
+            button = tkinter.Button(tkwindow.window,text=var.extra_button[0],command=var.extra_button[1],font=TKfont.Font(size=int(fontsize/1.1)))
+            button.place(relx=0.94 if k else 0.8,rely=i/length,relheight=height,relwidth=0.05)
         var.update()
 updateVariables(variables)
 
