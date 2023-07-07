@@ -13,6 +13,7 @@ from collections import deque
 from PIL import Image, ImageTk
 import tkinter
 from tkinter import messagebox
+from audioplayer import AudioPlayer
 from sys import argv
 
 # Set whether print log
@@ -127,10 +128,30 @@ class ambulance:
                 flutuator = True
             self.buzzer.send_buzzer_command(1480 if flutuator else 1407, 1000)
             time.sleep(1)
+class CaringService:
+    def __init__(self):
+        self.status = False
+        self.__audio = AudioPlayer(".\\music\\Are_you_feeling_well.mp3")
+        self.__audiohk = AudioPlayer(".\\music\\NotComfort(zh_hk).mp3")
+        self.__audiocn = AudioPlayer(".\\music\\NotComfort(zh_cn).mp3")
+    def power(self,onOff):
+        if self.status != onOff:
+            self.status = onOff
+            logger.info("Caring Service "+("On" if onOff else "Off"))
+            if onOff:
+                threading.Thread(target=self.play).start()
+
+    def play(self):
+        self.__audio.play(block=True)
+        self.__audiohk.play(block=True)
+        self.__audiocn.play(block=True)
+                
+            
 
 
 aircon_ = aircon(fan)
 ambulance_ = ambulance(buzzer)
+caring = CaringService()
 
 dialog = tkdialog("Prompt for setting up server for thermal camera",("IP(local)","Port"),("192.168.50.250","7777"))
 logger.info("Prompt for setting up server for thermal camera")
@@ -139,7 +160,14 @@ dialog.start()
 logger.info("Thermal camera address: "+addr+":"+port)
 ## Setup detection
 detection = detection(logger)
-action = action(aircon_,light,ambulance_,detection,logger)
+action = action(
+    aircon=aircon_,
+    light=light,
+    ambulance=ambulance_,
+    caring=caring,
+    detection=detection,
+    logger=logger
+    )
 
 ## Setup live connection to thermal camera
 concurrent_limit = 4
@@ -184,7 +212,7 @@ variables = (
     tkvariables("Moving", tkinter.BooleanVar(), tkwindow.window, lambda: detection.person.moving.status,lambda: time.time() - max(detection.person.moving.start,detection.person.moving.end) if max(detection.person.moving.start,detection.person.moving.end) else 0),
     tkvariables("Sleeping", tkinter.BooleanVar(), tkwindow.window, lambda: detection.person.sleeping.status,lambda: time.time() - max(detection.person.sleeping.start,detection.person.sleeping.end) if max(detection.person.sleeping.start,detection.person.sleeping.end) else 0),
     tkvariables("Temperature", tkinter.IntVar(), tkwindow.window, lambda: detection.person.temperature),
-    tkvariables("AvgKE",tkinter.IntVar(),tkwindow.window,lambda: detection.person.avgKE.average),
+    tkvariables("FLipOrBigMovement",tkinter.IntVar(),tkwindow.window,lambda: detection.person.EffectiveMoves.counter,("Reset",lambda: detection.person.EffectiveMoves.reset())),
     tkvariables("BedTemperature", tkinter.IntVar(), tkwindow.window, lambda: detection.bed.temperature),
     tkvariables("Ambulance", tkinter.BooleanVar(), tkwindow.window, lambda: action.ambulance.status),
     tkvariables("Aircon", tkinter.BooleanVar(), tkwindow.window, lambda: action.aircon.status),
@@ -206,6 +234,8 @@ def updateVariables(variables) -> None:
             time = tkinter.Label(tkwindow.window,textvariable=var.timetk)
             time.place(relx=0.83,rely=i/length,relheight=height,relwidth=0.1)
             var.time_update()
+        if var.extra_button is not None:
+            button = tkinter.Button(tkwindow.window,text=var.extra_button[0],command=var.extra_button[1])
         var.update()
 updateVariables(variables)
 

@@ -16,10 +16,11 @@ from live_status_manager import StatusManager
     ##4. music(lying)
 
 class action:
-    def __init__(self,aircon,light,ambulance,detection,logger) -> None:
+    def __init__(self,aircon,light,ambulance,caring,detection,logger) -> None:
         self.aircon    = aircon
         self.light     = light
         self.ambulance = ambulance
+        self.caring    = caring
         self.__ambulance_temperture = StatusManager(4,2)
         self.__ambulance_moving = StatusManager(4,2)
         self.events    = detection.events
@@ -37,7 +38,7 @@ class action:
         threading.Thread(target=self.Light,args=(self.events[5],)).start()
         threading.Thread(target=self.Ambulance,args=(self.events[2],self.events[3],self.events[1])).start()
         threading.Thread(target=self.Music,args=(self.events[0],)).start()
-        threading.Thread(target=self.Caring,args=(self.events[2],self.events[5]))
+        threading.Thread(target=self.Caring,args=(self.events[2],self.events[5])).start()
 
     def Aircon(self,lying,temperature,bed_temperature):
         self.logger.info("Aircon action started")
@@ -152,4 +153,15 @@ class action:
             move.wait(),sleep.wait()
             self.logger.info("Caring updating...")
             if not self.detection.person_presence.status:
+                self.caring.power(False)
                 continue
+            ## By some unknown source. It claims that human flip once in 30 min when sleep
+            ## With high values, it should be bad sleep or not able to sleep
+            if self.person.EffectiveMoves.counter > 4 and self.person.sleeping.status: ##and self.detection.timenow - self.person.sleeping.start > 30:
+                self.caring.power(True)
+                self.logger.info("Caring updating... start caring")
+            else:
+                self.caring.power(False)
+                self.logger.info("Caring updating... stop caring")
+    
+

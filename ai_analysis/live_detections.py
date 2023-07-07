@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 import threading
-from live_status_manager import StatusManager , AverageManagerByTime
+from live_status_manager import StatusManager , ValidCounterManagerByTime
 class Person:
     def __init__(self,logger):
         self.box = None
@@ -10,7 +10,7 @@ class Person:
         self.moving = StatusManager(2,5)
         self.sleeping = StatusManager(1,1)
         self.temperature = 0
-        self.avgKE = AverageManagerByTime(300,60)
+        self.EffectiveMoves = ValidCounterManagerByTime(period=3600,valid_number=100)
         # self.xyxy = torch.tensor([0,0,0,0])
         self.xyxy = None
         self.logger = logger
@@ -73,8 +73,8 @@ class Person:
         xyxy = self.box.xyxy
         # tolerance of movement is 15 pixels
         value = torch.abs(xyxy - self.xyxy)
-        self.avgKE.update_value(torch.sum(value).item(),timenow)
-
+        self.logger.info("Moving value: {}".format(torch.sum(value).item()))
+        self.EffectiveMoves.update_value(torch.sum(value).item(),timenow)
         if torch.all(value < 15):
             self.moving.update_status(False,timenow)
         else:

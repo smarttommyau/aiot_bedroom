@@ -5,12 +5,14 @@ from os import _exit
 
 
 class tkvariables:
-    def __init__(self,name,tkvar,window,update,time_getter=None) -> None:
+    #extra_button is a tuple of (name,command)
+    def __init__(self,name,tkvar,window,update,time_getter=None,extra_button=None) -> None:
         self.name = name
         self.tkvar = tkvar
         self.getter = update
         self.window = window
         self.time_getter = time_getter
+        self.extra_button = extra_button
         if time_getter is not None:
             self.timetk = tkinter.IntVar()
     def time_update(self):
@@ -27,7 +29,7 @@ class tkwindow:
         self.window.title('Frame Viewer')
         self.window.protocol("WM_DELETE_WINDOW", self.__onQuit)
         self.__imageLabel = tkinter.Label(self.window,text="Waiting...");
-        self.__imageLabel.place(x=0,y=0,relwidth=0.48,relheight=0.64)
+        self.__imageLabel.place(x=0,y=0,relwidth=0.5,relheight=0.68)
         self.__tkpi = None
         self.__quithandlers = quithandlers
         button = tkinter.Button(self.window,text="!!Force Kill!!",command=self.__onQuit)
