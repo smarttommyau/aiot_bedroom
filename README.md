@@ -61,7 +61,7 @@ We offer 2 LICENSES:
     - [x] Ping improvement(Not dropping extra frames)(5000ms)
     - [x] stability on pc
     - [x] stability on camera side(OOM problems)(auto drop extra frames)
-- [ ] Update for Elderly edition
-    - [ ] Not sleeping well
-    - [ ] Care service
+- [x] Update for Elderly edition
+    - [x] Not sleeping well
+    - [x] Care service
     - [ ] ...
