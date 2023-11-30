@@ -78,10 +78,10 @@ class action:
                 continue
             if self.person.sleeping.status and self.detection.timenow - self.person.sleeping.start > 5:
                 self.logger.info("Light updating... sleeping")
-                self.light.set_light_state(True)
+                self.light.set_light_state(False)
             elif not self.person.sleeping.status and self.detection.timenow - self.person.sleeping.end > 5:
                 self.logger.info("Light updating... not sleeping")
-                self.light.set_light_state(False)
+                self.light.set_light_state(True)
     def Ambulance(self,moving,temperature,lying):
         self.logger.info("Ambulance action started")
         while True:
