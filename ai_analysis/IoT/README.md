@@ -9,3 +9,8 @@ Follow instruction from [official repository](https://github.com/esp8266/Arduino
 - **IoT.py** is the library for the ai_anlysis python code to connect and control the board.
 ## Testing
 - **test.py** you can test the basic function of the board with it
+## Example Setup
+<p float="left" align="middle">
+  <img width="40%" src="./D1_mini_circut_diagram.png"/>
+  <img width="45%"  src="./D1_mini_circut.png"/>
+</p>
