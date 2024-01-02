@@ -12,6 +12,16 @@ Project that aims to provide the best bedroom environment with AI and IoT
 <img src="https://github.com/smarttommyau/aiot_bedroom/assets/75346987/98e1614c-e6c9-4acd-ac10-ca90d5e3f3bc"/>
 <img src="https://github.com/smarttommyau/aiot_bedroom/assets/75346987/63dfb274-fd5f-46d7-b135-64768435950b"/>
 
+# Some Details
+**!!!** Please look at the **[project documents](./project_documents)**
+- [Poster](./project_documents/P21_Poster.pptx)
+    - [Demo Video(Long)](https://youtu.be/l8e21IzSXhs)
+    - [Product Video(Short)](https://youtu.be/VZf5DOBUzaY)
+- [Poster(For Elderly Update)(More specific feature about elderly based)](./project_documents/Elderly_Poster.pdf)
+- [Pitch deck](./project_documents/P21_pitching_deck_AIoT%20Bedroom.pptx)
+- [Learning Summary](./project_documents/P21_Learning_Summary.docx)
+
+# Code
 ## 2 part 
 - [AI analysis](./ai_analysis)
 - [Camera Connector](./flir-cam-connect/FLIROneSDKBundle)
@@ -26,15 +36,6 @@ Adurino project devices(ESP8266)
 ## Camera Connector
 - [**live_connection.py**](./ai_analysis/live_connection.py) as the server(For pc)
 - [**flir-cam-connect**](./flir-cam-connect/FLIROneSDKBundle) as the client source code(For Cat S60)
-
-## More Details
-Look at the [project documents](./project_documents)
-- [Poster](./project_documents/P21_Poster.pptx)(Finished)
-    - [Demo Video(Long)](https://youtu.be/l8e21IzSXhs)
-    - [Product Video(Short)](https://youtu.be/VZf5DOBUzaY)
-- [Poster(For Elderly Update)](./project_documents/Elderly_Poster.pdf)
-- [Pitch deck](./project_documents/P21_pitching_deck_AIoT%20Bedroom.pptx)(Finished)
-- [Learning Summary](./project_documents/P21_Learning_Summary.docx)(Finished)
 
 ## Hardware
 Current using **Cat S60**(built-in flir camera), can accept more hardware in the future\
