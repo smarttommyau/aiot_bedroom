@@ -14,7 +14,7 @@ Project that aims to provide the best bedroom environment with AI and IoT
 
 # Some Details
 **!!!** Please look at the **[project documents](./project_documents)**
-- [Poster](./project_documents/P21_Poster.pptx)
+- [Poster](./project_documents/P21_Poster.pdf)
     - [Demo Video(Long)](https://youtu.be/l8e21IzSXhs)
     - [Product Video(Short)](https://youtu.be/VZf5DOBUzaY)
 - [Poster(For Elderly Update)(More specific feature about elderly based)](./project_documents/Elderly_Poster.pdf)
