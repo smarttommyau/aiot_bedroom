@@ -1,7 +1,8 @@
 # Live analyis
 > This is the part for PC.<br>
 
-Use ```conda activate myenv.yml```<br>
+# Create environment
+Use ```conda env create --name aiot_bedroom --file myenv.yml```<br>
 
 ## V1 Main program
 - **live_analysis.ipynb** is the main program<br>
